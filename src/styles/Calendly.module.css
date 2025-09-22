@@ -1,0 +1,69 @@
+@keyframes infiniteRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.calendlyButton {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: flex-end;
+}
+
+.buttonCircles {
+    position: relative;
+    display: flex;
+    transition: transform 0.4s;
+
+    &>* {
+        display: inline-flex;
+
+        border-radius: 50%;
+        height: 2rem;
+        width: 2rem;
+    }
+
+    & .circle:first-of-type {
+        border: 1px dashed white;
+        animation: infiniteRotate 14s linear infinite;
+    }
+
+    & .circle:last-of-type {
+        border: 1px solid white;
+        transform: translateX(-50%);
+        transition: opacity 0.4s;
+    }
+
+    & .buttonCirclesLabel {
+        margin-left: -20px;
+    }
+}
+
+.calendlyButton:hover {
+    & .buttonCircles {
+        transform: translateX(20px);
+    }
+
+    & .circle:first-of-type {
+        border: 1px dashed white;
+        animation: infiniteRotate 14s linear infinite;
+    }
+
+    & .circle:last-of-type {
+        opacity: 0;
+        transform: translateX(-100%);
+        transition: opacity 0.4s, transform 0.4s;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .calendlyButton {
+        justify-content: flex-start;
+    }
+
+}

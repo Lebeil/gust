@@ -1,0 +1,129 @@
+/* .rowContainer {
+    border-bottom: var(--border-s);
+    padding: var(--spacing-primary) 0;
+    cursor: pointer;
+    position: relative;
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+}
+
+.rowContainer:last-of-type {
+    border: none;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-primary);
+    width: 100%;
+}
+
+.heading {
+    font-size: var(--fs-large);
+    margin: 0;
+    width: 80%;
+}
+
+.expandableWrapper {
+    display: grid;
+    align-items: flex-start;
+    grid-template-rows: 0fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 var(--spacing-primary);
+    transition: grid-template-rows .4s .4s ease;
+}
+
+.expanded .expandableWrapper {
+    grid-template-rows: 1fr;
+    transition: grid-template-rows .4s ease;
+}
+
+.expandableContent {
+    display: block;
+    overflow: hidden;
+    grid-row: 1;
+    grid-column: 2;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity .4s, transform .4s;
+}
+
+.expanded .expandableContent {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .4s .4s, transform .4s .4s;
+}
+
+.expandableWrapper_variation {
+    display: grid;
+    grid-template-rows: 0fr;
+    gap: 0 var(--spacing-primary);
+    transition: grid-template-rows .4s .4s ease;
+}
+
+.expanded .expandableWrapper_variation {
+    grid-template-rows: 1fr;
+    transition: grid-template-rows .4s ease;
+}
+
+.expandableContent_variation {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity .4s, transform .4s, grid-template-rows .4s ease;
+
+    &>* {
+        overflow: hidden;
+    }
+}
+
+.expanded .expandableContent_variation {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .4s .4s, transform .4s .4s, grid-template-rows .4s ease;
+}
+
+.moreIcon {
+    position: absolute;
+    right: 0;
+}
+
+@media only screen and (max-width: 880px) {
+    .moreIcon {
+        position: relative;
+    }
+
+    .rowContainer {
+        padding: var(--spacing-primary) 0;
+    }
+
+    .expandableWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--spacing-primary)/2);
+    }
+
+    .expandableContent {
+        opacity: 1;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .rowContainer {
+        padding: calc(var(--spacing-primary)* 2) 0;
+    }
+
+    .expandableWrapper {
+        gap: var(--spacing-primary);
+    }
+} */

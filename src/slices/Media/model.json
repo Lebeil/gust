@@ -1,0 +1,66 @@
+{
+  "id": "media",
+  "type": "SharedSlice",
+  "name": "Media",
+  "description": "Media",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "media": {
+          "type": "Link",
+          "config": {
+            "label": "Media",
+            "placeholder": "Alt text",
+            "select": "media",
+            "allowText": true
+          }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "withList",
+      "name": "With List",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "media": {
+          "type": "Link",
+          "config": {
+            "label": "Media",
+            "placeholder": "Alt text",
+            "select": "media",
+            "allowText": true
+          }
+        },
+        "list_container": {
+          "type": "Group",
+          "config": {
+            "label": "List Container",
+            "repeat": true,
+            "fields": {
+              "list": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "List",
+                  "placeholder": "",
+                  "allowTargetBlank": true,
+                  "multi": "strong,em,list-item,hyperlink"
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

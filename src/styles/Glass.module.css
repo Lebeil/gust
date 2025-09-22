@@ -1,0 +1,30 @@
+.glassBox {
+    border-radius: var(--br-m);
+    background-color: var(--color-glass);
+    border: var(--border-s);
+    width: 100%;
+    height: 15vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.glassBg {
+    border-radius: var(--br-l);
+    background-color: var(--color-glass);
+    border: var(--border-s);
+}
+
+.glassBox .glassFigure {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.glassBox figure img {
+    height: 100%;
+    width: auto;
+    max-height: 25vw;
+}

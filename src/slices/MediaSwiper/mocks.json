@@ -1,0 +1,33 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"work_items": {
+				"key": "64595049-9949-4bc5-a3b5-452e3d0f66cc",
+				"__TYPE__": "LinkContent",
+				"value": {
+					"__TYPE__": "DocumentLink",
+					"id": "mock_document_id"
+				}
+			},
+			"branch": {
+				"__TYPE__": "FieldContent",
+				"value": "Open",
+				"type": "Select"
+			},
+			"heading": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "heading2",
+						"content": {
+							"text": "Struck"
+						}
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]

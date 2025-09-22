@@ -1,0 +1,128 @@
+{
+  "format": "custom",
+  "id": "work",
+  "label": "Work",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "title": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Title",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+        }
+      },
+      "branch": {
+        "type": "Select",
+        "config": {
+          "label": "Branch",
+          "placeholder": "",
+          "options": ["Make It", "Open", "Visual Creators"]
+        }
+      },
+      "secteurs": {
+        "type": "Group",
+        "config": {
+          "label": "Secteurs",
+          "repeat": true,
+          "fields": {
+            "label": {
+              "type": "Text",
+              "config": {
+                "label": "Label",
+                "placeholder": ""
+              }
+            }
+          }
+        }
+      },
+      "cover": {
+        "type": "Link",
+        "config": {
+          "label": "Cover",
+          "placeholder": "",
+          "select": "media"
+        }
+      },
+      "preview_video": {
+        "type": "Link",
+        "config": {
+          "label": "Preview video",
+          "placeholder": "",
+          "select": "media"
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "media": {
+              "type": "SharedSlice"
+            },
+            "work_media": {
+              "type": "SharedSlice"
+            },
+            "text_slider": {
+              "type": "SharedSlice"
+            },
+            "card_stack": {
+              "type": "SharedSlice"
+            },
+            "results": {
+              "type": "SharedSlice"
+            },
+            "numbered_cards": {
+              "type": "SharedSlice"
+            },
+            "rich_text": {
+              "type": "SharedSlice"
+            },
+            "media_text": {
+              "type": "SharedSlice"
+            },
+            "media_swiper": {
+              "type": "SharedSlice"
+            },
+            "before_after_slider": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Title",
+          "placeholder": ""
+        }
+      },
+      "meta_description": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Description",
+          "placeholder": ""
+        }
+      },
+      "meta_image": {
+        "type": "Image",
+        "config": {
+          "label": "Meta Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+.iconMoreContainer {
+    display: flex;
+    position: relative;
+    transition: transform .2s;
+    overflow: hidden;
+    grid-column: 3;
+}
+
+.iconMoreContainer span:first-of-type {
+    width: 100%;
+    height: 50%;
+    transform: translateX(0);
+    transition: transform .2s .2s;
+}
+
+.iconMoreContainer span:last-of-type {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+}
+
+.expanded.iconMoreContainer {
+    transform: rotate(90deg);
+    transition: transform .2s .2s;
+}
+
+.expanded.iconMoreContainer span:first-of-type {
+    transform: translateX(-100%);
+    transition: transform .2s;
+}
+
+/* ARROWS */
+.arrowsContainer {
+    display: flex;
+    gap: calc(var(--spacing-primary) / 2);
+}
+
+.iconArrowContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--color-white);
+    background-color: var(--color-glass);
+    padding: 5px;
+    cursor: pointer;
+}
+
+.iconArrowContainer>* {
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,26 @@
+.rtContainer {
+
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6,
+    & p {}
+
+    & p {}
+
+    & strong {}
+
+    &.li {
+        font-size: var(--fs-small);
+
+    }
+
+}
+
+.xcenter {
+    text-align: center;
+}
+
+@media only screen and (max-width: 880px) {}

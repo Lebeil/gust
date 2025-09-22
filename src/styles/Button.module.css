@@ -1,0 +1,25 @@
+.buttonContainer {
+    display: flex;
+    gap: var(--spacing-primary);
+    margin: var(--spacing-primary) 0 calc(var(--spacing-primary) * 2);
+    align-items: center;
+}
+
+.button {
+    cursor: pointer;
+    font-size: var(--fs-small);
+}
+
+.primary.button {
+    padding: var(--btn-padding);
+    border: var(--border-s);
+    background-color: var(--color-glass);
+    border-radius: var(--br-s);
+    cursor: pointer;
+    font-size: var(--fs-small);
+}
+
+
+.button:hover {
+    color: white;
+}

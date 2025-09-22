@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* --color-glass: rgba(255, 255, 255, 0.2);
+  --color-white: white;
+  --color-light-blue: #BBE3FF;
+  --color-dark-blue: #122644;
+  --color-mi-var2: #59ffcb;
+  --color-mi-var3: #3f58ff;
+
+  --color-vc-var2: #4a7aff;
+  --color-open-var2: #091424; */
+
+  --spacing-primary: 2rem;
+  --tw-2: .5rem;
+  --tw-4: 1rem;
+  --tw-6: 1.5rem;
+  --tw-8: 2rem;
+  --tw-12: 3rem;
+  --tw-18: 3.5rem;
+  --tw-20: 5rem;
+  --tw-24: 6rem;
+  --tw-36: 9rem;
+  --tw-48: 12rem;
+  --tw-64: 16rem;
+
+  --ls-s: 0.5px;
+  --lh-s: 1;
+
+  --fs-xsmall: 0.6rem;
+  --fs-small: 1rem;
+  --fs-medium: 1.2rem;
+  --fs-large: 2rem;
+  --fs-xlarge: 4rem;
+
+  --fs-vw-small: 1.5vw;
+
+  --fs-diff: 4px;
+
+  --btn-padding: 5px 50px 5px 10px;
+  --tag-padding: 5px 20px;
+
+  --gradient-to-bottom: linear-gradient(to bottom, black, transparent);
+  --gradient-to-top: linear-gradient(to top, black, transparent);
+
+  /* --border-xs: 0.5px solid var(--color-white);
+  --border-s: 1px solid var(--color-white);
+  --border-m: 2px solid var(--color-white); */
+
+  --br-s: 5px;
+  --br-m: 15px;
+  --br-l: 25px;
+  --br-round: 50px;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@font-face {
+  font-family: "Avenir";
+  src: url("../../public/assets/fonts/Avenir-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Avenir";
+  src: url("../../public/assets/fonts/Avenir-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: "Jemina";
+  src: url("../../public/assets/fonts/Jemina-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  ascent-override: 90%;
+  descent-override: 15%;
+}
+
+@font-face {
+  font-family: "Jemina-Italic";
+  src: url("../../public/assets/fonts/Jemina-Italic.woff") format("woff");
+  font-weight: normal;
+  ascent-override: 90%;
+  descent-override: 15%;
+}
+
+body {
+  background-color: black;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+*,
+pre {
+  color: white;
+  font-style: normal;
+}
+
+body * {
+  letter-spacing: 0.05rem;
+}
+
+section {
+  width: 100%;
+}
+
+/* initial state: hidden & shifted down */
+.fade-in {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.6s 0.2s ease-out, transform 0.6s 0.2s ease-out;
+}
+
+/* when .visible is added: fade up into place */
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+@media (width >= 96rem) {
+
+  header,
+  section,
+  footer {
+    max-width: 2200px;
+    margin: auto;
+  }
+  
+}
+
+@media (width < 40rem) { 
+  p {
+    font-size: 0.875rem;
+    line-height: calc(0.875rem * 1.33);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
+
+}
+
+li, p {
+  margin-bottom: revert;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+ol, ul {
+  margin-bottom: revert;
+}
+
+
+
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  /* display: flex;
+  gap: var(--spacing-primary);
+  padding-left: var(--spacing-primary); */
+}
+
+.embla__slide {
+  /* position: relative;
+  flex: 0 0 20%; */
+}
+
+.embla__slide:hover {
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+section[data-slice-variation="imageSlider"]:last-child > div {
+  padding-bottom: 12rem;
+}

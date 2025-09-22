@@ -1,0 +1,132 @@
+.navContainer {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--spacing-primary);
+    padding: var(--spacing-primary);
+    z-index: 10;
+}
+
+.logoContainer {
+    position: relative;
+    z-index: 10;
+}
+
+.headerLogo {
+    border-radius: 0;
+    max-width: 100px;
+}
+
+.headerLogo1 {
+    transform: rotateX(0deg);
+    opacity: 1;
+    transition: 1s 1s;
+}
+
+.headerLogo2 {
+    transform: rotateX(90deg);
+    opacity: 0;
+    transition: 1s;
+    position: absolute;
+    top: 0;
+}
+
+/* Rotated state on scroll */
+.logoRotated.logoContainer .headerLogo1 {
+    transform: rotateX(-90deg);
+    opacity: 0;
+    transition: 1s;
+}
+
+.logoRotated.logoContainer .headerLogo2 {
+    transform: rotateX(0deg);
+    opacity: 1;
+    transition: 1s 1s;
+}
+
+
+
+
+@media only screen and (max-width: 880px) {
+    .mobileMenu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(20px) brightness(0.2);
+        -webkit-backdrop-filter: blur(20px)  brightness(0.2);
+        opacity: 0;
+        transition: opacity .4s;
+        pointer-events: none;
+    }
+
+    .open.mobileMenu {
+        opacity: 1;
+        transition: opacity .4s;
+        pointer-events: all;
+
+    }
+
+    .closeOverlay {
+        display: none;
+        height: 100%;
+        width: 100%;
+        opacity: 0.5;
+    }
+
+    .mobileMenuWrapper {
+        /* padding: 20vh var(--spacing-primary) var(--spacing-primary); */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 100%;
+    }
+
+    .navItems, .subMenu, .navItem  {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .navItems {
+        gap: 2rem;
+    }
+
+
+    .mobileMenu .navItem {
+        /* opacity: 0; */
+        --index: 1
+    }
+
+    .mobileMenu.open .navItem {
+        /* opacity: 1; */
+        transform: translateY(20px);
+        transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .mobileMenu.open .navItem:nth-child(n) {
+        transition-delay: calc(0.05s * var(--index));
+    }
+
+    .mobileMenu.open .navItem.fade-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .subMenu {
+        position: initial;
+        /* padding-top: var(--spacing-primary); */
+        padding-top: 0;
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--spacing-primary)/4);
+    }
+
+
+}
