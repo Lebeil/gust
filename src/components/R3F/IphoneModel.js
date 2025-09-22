@@ -8,9 +8,9 @@ import { TextureLoader } from "three"
 import * as THREE from 'three'
 import { pastelBlue, gold, midnightBlue, matteGlass, matteSilver, soapyGlass } from './materials'
 
-export default function Model({ slice, onLoaded }) {
+export default function Model({ content, onLoaded }) {
     const imageTexture = useLoader(TextureLoader, '/assets/media/instagram_ui.png')
-    const landingVideo = slice.primary.media
+    const landingVideo = content.media
     const videoTexture = useVideoTexture(landingVideo.url)
     const { nodes } = useGLTF("/assets/glb/iphone-final.glb")
 
@@ -61,13 +61,13 @@ export default function Model({ slice, onLoaded }) {
             .to(text3Ref.current.material, { opacity: 1, duration: 1, ease: "power2.out" }, "+=0.3")
     }, [])
 
-    const text1 = slice.primary.text_primary[0].text[0].text
-    const text2 = slice.primary.text_secondary[0].text[0].text
-    const text3 = slice.primary.text_tertiary[0].text[0].text
-    const text4 = slice.primary.text_tertiary[1].text[0].text
-    const fontPrimary = "/assets/fonts/Avenir-Bold.woff"
-    const fontSecondary = "/assets/fonts/Jemina-Italic.woff"
-    const fontTertiary = "/assets/fonts/Avenir-Regular.woff"
+    const text1 = content.primaryText
+    const text2 = content.secondaryText
+    const text3 = content.description
+    const text4 = content.mission
+    const fontRegular = "/assets/fonts/Avenir-Regular.woff"  // Avenir Next Regular
+    const fontSemiBold = "/assets/fonts/Avenir-Demi.woff"   // Avenir Next Semi-Bold
+    const fontSecondary = "/assets/fonts/Jemina-Italic.woff" // Garde Jemina pour "STOP-SCROLLERS" uniquement
     const customMaterial = matteSilver
 
     return (
@@ -79,7 +79,7 @@ export default function Model({ slice, onLoaded }) {
                             ref={text1Ref}
                             position={[0, 0.8, 4]}
                             maxWidth={100}
-                            font={fontPrimary}
+                            font={fontSemiBold}
                             textAlign="center"
                             fontSize={0.6}
                             color="white"
@@ -117,14 +117,14 @@ export default function Model({ slice, onLoaded }) {
                             ref={text3Ref}
                             position={[0.2, 0, 0]}
                             maxWidth={baseScale * 20}
-                            font={fontTertiary}
+                            font={fontRegular}
                             fontSize={0.2}
                             color="white"
                             anchorX="left"
                             anchorY="middle"
                             opacity={0}
                         >
-                            {text3}{" "}{text4.length > 0 && text4}
+                            {text3}{" "}{text4 && text4}
                         </Text>
                     </group>
                 )

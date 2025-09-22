@@ -9,8 +9,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        avenir: ['Avenir', 'sans-serif'],
-        jemina: ['Jemina', 'serif'],
+        'avenir-next': ['Avenir Next', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        'avenir': ['Avenir Next', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'], // Alias pour compatibilité
+      },
+      fontWeight: {
+        'regular': '400',
+        'semi-bold': '600',
       },
     },
   },

@@ -3,18 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm:next:dev\" \"npm:slicemachine\" --names \"next,slicemachine\" ",
-    "next:dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "slicemachine": "start-slicemachine"
+    "lint": "next lint"
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
-    "@prismicio/client": "^7.16.1",
-    "@prismicio/next": "^2.0.0",
-    "@prismicio/react": "^3.1.0",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
     "@studio-freight/react-lenis": "^0.0.47",
@@ -38,7 +33,6 @@
     "three": "^0.169.0"
   },
   "devDependencies": {
-    "@slicemachine/adapter-next": "^0.3.68",
     "concurrently": "^9.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
@@ -46,7 +40,6 @@
     "glslify-loader": "^2.0.0",
     "postcss": "^8",
     "raw-loader": "^4.0.2",
-    "slice-machine-ui": "^2.13.1",
     "tailwindcss": "^3.4.1"
   }
 }

@@ -2,12 +2,12 @@
 import { useEffect } from "react"
 import gsap from "gsap"
 import ScrollTrigger from "gsap/dist/ScrollTrigger"
-import { PrismicRichText } from "@/components/PrismicRichText"
+import RichText from "@/components/RichText"
 
 gsap.registerPlugin(ScrollTrigger)
 
-const MainHeroMobile = ({ slice }) => {
-  const landingVideo = slice.primary.media
+const MainHeroMobile = ({ content }) => {
+  const landingVideo = content.media
 
   useEffect(() => {
     gsap.to("#main-hero", {
@@ -32,15 +32,15 @@ const MainHeroMobile = ({ slice }) => {
           <div className="flex flex-col justify-center md:max-w-2xl h-full">
             <h2 className="uppercase mb-[var(--tw-4)]">
               <div className="text-2xl mb-[var(--tw-4)]">
-                {slice.primary.text_primary?.[0]?.text?.[0]?.text}
+                {content.primaryText}
               </div>
-              <span className="font-jemina text-6xl">
-                {slice.primary.text_secondary?.[0]?.text?.[0]?.text}
+              <span className="font-avenir-next font-semi-bold text-6xl">
+                {content.secondaryText}
               </span>
             </h2>
 
-            <PrismicRichText
-              field={slice.primary.text_tertiary?.[0]?.text}
+            <RichText
+              content={content.description}
               components={{
                 paragraph: ({ children }) => (
                   <p className="text-2xl">{children}</p>
@@ -49,8 +49,8 @@ const MainHeroMobile = ({ slice }) => {
             />
 
             <div className="hidden lg:block">
-              <PrismicRichText
-                field={slice.primary.text_tertiary?.[1]?.text}
+              <RichText
+                content={content.mission}
                 components={{
                   paragraph: ({ children }) => <p>{children}</p>,
                 }}
@@ -58,8 +58,8 @@ const MainHeroMobile = ({ slice }) => {
             </div>
 
             <div className="lg:hidden">
-              <PrismicRichText
-                field={slice.primary.text_tertiary?.[1]?.text}
+              <RichText
+                content={content.mission}
                 components={{
                   paragraph: ({ children }) => <p>{children}</p>,
                 }}

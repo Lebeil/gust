@@ -1,22 +1,28 @@
 "use client"
-import { SliceZone } from "@prismicio/react"
-import { components } from "@/slices"
+import Link from "next/link"
 
-export function Footer({ footer, settings, pageType }) {
+export function Footer({ content, pageType }) {
+  if (!content) return null
+
   return (
-    <footer className={`footer ${pageType}`}>
-      <div className="px-[var(--tw-4)] md:px-[var(--tw-12)]">
-        <div
-          className="
-            h-[66.66svh]
-            w-full flex flex-col items-center 
-            md:justify-center
-          "
-        >
-          <div className="w-full border-t-2 border-white border-opacity-20 self-start lg:self-end"></div>
-          <SliceZone slices={footer.data.slices} components={components} />
-        </div>
+    <footer className="relative z-10 px-4 py-8 md:px-12 md:py-12 bg-black/20">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <p className="text-sm text-white/60">
+          {content.copyright}
+        </p>
+        
+        <nav className="flex gap-6">
+          {content.links.map((link, index) => (
+            <Link
+              key={index}
+              href={link.href}
+              className="text-sm text-white/60 hover:text-white transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
       </div>
-    </footer >
+    </footer>
   )
 }

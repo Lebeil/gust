@@ -1,8 +1,0 @@
-{
-  "repositoryName": "gustv2",
-  "adapter": "@slicemachine/adapter-next",
-  "libraries": [
-    "./src/slices"
-  ],
-  "localSliceSimulatorURL": "https://agencegust.com/slice-simulator"
-}

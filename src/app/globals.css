@@ -66,34 +66,19 @@
 }
 
 @font-face {
-  font-family: "Avenir";
+  font-family: "Avenir Next";
   src: url("../../public/assets/fonts/Avenir-Regular.woff") format("woff");
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "Avenir";
-  src: url("../../public/assets/fonts/Avenir-Bold.woff") format("woff");
-  font-weight: bold;
-  font-style: bold;
-}
-
-@font-face {
-  font-family: "Jemina";
-  src: url("../../public/assets/fonts/Jemina-Regular.woff") format("woff");
-  font-weight: normal;
+  font-family: "Avenir Next";
+  src: url("../../public/assets/fonts/Avenir-Demi.woff") format("woff");
+  font-weight: 600;
   font-style: normal;
-  ascent-override: 90%;
-  descent-override: 15%;
-}
-
-@font-face {
-  font-family: "Jemina-Italic";
-  src: url("../../public/assets/fonts/Jemina-Italic.woff") format("woff");
-  font-weight: normal;
-  ascent-override: 90%;
-  descent-override: 15%;
+  font-display: swap;
 }
 
 body {
@@ -102,6 +87,8 @@ body {
   height: 100%;
   width: 100%;
   position: relative;
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
 }
 
 * {
@@ -117,10 +104,42 @@ body {
 pre {
   color: white;
   font-style: normal;
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body * {
   letter-spacing: 0.05rem;
+}
+
+/* Classes utilitaires pour Avenir Next */
+.font-regular {
+  font-weight: 400 !important;
+}
+
+.font-semi-bold {
+  font-weight: 600 !important;
+}
+
+.font-avenir-next {
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Headings avec Avenir Next Semi-Bold */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+}
+
+/* Paragraphs avec Avenir Next Regular */
+p, span, div, a, button {
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+}
+
+/* Navigation et CTA en Semi-Bold */
+nav, .cta, .button {
+  font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
 }
 
 section {

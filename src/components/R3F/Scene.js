@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber"
 import { ScrollControls } from "@react-three/drei"
 import IphoneModel from "./IphoneModel"
 
-export default function Scene({ slice, onLoaded }) {
+export default function Scene({ content, onLoaded }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 2], fov: 50 }}
@@ -13,7 +13,7 @@ export default function Scene({ slice, onLoaded }) {
       <pointLight intensity={0.4} position={[2, 2, 2]} />
 
       <ScrollControls pages={1} damping={0.2}>
-        <IphoneModel slice={slice} onLoaded={onLoaded} />
+        <IphoneModel content={content} onLoaded={onLoaded} />
       </ScrollControls>
     </Canvas>
   )

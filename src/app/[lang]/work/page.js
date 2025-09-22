@@ -1,76 +1,30 @@
-import { SliceZone } from "@prismicio/react"
-import * as prismic from "@prismicio/client"
-import { createClient } from "@/prismicio"
 import { Layout } from "@/components/Layout"
-import { components } from "@/slices"
+import { workData } from "@/data/content"
 import WorkGrid from "@/components/WorkGrid"
-import { getLocales } from "@/lib/getLocales"
 
-export async function generateMetadata({ params }) {
-    const { lang } = params
-    const client = createClient()
-    const page = await client.getByUID("page", "work", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const seo = page.data
-
-    return {
-        title: seo?.meta_title || prismic.asText(page.data.title),
-        description: seo?.meta_description || "",
-        keywords: seo?.meta_keywords || "",
-        openGraph: {
-            title: seo?.meta_title || prismic.asText(page.data.title),
-            description: seo?.meta_description || "",
-            images: [
-                {
-                    url: settings.data.favicon.url,
-                },
-            ],
-        },
-        scripts: [
-            {
-                src: "https://static.cdn.prismic.io/prismic.js?new=true&repo=gustv2",
-                async: true,
-                defer: true,
-            },
-        ],
-    }
+export async function generateMetadata() {
+  return {
+    title: "Our Work - Gust",
+    description: "Discover our portfolio of stop-scrolling campaigns and creative projects.",
+  }
 }
 
-export default async function Page({ params }) {
-    const { lang } = await params
-    const client = createClient()
-    const page = await client.getByUID("page", "work", { lang })
-    const header = await client.getSingle("header", { lang })
-    const footer = await client.getSingle("footer", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const allWork = await client.getAllByType('work', { lang })
-    const locales = await getLocales(page, client)
-
-    return (
-        <Layout
-            header={header}
-            footer={footer}
-            settings={settings}
-            locales={locales}
-        >
-            <SliceZone slices={page.data.slices} components={components} />
-            <WorkGrid allWork={allWork} />
-        </Layout>
-    )
+export default function WorkPage() {
+  return (
+    <Layout>
+      <div className="pt-24 px-4 md:px-12">
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-12">
+          Our Work
+        </h1>
+        <WorkGrid projects={workData.projects} />
+      </div>
+    </Layout>
+  )
 }
 
 export async function generateStaticParams() {
-    const client = createClient()
-
-    const pages = await client.getAllByType("page", {
-        lang: "*",
-        filters: [prismic.filter.at("my.page.uid", "work")],
-    })
-
-    return pages.map((page) => {
-        return {
-            page: page,
-            lang: page.lang,
-        }
-    })
+  return [
+    { lang: 'fr' },
+    { lang: 'en' }
+  ]
 }

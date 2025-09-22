@@ -40,8 +40,8 @@ const SubHero = ({ slice }) => {
                     <PrismicRichText
                         field={slice.primary.text}
                         components={{
-                            heading2: ({ children }) => <h2 className="md:text-lg font-bold uppercase">{children}</h2>,
-                            heading3: ({ children }) => <h3 className="md:text-lg font-bold uppercase">{children}</h3>,
+                            heading2: ({ children }) => <h2 className="md:text-lg font-avenir-next font-semi-bold uppercase">{children}</h2>,
+                            heading3: ({ children }) => <h3 className="md:text-lg font-avenir-next font-semi-bold uppercase">{children}</h3>,
                             paragraph: ({ children }) => <p className="md:text-lg">{children}</p>,
                         }}
                     />
@@ -72,8 +72,8 @@ const SubHero = ({ slice }) => {
                             <PrismicRichText
                                 field={item.heading}
                                 components={{
-                                    heading2: ({ children }) => <h2 className="mb-4 text-2xl font-bold font-avenir uppercase">{children}</h2>,
-                                    heading3: ({ children }) => <h3 className="mb-4 text-2xl font-bold font-avenir uppercase">{children}</h3>
+                    heading2: ({ children }) => <h2 className="mb-4 text-2xl font-avenir-next font-semi-bold uppercase">{children}</h2>,
+                    heading3: ({ children }) => <h3 className="mb-4 text-2xl font-avenir-next font-semi-bold uppercase">{children}</h3>
                                 }}
                             />
                             <PrismicRichText

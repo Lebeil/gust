@@ -30,7 +30,7 @@ const OpenCalendly = () => {
     )
 }
 
-export function BottomBar({ locales = [] }) {
+export function BottomBar() {
     const [currentTime, setCurrentTime] = useState("")
     const pathname = usePathname()
 
@@ -70,21 +70,7 @@ export function BottomBar({ locales = [] }) {
                 >
 
                     <div className="grid gap-[var(--tw-2)] w-max">
-                        {/* <ul className="flex flex-wrap gap-[var(--tw-4)]">
-                            {locales.map((locale) => (
-                                <li key={locale.lang} className="first:font-semibold last:opacity-50">
-                                    <PrismicNextLink
-                                        href={locale.url}
-                                        locale={locale.lang}
-                                        aria-label={`Change language to ${locale.lang_name}`}
-                                    >
-                                        {localeLabels[locale.lang] || locale.lang}
-                                    </PrismicNextLink>
-                                </li>
-                            ))}
-                        </ul> */}
-
-                        <div className="hidden lg:flex">{currentTime}</div>
+                        {/* Horloge déplacée vers la navbar */}
                     </div>
 
                     <OpenCalendly />

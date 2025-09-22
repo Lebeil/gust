@@ -1,0 +1,18 @@
+<svg width="120" height="36" viewBox="0 0 120 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Gust - Design minimaliste -->
+  <defs>
+    <linearGradient id="gustGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cccccc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Texte GUST -->
+  <text x="10" y="26" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="url(#gustGradient)" letter-spacing="2px">
+    GUST
+  </text>
+  
+  <!-- Élément graphique minimaliste -->
+  <circle cx="100" cy="18" r="8" fill="none" stroke="url(#gustGradient)" stroke-width="2"/>
+  <circle cx="100" cy="18" r="3" fill="url(#gustGradient)"/>
+</svg> 

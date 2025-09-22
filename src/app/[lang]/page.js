@@ -1,73 +1,34 @@
-import { SliceZone } from "@prismicio/react"
-import * as prismic from "@prismicio/client"
-import { createClient } from "@/prismicio"
 import { Layout } from "@/components/Layout"
-import { components } from "@/slices"
-import { getLocales } from "@/lib/getLocales"
+import { homePageContent } from "@/data/content"
+import Hero from "@/components/Hero"
 
 export async function generateMetadata({ params }) {
   const { lang } = params
-  const client = createClient()
-  const page = await client.getByUID("page", "home", { lang })
-  const settings = await client.getSingle("settings", { lang })
-  const seo = page.data
-
+  
   return {
-    title: seo?.meta_title || prismic.asText(page.data.title),
-    description: seo?.meta_description || "",
-    keywords: seo?.meta_keywords || "",
+    title: "Gust - We create stop-scrollers",
+    description: "L'attention, l'essentiel pour les marques. Nous créons des campagnes qui capturent l'attention.",
+    keywords: "creative agency, stop scrollers, marketing, campaigns",
     openGraph: {
-      title: seo?.meta_title || prismic.asText(page.data.title),
-      description: seo?.meta_description || "",
-      images: [
-        {
-          url: settings.data.favicon.url,
-        },
-      ],
+      title: "Gust - We create stop-scrollers",
+      description: "L'attention, l'essentiel pour les marques. Nous créons des campagnes qui capturent l'attention.",
     },
-    scripts: [
-      {
-        src: "https://static.cdn.prismic.io/prismic.js?new=true&repo=gustv2",
-        async: true,
-        defer: true,
-      },
-    ],
   }
 }
 
 export default async function Page({ params }) {
   const { lang } = await params
-  const client = createClient()
-  const page = await client.getByUID("page", "home", { lang })
-  const header = await client.getSingle("header", { lang })
-  const footer = await client.getSingle("footer", { lang })
-  const settings = await client.getSingle("settings", { lang })
-  const locales = await getLocales(page, client)
-
+  
   return (
-    <Layout
-      header={header}
-      footer={footer}
-      settings={settings}
-      locales={locales}
-    >
-      <SliceZone slices={page.data.slices} components={components} />
+    <Layout>
+      <Hero content={homePageContent.hero} />
     </Layout>
   )
 }
 
 export async function generateStaticParams() {
-  const client = createClient()
-
-  const pages = await client.getAllByType("page", {
-    lang: "*",
-    filters: [prismic.filter.at("my.page.uid", "home")],
-  })
-
-  return pages.map((page) => {
-    return {
-      page: page,
-      lang: page.lang,
-    }
-  })
+  return [
+    { lang: 'fr' },
+    { lang: 'en' }
+  ]
 }
