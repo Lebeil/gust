@@ -17,10 +17,16 @@ export const navigation = {
 export const homePageContent = {
   hero: {
     title: "We create stop-scrollers.",
+    titleBold: true,
     primaryText: "NOUS CRÉONS DES",
     secondaryText: "STOP-SCROLLERS",
-    description: "**We create stop-scrollers.**\n\nL'attention, l'essentiel pour les marques. Avec la fragmentation des audiences et la saturation publicitaire, capter l'attention est désormais le critère clé de réussite d'une campagne.\n\nNotre mission : vous permettre de capter vos audiences afin de délivrer votre message de marque.\n\n**Notre travail →**",
-    mission: "",
+    description: "L'attention, l'essentiel pour les marques. Avec la fragmentation des audiences et la saturation publicitaire, capter l'attention est désormais le critère clé de réussite d'une campagne.",
+    mission: "Notre mission : vous permettre de capter vos audiences",
+    cta: {
+      text: "Notre travail →",
+      link: "/work",
+      isBold: true
+    },
     media: {
       url: "/assets/media/gust_showreel_landing.webm",
       type: "video"
@@ -28,6 +34,7 @@ export const homePageContent = {
   },
   mediaText: {
     title: "We create stop-scrollers.",
+    titleBold: true,
     description: [
       "L'attention, l'essentiel pour les marques. Avec la fragmentation des audiences et la saturation publicitaire, capter l'attention est désormais le critère clé de réussite d'une campagne.",
       "Notre mission : vous permettre de capter vos audiences afin de délivrer votre message de marque."

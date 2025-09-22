@@ -8,7 +8,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
-      <body className="font-avenir-next font-regular">{children}</body>
+      <body className="font-avenir-next font-regular" suppressHydrationWarning={true}>
+        {children}
+      </body>
     </html>
   )
 }
