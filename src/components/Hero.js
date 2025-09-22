@@ -43,7 +43,7 @@ const Hero = ({ content }) => {
         <MainHeroMobile content={content} />
       </div>
 
-      <div className="hidden lg:block lg:min-h-screen">
+      <div className="hidden lg:block lg:h-full">
         <Scene
           content={content}
           onLoaded={() => setIsSceneLoaded(true)}

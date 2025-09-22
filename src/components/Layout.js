@@ -29,9 +29,9 @@ export function Layout({ children }) {
       <Navbar />
       
       <Template>
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full overflow-hidden">
           <main
-            className={`${pageType ? `main ${pageType}` : ""}${
+            className={`h-full ${pageType ? `main ${pageType}` : ""}${
               pageType === "contact" ? " h-screen" : ""
             }${
               pageType === "work" || pageType === "contact" ? " pt-[var(--tw-64)]" : ""
