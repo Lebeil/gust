@@ -25,7 +25,7 @@ export default function LogoBanner() {
   const duplicatedLogos = [...logos, ...logos];
 
   return (
-    <div className="w-screen py-1 lg:py-2 overflow-hidden relative mb-0 left-1/2 transform -translate-x-1/2 bg-blue-900/95" style={{
+    <div className="fixed bottom-10 w-full py-4 overflow-hidden z-10" style={{
       maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
       WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)'
     }}>
@@ -33,9 +33,9 @@ export default function LogoBanner() {
         {duplicatedLogos.map((logo, index) => (
           <div 
             key={`${logo.name}-${index}`}
-            className="flex items-center justify-center min-w-[80px] lg:min-w-[110px]"
+            className="flex items-center justify-center min-w-[180px]"
           >
-            <div className="relative w-28 h-7 lg:w-36 lg:h-9 flex items-center justify-center">
+            <div className="relative w-80 h-24 flex items-center justify-center">
               <Image 
                 src={logo.image} 
                 alt={logo.name} 
@@ -50,8 +50,8 @@ export default function LogoBanner() {
       </div>
       
       {/* Dégradés de renfort pour un fondu ultra-doux */}
-      <div className="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-blue-900 via-blue-900/60 to-transparent pointer-events-none z-10"></div>
-      <div className="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-blue-900 via-blue-900/60 to-transparent pointer-events-none z-10"></div>
+      <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-blue-900 via-blue-900/40 to-transparent pointer-events-none z-10"></div>
+      <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-blue-900 via-blue-900/40 to-transparent pointer-events-none z-10"></div>
     </div>
   );
 }

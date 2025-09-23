@@ -2,13 +2,12 @@
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Navbar from "./Navbar"
-import { Footer } from "./Footer"
-import { BottomBar } from "./BottomBar"
+import PrendreRDV from "./PrendreRDV"
+import LogoBanner from "./LogoBanner"
 import ScrollingBackgroundShaderPage from "./scrollingBackgroundGradient/ScrollingBackgroundGradientPage"
 import { Leva } from 'leva'
 import Template from "./Template"
 import FadeObserver from "./FadeObserver"
-import { footerContent } from "@/data/content"
 
 export function Layout({ children }) {
   const pathname = usePathname()
@@ -41,9 +40,8 @@ export function Layout({ children }) {
           </main>
         </div>
       </Template>
-
-      <BottomBar />
-      <Footer content={footerContent} pageType={pageType} />
+      <LogoBanner />
+      <PrendreRDV />
     </>
   )
 }

@@ -30,7 +30,7 @@ const OpenCalendly = () => {
     )
 }
 
-export function BottomBar() {
+export default function PrendreRDV() {
     const [currentTime, setCurrentTime] = useState("")
     const pathname = usePathname()
 
@@ -55,9 +55,12 @@ export function BottomBar() {
         <section className={`relative`}>
             <div
                 className={`
-                    fixed bottom-0 w-full max-w-[inherit]
+                    fixed bottom-0 right-0 w-auto
                     p-[var(--tw-6)]
                     md:p-[var(--tw-12)]
+                    pb-2
+                    md:pb-4
+                    z-30
                 `}
             >
 

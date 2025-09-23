@@ -1,7 +1,6 @@
 import { Layout } from "@/components/Layout"
 import { homePageContent } from "@/data/content"
 import Hero from "@/components/Hero"
-import LogoBanner from "@/components/LogoBanner"
 
 export async function generateMetadata({ params }) {
   const { lang } = params
@@ -22,13 +21,8 @@ export default async function Page({ params }) {
   
   return (
     <Layout>
-      <div className="h-screen flex flex-col overflow-hidden relative">
-        <div className="flex-1 flex flex-col justify-center min-h-0">
-          <Hero content={homePageContent.hero} />
-        </div>
-        <div className="flex-shrink-0 h-auto">
-          <LogoBanner />
-        </div>
+      <div className="h-screen flex flex-col justify-start items-center -mt-16 overflow-hidden relative min-h-0">
+        <Hero content={homePageContent.hero} />
       </div>
     </Layout>
   )
