@@ -186,7 +186,7 @@ const HorizontalScroll = () => {
         'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 
         'none';
     });
-  }, [isHeroAnimationComplete, scrollProgress, transitionProgress, isInHeroZone]);
+  }, [isHeroAnimationComplete]);
 
   const measure = useCallback(() => {
     if (typeof window === "undefined") {
@@ -203,7 +203,7 @@ const HorizontalScroll = () => {
     offsetRef.current = clampOffset(offsetRef.current);
     setTrackWidth(viewportWidth * slides.length); // Largeur visuelle normale pour le rendu
     applyTransform();
-  }, [applyTransform, clampOffset, slides.length, isHeroAnimationComplete]);
+  }, [applyTransform, clampOffset, slides.length]);
 
   useEffect(() => {
     measure();
@@ -309,7 +309,7 @@ const HorizontalScroll = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [applyTransform, clampOffset, measure, isHeroAnimationComplete]);
+  }, [applyTransform, clampOffset, measure]);
 
       return (
         <div className="relative flex h-screen w-screen overflow-hidden ">

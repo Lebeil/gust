@@ -1,73 +1,77 @@
-import * as prismic from "@prismicio/client"
-import { createClient } from "@/prismicio"
-import { SliceZone } from "@prismicio/react"
 import { Layout } from "@/components/Layout"
-import { components } from "@/slices"
-import { getLocales } from "@/lib/getLocales"
 
 export async function generateMetadata({ params }) {
-    const { lang } = params
-    const client = createClient()
-    const page = await client.getByUID("page", "make-it", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const seo = page.data
-
-    return {
-        title: seo?.meta_title || prismic.asText(page.data.title),
-        description: seo?.meta_description || "",
-        keywords: seo?.meta_keywords || "",
-        openGraph: {
-            title: seo?.meta_title || prismic.asText(page.data.title),
-            description: seo?.meta_description || "",
-            images: [
-                {
-                    url: settings.data.favicon.url,
-                },
-            ],
-        },
-        scripts: [
-            {
-                src: "https://static.cdn.prismic.io/prismic.js?new=true&repo=gustv2",
-                async: true,
-                defer: true,
-            },
-        ],
-    }
+  const { lang } = params
+  
+  return {
+    title: "Make It - Gust",
+    description: "Faisons-le ensemble ! Découvrez notre processus de création collaboratif.",
+    keywords: "make it, création, gust, processus créatif",
+    openGraph: {
+      title: "Make It - Gust",
+      description: "Faisons-le ensemble ! Découvrez notre processus de création collaboratif.",
+    },
+  }
 }
 
-export default async function Page({ params }) {
-    const { lang } = await params
-    const client = createClient()
-    const page = await client.getByUID("page", "make-it", { lang })
-    const header = await client.getSingle("header", { lang })
-    const footer = await client.getSingle("footer", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const locales = await getLocales(page, client)
-
-    return (
-        <Layout
-            header={header}
-            footer={footer}
-            settings={settings}
-            locales={locales}
-        >
-            <SliceZone slices={page.data.slices} components={components} />
-        </Layout>
-    )
+export default async function MakeItPage({ params }) {
+  const { lang } = await params
+  
+  return (
+    <Layout>
+      <div className="min-h-screen flex items-center justify-center px-6 py-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
+            Make It
+          </h1>
+          
+          <p className="text-xl text-white/80 mb-12">
+            Transformons vos idées en réalité avec notre expertise créative.
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
+              <div className="text-4xl mb-4">🎯</div>
+              <h3 className="text-2xl font-semibold text-white mb-4">Stratégie</h3>
+            <p className="text-white/80">
+              Définition d&apos;une stratégie créative alignée sur vos objectifs.
+            </p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
+              <div className="text-4xl mb-4">🎬</div>
+              <h3 className="text-2xl font-semibold text-white mb-4">Production</h3>
+            <p className="text-white/80">
+              Création de contenu vidéo premium qui capture l&apos;attention.
+            </p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
+              <div className="text-4xl mb-4">✨</div>
+              <h3 className="text-2xl font-semibold text-white mb-4">Résultats</h3>
+            <p className="text-white/80">
+              Des campagnes qui génèrent de l&apos;engagement et des résultats.
+            </p>
+            </div>
+          </div>
+          
+          <div className="mt-12">
+            <a 
+              href="/contact" 
+              className="inline-block bg-white text-black px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/90 transition-colors"
+            >
+              Commencer un projet
+            </a>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  )
 }
 
 export async function generateStaticParams() {
-    const client = createClient()
-
-    const pages = await client.getAllByType("page", {
-        lang: "*",
-        filters: [prismic.filter.at("my.page.uid", "make-it")],
-    })
-
-    return pages.map((page) => {
-        return {
-            page: page,
-            lang: page.lang
-        }
-    })
+  return [
+    { lang: 'fr' },
+    { lang: 'en' }
+  ]
 }

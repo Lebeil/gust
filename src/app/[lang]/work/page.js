@@ -16,7 +16,7 @@ export default function WorkPage() {
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-12">
           Our Work
         </h1>
-        <WorkGrid projects={workData.projects} />
+        <WorkGrid allWork={workData.projects} />
       </div>
     </Layout>
   )

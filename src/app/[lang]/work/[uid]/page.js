@@ -1,73 +1,113 @@
-import * as prismic from "@prismicio/client"
-import { createClient } from "@/prismicio"
-import { SliceZone } from "@prismicio/react"
-import { components } from "@/slices"
 import { Layout } from "@/components/Layout"
-import { getLocales } from "@/lib/getLocales"
+import { notFound } from "next/navigation"
+
+// Projets statiques pour remplacer Prismic
+const projects = {
+  'les-secrets-de-loly': {
+    title: 'Les secrets de Loly',
+    client: 'OPI',
+    description: 'Une campagne créative pour OPI mettant en scène Loly dans un univers coloré.',
+    video: '/assets/media/cases_studies/Les%20secrets%20de%20loly.mp4',
+    tags: ['Production', 'Influence']
+  },
+  'vestiaire-collective': {
+    title: 'Vestiaire Collective',
+    client: 'VESTIAIRE COLLECTIVE',
+    description: 'Campagne d\'influence pour la plateforme de mode de seconde main.',
+    video: '/assets/media/cases_studies/Vestiaire_Collective.mp4',
+    tags: ['Influence']
+  },
+  'showroom-prive': {
+    title: 'Showroom Privé',
+    client: 'SHOWROOM PRIVÉ',
+    description: 'Collaboration avec des célébrités pour une campagne d\'impact.',
+    video: '/assets/media/cases_studies/ShowroomBy-Faustine.mp4',
+    tags: ['Célébrité', 'Production']
+  }
+};
 
 export async function generateMetadata({ params: { uid, lang } }) {
-    const client = createClient()
-    const work = await client.getByUID("work", uid, { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const seo = work.data
-
+  const project = projects[uid];
+  
+  if (!project) {
     return {
-        title: seo?.meta_title || prismic.asText(seo.title),
-        description: seo?.meta_description || "",
-        keywords: seo?.meta_keywords || "",
-        openGraph: {
-            title: seo?.meta_title || prismic.asText(seo.title),
-            description: seo?.meta_description || "",
-            images: [
-                {
-                    url: settings.data.favicon?.url || "/default-og-image.jpg",
-                },
-            ],
-        },
-        scripts: [
-            {
-                src: "https://static.cdn.prismic.io/prismic.js?new=true&repo=gustv2",
-                async: true,
-                defer: true,
-            },
-        ],
-    }
+      title: 'Projet non trouvé - Gust',
+      description: 'Ce projet n\'existe pas.'
+    };
+  }
+  
+  return {
+    title: `${project.title} - ${project.client} | Gust`,
+    description: project.description,
+    keywords: `${project.client}, ${project.tags.join(', ')}, gust`,
+    openGraph: {
+      title: `${project.title} - ${project.client}`,
+      description: project.description,
+    },
+  }
 }
 
-export default async function Page({ params }) {
-    const { lang } = await params
-    const client = createClient()
-    const work = await client.getByUID("work", params.uid, { lang })
-    const header = await client.getSingle("header", { lang })
-    const footer = await client.getSingle("footer", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const locales = await getLocales(work, client)
-    const resultsData = work.data.slices.filter(slice => slice.slice_type === "results")
-
-    return (
-        <Layout
-            header={header}
-            footer={footer}
-            settings={settings}
-            locales={locales}
-        >
-            <SliceZone slices={work.data.slices} components={components} resultsData={resultsData} />
-        </Layout>
-    )
+export default async function WorkPage({ params }) {
+  const { lang, uid } = await params;
+  const project = projects[uid];
+  
+  if (!project) {
+    notFound();
+  }
+  
+  return (
+    <Layout>
+      <div className="min-h-screen px-6 py-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+              {project.title}
+            </h1>
+            <p className="text-2xl text-white/60 mb-8">
+              {project.client}
+            </p>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+              {project.description}
+            </p>
+          </div>
+          
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {project.tags.map((tag) => (
+                <span 
+                  key={tag}
+                  className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-white/80 text-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          
+          {project.video && (
+            <div className="aspect-video bg-black rounded-lg overflow-hidden">
+              <video 
+                controls 
+                className="w-full h-full"
+                poster={`/assets/media/cases_studies/cover/${project.title}_cover.png`}
+              >
+                <source src={project.video} type="video/mp4" />
+                Votre navigateur ne supporte pas la vidéo.
+              </video>
+            </div>
+          )}
+        </div>
+      </div>
+    </Layout>
+  )
 }
 
 export async function generateStaticParams() {
-    const client = createClient()
-
-    const pages = await client.getAllByType("work", {
-        lang: "*",
-        filters: [prismic.filter.not("my.page.uid", "work")],
-    })
-
-    return pages.map((page) => {
-        return {
-            uid: page.uid,
-            lang: page.lang,
-        }
-    })
+  // Générer les paramètres statiques pour les projets existants
+  const projectIds = Object.keys(projects);
+  
+  return projectIds.flatMap(uid => [
+    { uid, lang: 'fr' },
+    { uid, lang: 'en' }
+  ]);
 }

@@ -53,21 +53,71 @@ export const homePageContent = {
   }
 }
 
+
 export const workData = {
   projects: [
     {
-      uid: "project-1",
-      title: "Project 1",
-      description: "Description of project 1",
-      image: "/assets/media/LIVRES.png",
-      category: "Brand"
+      uid: "les-secrets-de-loly",
+      title: "Les secrets de Loly",
+      client: "OPI",
+      tags: ["Production", "Influence"],
+      data: {
+        secteurs: [
+          { label: "Beauty" },
+          { label: "Lifestyle" }
+        ],
+        cover: {
+          url: "/assets/media/cases_studies/cover/LSL_cover 2.png",
+          alt: "Les secrets de Loly cover",
+          width: 800,
+          height: 600
+        },
+        preview_video: {
+          url: "/assets/media/cases_studies/Les%20secrets%20de%20loly.mp4"
+        }
+      }
     },
     {
-      uid: "project-2", 
-      title: "Project 2",
-      description: "Description of project 2", 
-      image: "/assets/media/LIVRES_2.png",
-      category: "Digital"
+      uid: "vestiaire-collective",
+      title: "Vestiaire Collective",
+      client: "VESTIAIRE COLLECTIVE", 
+      tags: ["Influence"],
+      data: {
+        secteurs: [
+          { label: "Fashion" },
+          { label: "E-commerce" }
+        ],
+        cover: {
+          url: "/assets/media/cases_studies/cover/VestiaireCo_cover 2.png",
+          alt: "Vestiaire Collective cover",
+          width: 800,
+          height: 600
+        },
+        preview_video: {
+          url: "/assets/media/cases_studies/Vestiaire_Collective.mp4"
+        }
+      }
+    },
+    {
+      uid: "showroom-prive",
+      title: "Showroom Privé",
+      client: "SHOWROOM PRIVÉ",
+      tags: ["Célébrité", "Production"],
+      data: {
+        secteurs: [
+          { label: "Fashion" },
+          { label: "Celebrity" }
+        ],
+        cover: {
+          url: "/assets/media/cases_studies/cover/Faustine_cover 2.png",
+          alt: "Showroom Privé cover",
+          width: 800,
+          height: 600
+        },
+        preview_video: {
+          url: "/assets/media/cases_studies/ShowroomBy-Faustine.mp4"
+        }
+      }
     }
   ]
 }

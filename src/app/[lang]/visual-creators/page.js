@@ -1,73 +1,65 @@
-import * as prismic from "@prismicio/client"
-import { createClient } from "@/prismicio"
-import { SliceZone } from "@prismicio/react"
 import { Layout } from "@/components/Layout"
-import { components } from "@/slices"
-import { getLocales } from "@/lib/getLocales"
 
 export async function generateMetadata({ params }) {
-    const { lang } = params
-    const client = createClient()
-    const page = await client.getByUID("page", "visual-creators", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const seo = page.data
-
-    return {
-        title: seo?.meta_title || prismic.asText(page.data.title),
-        description: seo?.meta_description || "",
-        keywords: seo?.meta_keywords || "",
-        openGraph: {
-            title: seo?.meta_title || prismic.asText(page.data.title),
-            description: seo?.meta_description || "",
-            images: [
-                {
-                    url: settings.data.favicon.url,
-                },
-            ],
-        },
-        scripts: [
-            {
-                src: "https://static.cdn.prismic.io/prismic.js?new=true&repo=gustv2",
-                async: true,
-                defer: true,
-            },
-        ],
-    }
+  const { lang } = params
+  
+  return {
+    title: "Visual Creators - Gust",
+    description: "Découvrez notre expertise en création visuelle et nos créateurs de contenu.",
+    keywords: "visual creators, créateurs visuels, gust, production vidéo",
+    openGraph: {
+      title: "Visual Creators - Gust",
+      description: "Découvrez notre expertise en création visuelle et nos créateurs de contenu.",
+    },
+  }
 }
 
-export default async function Page({ params }) {
-    const { lang } = await params
-    const client = createClient()
-    const page = await client.getByUID("page", "visual-creators", { lang })
-    const header = await client.getSingle("header", { lang })
-    const footer = await client.getSingle("footer", { lang })
-    const settings = await client.getSingle("settings", { lang })
-    const locales = await getLocales(page, client)
-
-    return (
-        <Layout
-            header={header}
-            footer={footer}
-            settings={settings}
-            locales={locales}
-        >
-            <SliceZone slices={page.data.slices} components={components} />
-        </Layout>
-    )
+export default async function VisualCreatorsPage({ params }) {
+  const { lang } = await params
+  
+  return (
+    <Layout>
+      <div className="min-h-screen flex items-center justify-center px-6 py-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
+            Visual Creators
+          </h1>
+          
+          <p className="text-xl text-white/80 mb-12">
+            Nous travaillons avec les meilleurs créateurs visuels pour donner vie à vos projets.
+          </p>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
+              <h3 className="text-2xl font-semibold text-white mb-4">Production</h3>
+              <p className="text-white/80">
+                Création de contenu vidéo professionnel avec nos équipes créatives.
+              </p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
+              <h3 className="text-2xl font-semibold text-white mb-4">Direction Artistique</h3>
+              <p className="text-white/80">
+                Conception et supervision créative de vos campagnes visuelles.
+              </p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
+              <h3 className="text-2xl font-semibold text-white mb-4">Post-Production</h3>
+              <p className="text-white/80">
+                Montage, étalonnage et finalisation de vos créations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  )
 }
 
 export async function generateStaticParams() {
-    const client = createClient()
-
-    const pages = await client.getAllByType("page", {
-        lang: "*",
-        filters: [prismic.filter.at("my.page.uid", "visual-creators")],
-    })
-
-    return pages.map((page) => {
-        return {
-            page: page,
-            lang: page.lang
-        }
-    })
+  return [
+    { lang: 'fr' },
+    { lang: 'en' }
+  ]
 }
