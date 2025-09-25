@@ -7,7 +7,7 @@ const Scene = dynamic(() => import("./R3F/Scene"), {
   ssr: false,
 });
 
-const Hero = ({ content }) => {
+const Hero = ({ content, scrollProgress = 0 }) => {
   const [isSceneLoaded, setIsSceneLoaded] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -47,6 +47,7 @@ const Hero = ({ content }) => {
         <Scene
           content={content}
           onLoaded={() => setIsSceneLoaded(true)}
+          scrollProgress={scrollProgress}
         />
       </div>
     </section>

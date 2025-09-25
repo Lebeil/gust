@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout"
 import { homePageContent } from "@/data/content"
 import Hero from "@/components/Hero"
+import HorizontalScroll from "@/components/HorizontalScroll"
 
 export async function generateMetadata({ params }) {
   const { lang } = params
@@ -21,7 +22,7 @@ export default async function Page({ params }) {
   
   return (
     <Layout>
-      <Hero content={homePageContent.hero} />
+      <HorizontalScroll />
     </Layout>
   )
 }

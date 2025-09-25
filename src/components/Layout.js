@@ -2,7 +2,7 @@
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Navbar from "./Navbar"
-import { Footer } from "./Footer"
+
 import { BottomBar } from "./BottomBar"
 import ScrollingBackgroundShaderPage from "./scrollingBackgroundGradient/ScrollingBackgroundGradientPage"
 import { Leva } from 'leva'
@@ -43,7 +43,6 @@ export function Layout({ children }) {
       </Template>
 
       <BottomBar />
-      <Footer content={footerContent} pageType={pageType} />
     </>
   )
 }

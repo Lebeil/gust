@@ -49,7 +49,7 @@ const RoundedScreenMaterial = shaderMaterial(
 
 extend({ RoundedScreenMaterial })
 
-export default function Model({ content, onLoaded }) {
+export default function Model({ content, onLoaded, externalScrollProgress }) {
     const landingVideo = content.media
     const videoTexture = useVideoTexture(landingVideo.url)
     const { nodes } = useGLTF("/assets/glb/iphone-final.glb")
@@ -84,7 +84,9 @@ export default function Model({ content, onLoaded }) {
     const baseScale = Math.min(viewport.width, viewport.height) * 0.1
 
     useFrame((state, delta) => {
-        tl.current.seek(scroll.offset * tl.current.duration())
+        // Utiliser le scroll externe si disponible, sinon le scroll normal
+        const scrollValue = externalScrollProgress !== undefined ? externalScrollProgress : scroll.offset;
+        tl.current.seek(scrollValue * tl.current.duration())
     })
 
     useLayoutEffect(() => {
