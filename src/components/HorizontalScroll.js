@@ -6,6 +6,7 @@ import ThreeColumnsAccordion from "@/components/ThreeColumnsAccordion";
 import AutoScrollGallery from "@/components/AutoScrollGallery";
 import ExpertisesGrid from "@/components/ExpertisesGrid";
 import LogoBanner from "@/components/LogoBanner";
+import FaqOverlay from "@/components/FaqOverlay";
 import { homePageContent } from "@/data/content";
 
 const HorizontalScroll = () => {
@@ -95,8 +96,15 @@ const HorizontalScroll = () => {
   // Calculer le progress de scroll pour l'animation iPhone
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isHeroAnimationComplete, setIsHeroAnimationComplete] = useState(false);
-  const [isInHeroZone, setIsInHeroZone] = useState(true);
-  const [transitionProgress, setTransitionProgress] = useState(0);
+  const [overlayProgress, setOverlayProgress] = useState(0);
+  const overlayProgressRef = useRef(0);
+  const overlayContainerRef = useRef(null);
+  const overlayZoneRef = useRef(0);
+  const overlayStartRef = useRef(0);
+
+  const handleOverlayContainerReady = useCallback((node) => {
+    overlayContainerRef.current = node;
+  }, []);
   
   const slides = useMemo(
     () => [
@@ -287,10 +295,12 @@ const HorizontalScroll = () => {
 
       let magnetContext = null;
 
-      if (offsetRef.current > heroExtendedZone) {
+      const clampedOffsetForTrack = Math.min(offsetRef.current, overlayStartRef.current || offsetRef.current);
+
+      if (clampedOffsetForTrack > heroExtendedZone) {
         const slidesAfterHero = Math.max(slides.length - 1, 0);
         magnetContext = getMagnetizedTransform({
-          offsetValue: offsetRef.current,
+          offsetValue: clampedOffsetForTrack,
           viewportWidth,
           slidesCount: slidesAfterHero,
         });
@@ -306,35 +316,34 @@ const HorizontalScroll = () => {
       let transformValue = 0;
 
       if (offsetRef.current <= heroExtendedZone) {
-        setIsInHeroZone(true);
-        
         if (heroProgress >= 0.98) {
-          // Transition progressive à partir de 98%
           const transitionProg = (heroProgress - 0.98) / 0.02;
-          setTransitionProgress(transitionProg);
-          // Animation fluide vers la section suivante
           transformValue = -transitionProg * viewportWidth;
         } else {
-          setTransitionProgress(0);
           transformValue = 0;
         }
       } else {
-        // Hors de la zone Hero - défilement magnétique
-        setIsInHeroZone(false);
-
         const slidesAfterHero = Math.max(slides.length - 1, 0);
         const magnetDetails = magnetContext ?? getMagnetizedTransform({
-          offsetValue: offsetRef.current,
+          offsetValue: clampedOffsetForTrack,
           viewportWidth,
           slidesCount: slidesAfterHero,
         });
-
-        setTransitionProgress(magnetDetails.localProgress);
         transformValue = magnetDetails.transformValue;
       }
 
       // Application de la transformation avec transitions fluides
       trackRef.current.style.transform = `translate3d(${transformValue}px, 0, 0)`;
+
+      const overlayStart = overlayStartRef.current;
+      const overlayZone = overlayZoneRef.current || 1;
+      const overlayDelta = Math.max(offsetRef.current - overlayStart, 0);
+      const rawOverlayProgress = Math.min(overlayDelta / overlayZone, 1);
+
+      if (Math.abs(rawOverlayProgress - overlayProgressRef.current) > 0.001) {
+        overlayProgressRef.current = rawOverlayProgress;
+        setOverlayProgress(rawOverlayProgress);
+      }
     });
   }, [getMagnetizedTransform, isHeroAnimationComplete, isMobile, slides.length, updateTrackTransition]);
 
@@ -351,9 +360,15 @@ const HorizontalScroll = () => {
     const viewportWidth = window.innerWidth;
     const heroExtendedZone = viewportWidth * 2; // Zone étendue pour Hero
     // Largeur totale = zone étendue Hero + autres sections normales
-    const totalWidth = heroExtendedZone + viewportWidth * (slides.length - 1);
+    const slidesAfterHero = Math.max(slides.length - 1, 0);
+    const overlayZone = viewportWidth;
+    const baseTotalWidth = heroExtendedZone + viewportWidth * slidesAfterHero;
+    const baseMaxOffset = Math.max(baseTotalWidth - viewportWidth, 0);
+    const totalWidth = baseTotalWidth + overlayZone;
     const maxOffset = Math.max(totalWidth - viewportWidth, 0);
 
+    overlayZoneRef.current = overlayZone;
+    overlayStartRef.current = baseMaxOffset;
     maxOffsetRef.current = maxOffset;
     offsetRef.current = clampOffset(offsetRef.current);
     setTrackWidth(viewportWidth * slides.length); // Largeur visuelle normale pour le rendu
@@ -373,9 +388,23 @@ const HorizontalScroll = () => {
     document.body.style.overflow = "hidden";
 
     const handleWheel = (event) => {
+      const isVertical = Math.abs(event.deltaY) >= Math.abs(event.deltaX);
+      const overlayFullyVisible = overlayProgressRef.current >= 0.999;
+      const overlayContainer = overlayContainerRef.current;
+
+      if (overlayFullyVisible && isVertical) {
+        if (event.deltaY > 0 && overlayContainer) {
+          return;
+        }
+
+        if (event.deltaY < 0 && overlayContainer && overlayContainer.scrollTop > 0) {
+          return;
+        }
+      }
+
       event.preventDefault();
 
-      const dominantDelta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+      const dominantDelta = isVertical ? event.deltaY : event.deltaX;
       offsetRef.current = clampOffset(offsetRef.current + dominantDelta);
       applyTransform();
     };
@@ -387,6 +416,19 @@ const HorizontalScroll = () => {
     const handleKeyDown = (event) => {
       if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].includes(event.key)) {
         return;
+      }
+
+      const overlayFullyVisible = overlayProgressRef.current >= 0.999;
+      const overlayContainer = overlayContainerRef.current;
+
+      if (overlayFullyVisible) {
+        if (event.key === "ArrowDown") {
+          return;
+        }
+
+        if (event.key === "ArrowUp" && overlayContainer && overlayContainer.scrollTop > 0) {
+          return;
+        }
       }
 
       event.preventDefault();
@@ -426,14 +468,28 @@ const HorizontalScroll = () => {
       const touch = event.touches[0];
       const deltaY = touchStartRef.current.y - touch.clientY;
       const deltaX = touchStartRef.current.x - touch.clientX;
-      const dominantDelta = Math.abs(deltaY) > Math.abs(deltaX) ? deltaY : -deltaX;
 
-      if (Math.abs(dominantDelta) < 2) {
+      if (Math.abs(deltaX) < 2 && Math.abs(deltaY) < 2) {
         return;
+      }
+
+      const isVertical = Math.abs(deltaY) >= Math.abs(deltaX);
+      const overlayFullyVisible = overlayProgressRef.current >= 0.999;
+      const overlayContainer = overlayContainerRef.current;
+
+      if (overlayFullyVisible && isVertical) {
+        if (deltaY > 0 && overlayContainer) {
+          return;
+        }
+
+        if (deltaY < 0 && overlayContainer && overlayContainer.scrollTop > 0) {
+          return;
+        }
       }
 
       event.preventDefault();
 
+      const dominantDelta = isVertical ? deltaY : -deltaX;
       offsetRef.current = clampOffset(touchStartRef.current.offset + dominantDelta);
       applyTransform();
     };
@@ -543,29 +599,7 @@ const HorizontalScroll = () => {
       );
     })}
   </div>
-  
-  {/* Indicateur de progression pour l'animation Hero */}
-  {scrollProgress < 0.98 && !isHeroAnimationComplete && (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2">
-      <div className="text-white/70 text-sm font-medium">
-        {scrollProgress < 0.95 ? "Continuez à défiler pour voir l'animation" : "Découvrez notre CTA ↓"}
-      </div>
-      <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-white rounded-full transition-all duration-300"
-          style={{ width: `${scrollProgress * 100}%` }}
-        />
-      </div>
-      <div className="text-white/50 text-xs">
-        {Math.round(scrollProgress * 100)}%
-      </div>
-    </div>
-  )}
-  
-  {/* Indicateur de transition en cours retiré */}
-  
-  {/* Message quand l'animation est terminée mais avant transition */}
-  {/* Overlay retiré : LogoBanner affiché directement sous Hero */}
+  <FaqOverlay progress={overlayProgress} onContainerReady={handleOverlayContainerReady} />
 </div>
 );
 };

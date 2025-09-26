@@ -1,11 +1,24 @@
 "use client";
 
-import { useMemo } from 'react';
-import Faq from './Faq';
+import { useEffect, useMemo, useRef } from 'react';
+import Faq, { FaqContent } from './Faq';
 import CinematicFooter from './CinematicFooter';
 
-export default function FaqOverlay({ progress = 0 }) {
+export default function FaqOverlay({ progress = 0, onContainerReady }) {
   const clamped = useMemo(() => Math.max(0, Math.min(1, progress || 0)), [progress]);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof onContainerReady !== 'function') {
+      return;
+    }
+
+    onContainerReady(containerRef.current);
+
+    return () => {
+      onContainerReady(null);
+    };
+  }, [onContainerReady]);
 
   const ease = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
   const eased = ease(clamped);
@@ -13,15 +26,17 @@ export default function FaqOverlay({ progress = 0 }) {
 
   return (
     <div
-      className="fixed inset-0 z-[1050] pointer-events-none"
+      className="fixed inset-0 z-[1050]"
       style={{
         transform: `translateY(${translateY}vh)`,
         transition: 'transform 0.1s ease-out',
+        pointerEvents: clamped > 0 ? 'auto' : 'none'
       }}
     >
       <div
         id="faq-scroll-container"
-        className="w-full h-full overflow-y-auto pointer-events-auto"
+        ref={containerRef}
+        className="flex h-full w-full flex-col overflow-y-auto"
         style={{
           opacity: clamped > 0 ? 1 : 0,
           backgroundImage: "url('/images/GRADIANT.png')",
@@ -30,8 +45,12 @@ export default function FaqOverlay({ progress = 0 }) {
           backgroundPosition: 'center'
         }}
       >
-        <Faq />
-        <CinematicFooter />
+        <div className="flex flex-1 flex-col">
+          <FaqContent />
+        </div>
+        <div className="px-6 pt-6 md:px-10 md:pt-10">
+          <CinematicFooter />
+        </div>
       </div>
     </div>
   );
