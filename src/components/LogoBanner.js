@@ -27,16 +27,7 @@ export default function LogoBanner() {
   return (
     <div
       className="relative flex w-full items-center justify-center overflow-hidden py-[var(--tw-8)] md:py-[var(--tw-10)]"
-      style={{
-        maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
-      }}
     >
-      <div className="absolute inset-0 z-10 pointer-events-none" aria-hidden="true">
-        <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-blue-900 via-blue-900/40 to-transparent" />
-        <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-blue-900 via-blue-900/40 to-transparent" />
-      </div>
-
       <div className="flex min-w-full animate-logo-marquee gap-[var(--tw-10)]">
         {duplicatedLogos.map((logo, index) => (
           <div

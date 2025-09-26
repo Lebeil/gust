@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 5vh;
+  height: 8vh;
   /* 5% de la hauteur d'écran */
   display: flex;
   align-items: center;
@@ -273,8 +273,8 @@
 @media (max-width: 768px) {
   .cinematicNavbar {
     padding: 0 1.5rem;
-    height: 5vh;
-    /* Maintient 5% sur tablet */
+    height: 8vh;
+    /* Maintient 8% sur tablet */
   }
 
   .desktopMenu,
@@ -295,8 +295,8 @@
 @media (max-width: 480px) {
   .cinematicNavbar {
     padding: 0 1rem;
-    height: 5vh;
-    /* Maintient 5% sur mobile */
+    height: 8vh;
+    /* Maintient 8% sur mobile */
   }
 
   .mobileDropdown {

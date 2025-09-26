@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 // - 1 carte centrale agrandie
 // - 4 cartes périphériques sur un arc
 // - Survol d'une carte: elle se déplace au centre, s'agrandit et lit la vidéo
-export default function ExpertisesGrid() {
+export default function ExpertisesGrid({ forceActiveIndex }) {
   const router = useRouter();
   const pathname = usePathname();
   const langPrefix = useMemo(() => {
@@ -70,6 +70,21 @@ export default function ExpertisesGrid() {
     []
   );
   const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof forceActiveIndex !== "number") {
+      return;
+    }
+
+    const boundedIndex = ((forceActiveIndex % cards.length) + cards.length) % cards.length;
+    const targetCard = cards[boundedIndex];
+
+    if (!targetCard || targetCard.id === activeId) {
+      return;
+    }
+
+    setActiveId(targetCard.id);
+  }, [activeId, cards, forceActiveIndex]);
 
   useEffect(() => {
     const v = videoRef.current;

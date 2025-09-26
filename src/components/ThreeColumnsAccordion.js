@@ -1,12 +1,25 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Component that displays the 3-columns section with accordion hover effect
 export default function ThreeColumnsAccordion({ progress = 0 }) {
-  const [hoveredColumn, setHoveredColumn] = useState(null);
+  const [activeColumn, setActiveColumn] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Force logos to be hidden - they should not appear after iPhone page
   const logoOpacity = 0;
+
+  // Mobile detection
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 1024);
+      };
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }
+  }, []);
 
   const columns = [
     {
@@ -32,9 +45,88 @@ export default function ThreeColumnsAccordion({ progress = 0 }) {
     }
   ];
 
+  const handleToggleColumn = (columnId) => {
+    if (activeColumn === columnId) {
+      setActiveColumn(null);
+      return;
+    }
+
+    setActiveColumn(columnId);
+  };
+
+  // Mobile accordion layout
+  if (isMobile) {
+    return (
+      <section
+        className="relative flex min-h-screen w-full flex-col overflow-hidden"
+        aria-label="We think We connect We produce"
+      >
+        <div className="flex flex-1 flex-col">
+          {columns.map((column, index) => {
+            const isExpanded = activeColumn === column.id;
+            const panelId = `${column.id}-panel`;
+            const headingId = `${column.id}-heading`;
+
+            return (
+              <article
+                key={column.id}
+                className="flex min-h-[33.333vh] flex-col justify-center border-b border-white/20 bg-transparent last:border-b-0"
+                tabIndex={0}
+                role="region"
+                aria-labelledby={headingId}
+              >
+                <button
+                  id={headingId}
+                  type="button"
+                  className="flex w-full items-center justify-between px-6 py-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  onClick={() => handleToggleColumn(column.id)}
+                  aria-expanded={isExpanded}
+                  aria-controls={panelId}
+                >
+                  <span className="text-2xl font-bold text-white">
+                    {column.title}
+                  </span>
+                  <span className="text-2xl font-bold text-white" aria-hidden="true">
+                    {isExpanded ? '-' : '+'}
+                  </span>
+                </button>
+
+                <div
+                  id={panelId}
+                  className={`flex flex-col overflow-hidden transition-all duration-500 ease-in-out ${
+                    isExpanded ? 'max-h-[120vh] opacity-100 py-6' : 'max-h-0 opacity-0'
+                  }`}
+                  aria-hidden={!isExpanded}
+                >
+                  <div className="mb-8 flex flex-col gap-4">
+                    {column.items.map((item, i) => (
+                      <div key={item} className="flex items-center gap-3 text-white">
+                        <span className="text-xl" aria-hidden="true">
+                          →
+                        </span>
+                        <span className="text-xl font-semibold">
+                          {item}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-base leading-relaxed text-white/85">
+                    {column.description}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop layout
   return (
-    <section 
-      className="relative w-full h-full overflow-hidden" 
+    <section
+      className="relative w-full h-full overflow-hidden"
       aria-label="We think We connect We produce"
     >
       {/* Grid with 3 columns */}
@@ -43,18 +135,18 @@ export default function ThreeColumnsAccordion({ progress = 0 }) {
           <div
             key={column.id}
             className={`relative h-full transition-all duration-500 ease-in-out cursor-pointer ${
-              hoveredColumn === column.id 
+              activeColumn === column.id 
                 ? 'flex-grow-[2]' 
-                : hoveredColumn 
+                : activeColumn 
                   ? 'flex-grow-[0.5]' 
                   : 'flex-grow'
             }`}
             style={{ 
-              flex: hoveredColumn === column.id ? '2' : hoveredColumn ? '0.5' : '1',
+              flex: activeColumn === column.id ? '2' : activeColumn ? '0.5' : '1',
               transition: 'flex 0.5s ease-in-out'
             }}
-            onMouseEnter={() => setHoveredColumn(column.id)}
-            onMouseLeave={() => setHoveredColumn(null)}
+            onMouseEnter={() => setActiveColumn(column.id)}
+            onMouseLeave={() => setActiveColumn(null)}
           >
             {/* Border separator */}
             {index > 0 && (
@@ -65,7 +157,7 @@ export default function ThreeColumnsAccordion({ progress = 0 }) {
             <div className="relative h-full flex items-center justify-center p-8">
               {/* Vertical title (shown when not hovered) */}
               <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
-                hoveredColumn === column.id ? 'opacity-0' : 'opacity-100'
+                activeColumn === column.id ? 'opacity-0' : 'opacity-100'
               }`}>
                 <div className={`transform ${
                   index === 0 ? '-rotate-90' : index === 2 ? '-rotate-90' : '-rotate-90'
@@ -78,7 +170,7 @@ export default function ThreeColumnsAccordion({ progress = 0 }) {
 
               {/* Expanded content (shown when hovered) */}
               <div className={`relative z-10 text-white transition-all duration-500 ${
-                hoveredColumn === column.id 
+                activeColumn === column.id 
                   ? 'opacity-100 transform translate-y-0' 
                   : 'opacity-0 transform translate-y-10 pointer-events-none'
               }`}>

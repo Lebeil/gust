@@ -1,6 +1,23 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
+// Détection mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  return isMobile;
+};
+
 // Dimensions fixes demandées pour chaque card
 const CARD_WIDTH = 280; // px (aligné au design fourni)
 const CARD_HEIGHT = 440; // px
@@ -10,7 +27,7 @@ const GAP_PX = 24; // écart horizontal exact entre les cards
  * Galerie d'images à défilement automatique horizontal
  * Design moderne avec contrôle au survol
  */
-export default function AutoScrollGallery({ 
+export default function AutoScrollGallery({
   images = [],
   autoScrollSpeed = 0.02, // conservé pour compatibilité
   visibleImages = 4,
@@ -19,6 +36,7 @@ export default function AutoScrollGallery({
   onSelect = () => {},
   onApiReady
 }) {
+  const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
   const lastProgressRef = useRef(0);
@@ -26,6 +44,7 @@ export default function AutoScrollGallery({
   const scrollPositionRef = useRef(0);
   const animationFrameRef = useRef(null);
   const lastTimeRef = useRef(0);
+  const touchStartRef = useRef(null);
 
   // Source des items: utilise les images fournies, sinon un set par défaut pour garantir un flux continu
   const defaultItems = [
@@ -168,34 +187,34 @@ export default function AutoScrollGallery({
 
   // Gestion des événements wheel et trackpad (horizontal + vertical)
   useEffect(() => {
-    if (!scrollable) return; // ne capte pas la molette si non scrollable
+    if (!scrollable && !isMobile) return; // ne capte pas la molette/trackpad si non scrollable et pas mobile
     const galleryElement = galleryRef.current;
     if (!galleryElement) return;
 
     const handleWheel = (e) => {
-      if (!isHovered) return;
-      
+      if (!isHovered && !isMobile) return;
+
       e.preventDefault();
       e.stopPropagation();
-      
+
       // Détecter le mouvement principal (horizontal ou vertical)
       const deltaX = Math.abs(e.deltaX);
       const deltaY = Math.abs(e.deltaY);
-      
+
       let delta = 0;
       let intensity = 1;
-      
+
       // Si mouvement horizontal plus important (swipe trackpad)
       if (deltaX > deltaY) {
         delta = Math.sign(e.deltaX) * 14; // px par tick pour trackpad
         intensity = Math.min(deltaX / 120, 1.0);
-      } 
+      }
       // Sinon utiliser le mouvement vertical (molette classique)
       else {
         delta = Math.sign(e.deltaY) * 10; // px par tick pour molette
         intensity = Math.min(deltaY / 160, 0.8);
       }
-      
+
       // Mise à jour directe de la position pour éviter les saccades
       const movement = delta * intensity;
       scrollPositionRef.current += movement; // en px
@@ -209,12 +228,70 @@ export default function AutoScrollGallery({
       setProgressPercent(currentProgress);
     };
 
+    // Gestionnaire pour le défilement tactile (mobile)
+    const handleTouchStart = (e) => {
+      if (!isMobile) return;
+      if (e.touches.length !== 1) {
+        touchStartRef.current = null;
+        return;
+      }
+
+      const touch = e.touches[0];
+      touchStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        time: Date.now()
+      };
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isMobile || !touchStartRef.current || e.touches.length !== 1) {
+        return;
+      }
+
+      const touch = e.touches[0];
+      const deltaX = touchStartRef.current.x - touch.clientX;
+      const deltaY = touchStartRef.current.y - touch.clientY;
+      const deltaTime = Date.now() - touchStartRef.current.time;
+
+      // Si le mouvement est principalement horizontal et assez rapide
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Calculer la vitesse du mouvement
+        const speed = Math.abs(deltaX) / Math.max(deltaTime, 1);
+        const sensitivity = Math.min(speed / 5, 2); // Sensibilité adaptative
+
+        // Appliquer le mouvement
+        scrollPositionRef.current += deltaX * sensitivity;
+
+        // Mettre à jour le transform
+        updateTransformAndProgress();
+
+        // Mettre à jour la progression
+        const oneSetWidth = totalImages * CARD_WIDTH + Math.max(totalImages - 1, 0) * GAP_PX;
+        const currentProgress = (scrollPositionRef.current % oneSetWidth) / oneSetWidth * 100;
+        setProgressPercent(currentProgress);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      touchStartRef.current = null;
+    };
+
     galleryElement.addEventListener('wheel', handleWheel, { passive: false });
+    galleryElement.addEventListener('touchstart', handleTouchStart, { passive: true });
+    galleryElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+    galleryElement.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       galleryElement.removeEventListener('wheel', handleWheel);
+      galleryElement.removeEventListener('touchstart', handleTouchStart);
+      galleryElement.removeEventListener('touchmove', handleTouchMove);
+      galleryElement.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isHovered, totalImages, visibleImages, scrollable]);
+  }, [isHovered, totalImages, visibleImages, scrollable, isMobile]);
 
   return (
     <div className="w-full">

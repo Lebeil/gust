@@ -15,6 +15,28 @@ const HorizontalScroll = () => {
   const offsetRef = useRef(0);
   const touchStartRef = useRef(null);
   const [trackWidth, setTrackWidth] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const MOBILE_BREAKPOINT = 1024;
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+
+    const handleMediaChange = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaChange);
+    };
+  }, []);
 
   const projectsData = useMemo(
     () => [
@@ -81,7 +103,9 @@ const HorizontalScroll = () => {
       {
         id: "hero",
         label: "Section introduction Gust",
-        content: (
+        content: isMobile ? (
+          <Hero content={homePageContent.hero} scrollProgress={scrollProgress} />
+        ) : (
           <div className="flex h-full w-full flex-col items-center justify-start gap-[var(--tw-6)] pt-[var(--tw-2)] pb-[var(--tw-32)] transition-all duration-700 ease-out">
             <div className="flex w-full max-w-[1200px] flex-1 items-start justify-center">
               <Hero
@@ -95,7 +119,9 @@ const HorizontalScroll = () => {
             </div>
           </div>
         ),
-        className: "transition-opacity duration-700 ease-out justify-start pt-[var(--tw-12)] lg:pt-[var(--tw-16)] pb-[var(--tw-48)] lg:pb-[var(--tw-64)] gap-[var(--tw-12)]",
+        className: isMobile
+          ? "gap-0"
+          : "transition-opacity duration-700 ease-out justify-start pt-[var(--tw-12)] lg:pt-[var(--tw-16)] pb-[var(--tw-48)] lg:pb-[var(--tw-64)] gap-[var(--tw-12)]",
       },
       {
         id: "expertises-accordion",
@@ -120,7 +146,7 @@ const HorizontalScroll = () => {
         className: " text-white",
       },
     ],
-    [projectsData, scrollProgress]
+    [homePageContent.hero, isMobile, projectsData, scrollProgress]
   );
 
   const clampOffset = useCallback((value) => {
@@ -235,6 +261,14 @@ const HorizontalScroll = () => {
   }, []);
 
   const applyTransform = useCallback(() => {
+    if (isMobile) {
+      if (trackRef.current) {
+        trackRef.current.style.transform = "translate3d(0, 0, 0)";
+        trackRef.current.style.transition = "";
+      }
+      return;
+    }
+
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
@@ -302,10 +336,15 @@ const HorizontalScroll = () => {
       // Application de la transformation avec transitions fluides
       trackRef.current.style.transform = `translate3d(${transformValue}px, 0, 0)`;
     });
-  }, [getMagnetizedTransform, isHeroAnimationComplete, slides.length, updateTrackTransition]);
+  }, [getMagnetizedTransform, isHeroAnimationComplete, isMobile, slides.length, updateTrackTransition]);
 
   const measure = useCallback(() => {
     if (typeof window === "undefined") {
+      return;
+    }
+
+    if (isMobile) {
+      setTrackWidth(0);
       return;
     }
 
@@ -319,14 +358,14 @@ const HorizontalScroll = () => {
     offsetRef.current = clampOffset(offsetRef.current);
     setTrackWidth(viewportWidth * slides.length); // Largeur visuelle normale pour le rendu
     applyTransform();
-  }, [applyTransform, clampOffset, slides.length]);
+  }, [applyTransform, clampOffset, isMobile, slides.length]);
 
   useEffect(() => {
     measure();
   }, [measure]);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || isMobile) {
       return undefined;
     }
 
@@ -425,72 +464,126 @@ const HorizontalScroll = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [applyTransform, clampOffset, measure]);
+  }, [applyTransform, clampOffset, isMobile, measure]);
 
-      return (
-        <div className="relative flex h-screen w-screen overflow-hidden ">
-          
-          <div
-            ref={trackRef}
-            className="flex h-full items-stretch"
-            style={{ width: trackWidth ? `${trackWidth}px` : "100vw" }}
-            role="group"
-            aria-label="Défilement horizontal des sections"
-          >
-        {slides.map((slide, index) => {
-          // Toutes les sections sont visibles - la transformation du track contrôle l'affichage
-          const sectionOpacity = 1;
-          const sectionTransform = 'translateX(0)';
-          
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    if (isMobile) {
+      document.body.style.overflow = "";
+    }
+  }, [isMobile]);
+
+  if (isMobile) {
+    return (
+      <div className="flex min-h-screen w-screen flex-col overflow-x-hidden">
+        {slides.map((slide) => {
+          const baseClasses = "flex min-h-screen w-screen max-w-full flex-col items-stretch justify-center outline-none focus-visible:ring-2 focus-visible:ring-white/50";
+          const heroSpecificClasses = "px-0 py-0";
+          const defaultSectionClasses = "px-6 py-8 gap-6";
+          const sectionClasses = [baseClasses];
+
+          if (slide.id === "hero") {
+            sectionClasses.push(heroSpecificClasses);
+          } else {
+            sectionClasses.push(defaultSectionClasses);
+          }
+
           return (
             <section
               key={slide.id}
+              id={slide.id}
               tabIndex={0}
               aria-label={slide.label}
-              className={`flex h-screen w-screen flex-col items-stretch justify-center gap-6 px-6 py-8 outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:px-10 sm:py-12 lg:px-16 ${slide.className || ""}`}
-              style={{
-                opacity: sectionOpacity,
-                transform: sectionTransform,
-                // Assurer que chaque section prend exactement 100vw
-                minWidth: '100vw',
-                maxWidth: '100vw',
-                flexShrink: 0,
-              }}
+              className={`${sectionClasses.join(" ")} ${slide.className || ""}`}
             >
               {slide.content}
             </section>
           );
         })}
       </div>
+    );
+  }
+
+  return (
+    <div className="relative flex h-screen w-screen overflow-hidden ">
       
-      {/* Indicateur de progression pour l'animation Hero */}
-      {scrollProgress < 0.98 && !isHeroAnimationComplete && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2">
-          <div className="text-white/70 text-sm font-medium">
-            {scrollProgress < 0.95 ? "Continuez à défiler pour voir l'animation" : "Découvrez notre CTA ↓"}
-          </div>
-          <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-white rounded-full transition-all duration-300"
-              style={{ width: `${scrollProgress * 100}%` }}
-            />
-          </div>
-          <div className="text-white/50 text-xs">
-            {Math.round(scrollProgress * 100)}%
-          </div>
-        </div>
-      )}
+      <div
+        ref={trackRef}
+        className="flex h-full items-stretch"
+        style={{ width: trackWidth ? `${trackWidth}px` : "100vw" }}
+        role="group"
+        aria-label="Défilement horizontal des sections"
+      >
+    {slides.map((slide, index) => {
+      // Toutes les sections sont visibles - la transformation du track contrôle l'affichage
+      const sectionOpacity = 1;
+      const sectionTransform = 'translateX(0)';
       
-      {/* Indicateur de transition en cours retiré */}
-      
-      {/* Message quand l'animation est terminée mais avant transition */}
-      {/* Overlay retiré : LogoBanner affiché directement sous Hero */}
+      return (
+        <section
+          key={slide.id}
+          id={slide.id}
+          tabIndex={0}
+          aria-label={slide.label}
+          className={`flex h-screen w-screen flex-col items-stretch justify-center gap-6 px-6 py-8 outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:px-10 sm:py-12 lg:px-16 ${slide.className || ""}`}
+          style={{
+            opacity: sectionOpacity,
+            transform: sectionTransform,
+            // Assurer que chaque section prend exactement 100vw
+            minWidth: '100vw',
+            maxWidth: '100vw',
+            flexShrink: 0,
+          }}
+        >
+          {slide.content}
+        </section>
+      );
+    })}
+  </div>
+  
+  {/* Indicateur de progression pour l'animation Hero */}
+  {scrollProgress < 0.98 && !isHeroAnimationComplete && (
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2">
+      <div className="text-white/70 text-sm font-medium">
+        {scrollProgress < 0.95 ? "Continuez à défiler pour voir l'animation" : "Découvrez notre CTA ↓"}
+      </div>
+      <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
+        <div 
+          className="h-full bg-white rounded-full transition-all duration-300"
+          style={{ width: `${scrollProgress * 100}%` }}
+        />
+      </div>
+      <div className="text-white/50 text-xs">
+        {Math.round(scrollProgress * 100)}%
+      </div>
     </div>
-  );
+  )}
+  
+  {/* Indicateur de transition en cours retiré */}
+  
+  {/* Message quand l'animation est terminée mais avant transition */}
+  {/* Overlay retiré : LogoBanner affiché directement sous Hero */}
+</div>
+);
 };
 
 const ProjectsSection = ({ projectsData }) => {
   const [galleryApi, setGalleryApi] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Détection mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handlePrevious = useCallback(() => {
     galleryApi?.prev();
@@ -529,7 +622,7 @@ const ProjectsSection = ({ projectsData }) => {
           <button
             type="button"
             onClick={handleNext}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-white transition-colors durée-200 hover:border-white/60 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-white transition-colors duration-200 hover:border-white/60 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             aria-label="Projet suivant"
           >
             <svg
@@ -551,7 +644,7 @@ const ProjectsSection = ({ projectsData }) => {
         <AutoScrollGallery
           images={projectsData}
           enableAutoScroll
-          scrollable
+          scrollable={isMobile} // Activer le scrollable uniquement sur mobile
           visibleImages={4}
           onApiReady={setGalleryApi}
           duplicate
@@ -564,11 +657,24 @@ const ProjectsSection = ({ projectsData }) => {
 
 const ExpertisesSection = () => {
   const [currentExpertise, setCurrentExpertise] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const sectionRef = useRef(null);
+  const touchStateRef = useRef(null);
 
   const expertises = useMemo(
     () => ["production", "social", "ugc", "celebrity", "influence"],
     []
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handlePrevious = useCallback(() => {
     setCurrentExpertise((previous) => (previous === 0 ? expertises.length - 1 : previous - 1));
@@ -578,49 +684,126 @@ const ExpertisesSection = () => {
     setCurrentExpertise((previous) => (previous === expertises.length - 1 ? 0 : previous + 1));
   }, [expertises.length]);
 
+  useEffect(() => {
+    if (!isMobile) {
+      return;
+    }
+
+    const sectionElement = sectionRef.current;
+    if (!sectionElement) {
+      return;
+    }
+
+    const handleTouchStart = (event) => {
+      if (event.touches.length !== 1) {
+        touchStateRef.current = null;
+        return;
+      }
+
+      const touch = event.touches[0];
+      touchStateRef.current = {
+        startX: touch.clientX,
+        startY: touch.clientY,
+        direction: null,
+      };
+    };
+
+    const handleTouchMove = (event) => {
+      if (!touchStateRef.current || event.touches.length !== 1) {
+        return;
+      }
+
+      const touch = event.touches[0];
+      const deltaX = touchStateRef.current.startX - touch.clientX;
+      const deltaY = touchStateRef.current.startY - touch.clientY;
+
+      if (Math.abs(deltaX) <= Math.abs(deltaY) || Math.abs(deltaX) < 18) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      touchStateRef.current.direction = deltaX > 0 ? "next" : "previous";
+    };
+
+    const handleTouchEnd = () => {
+      const direction = touchStateRef.current?.direction;
+
+      if (direction === "next") {
+        handleNext();
+      }
+
+      if (direction === "previous") {
+        handlePrevious();
+      }
+
+      touchStateRef.current = null;
+    };
+
+    sectionElement.addEventListener("touchstart", handleTouchStart, { passive: true });
+    sectionElement.addEventListener("touchmove", handleTouchMove, { passive: false });
+    sectionElement.addEventListener("touchend", handleTouchEnd, { passive: true });
+    sectionElement.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+
+    return () => {
+      sectionElement.removeEventListener("touchstart", handleTouchStart);
+      sectionElement.removeEventListener("touchmove", handleTouchMove);
+      sectionElement.removeEventListener("touchend", handleTouchEnd);
+      sectionElement.removeEventListener("touchcancel", handleTouchEnd);
+    };
+  }, [handleNext, handlePrevious, isMobile]);
+
   return (
-    <div className="relative #+# flex h-full w-full items-center justify-center">
-      <button
-        type="button"
-        onClick={handlePrevious}
-        className="absolute left-6 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white transition-colors duration-200 hover:border-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:left-10 lg:left-16"
-        aria-label="Expertise précédente"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+    <div
+      ref={sectionRef}
+      className="relative flex h-full w-full items-center justify-center"
+    >
+      {!isMobile && (
+        <button
+          type="button"
+          onClick={handlePrevious}
+          className="absolute left-6 top-1/2 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white transition-colors duration-200 hover:border-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:flex md:left-10 lg:left-16"
+          aria-label="Expertise précédente"
         >
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+      )}
       <div className="flex h-full w-full items-center justify-center">
         <ExpertisesGridWithControl currentIndex={currentExpertise} />
       </div>
-      <button
-        type="button"
-        onClick={handleNext}
-        className="absolute right-6 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justifier-center rounded-full border border-white/30 text-white transition-colors durée-200 hover:border-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:right-10 lg:right-16"
-        aria-label="Expertise suivante"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+      {!isMobile && (
+        <button
+          type="button"
+          onClick={handleNext}
+          className="absolute right-6 top-1/2 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white transition-colors duration-200 hover:border-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:right-10 md:flex lg:right-16"
+          aria-label="Expertise suivante"
         >
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 };
