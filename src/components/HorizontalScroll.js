@@ -135,6 +135,95 @@ const HorizontalScroll = () => {
     return value;
   }, [isHeroAnimationComplete]);
 
+  const getMagnetizedTransform = useCallback(({ offsetValue, viewportWidth, slidesCount }) => {
+    if (slidesCount <= 0) {
+      return {
+        activeSlideIndex: 0,
+        localProgress: 0,
+        transformValue: -viewportWidth,
+      };
+    }
+
+    const heroExtendedZone = viewportWidth * 2;
+    const beyondOffset = offsetValue - heroExtendedZone;
+
+    if (beyondOffset <= 0) {
+      return {
+        activeSlideIndex: 0,
+        localProgress: 0,
+        transformValue: -viewportWidth,
+      };
+    }
+
+    const clampedBeyondOffset = Math.min(beyondOffset, viewportWidth * slidesCount);
+    const rawSlideIndex = Math.floor(clampedBeyondOffset / viewportWidth);
+    const activeSlideIndex = Math.min(rawSlideIndex, slidesCount - 1);
+    const offsetWithinSlide = clampedBeyondOffset - activeSlideIndex * viewportWidth;
+    const magnetThreshold = viewportWidth * 0.35;
+
+    if (offsetWithinSlide <= magnetThreshold) {
+      return {
+        activeSlideIndex,
+        localProgress: 0,
+        transformValue: -viewportWidth - activeSlideIndex * viewportWidth,
+      };
+    }
+
+    const remainingWidth = viewportWidth - magnetThreshold;
+    const rawProgress = (offsetWithinSlide - magnetThreshold) / remainingWidth;
+    const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+    const easedProgress = Math.pow(clampedProgress, 0.85);
+    const easedOffset = easedProgress * viewportWidth;
+
+    return {
+      activeSlideIndex,
+      localProgress: clampedProgress,
+      transformValue: -viewportWidth - activeSlideIndex * viewportWidth - easedOffset,
+    };
+  }, []);
+
+  const updateTrackTransition = useCallback((heroProgress, heroExtendedZone, viewportWidth, magnetProgress) => {
+    if (!trackRef.current) {
+      return;
+    }
+
+    const isWithinHeroExtendedZone = offsetRef.current <= heroExtendedZone;
+    const shouldEaseIntoAccordion = isWithinHeroExtendedZone && heroProgress >= 0.97;
+
+    if (!shouldEaseIntoAccordion) {
+      if (typeof magnetProgress !== "number") {
+        trackRef.current.style.transition = "transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+        return;
+      }
+
+      if (magnetProgress < 0.05) {
+        trackRef.current.style.transition = "transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+        return;
+      }
+
+      if (magnetProgress < 0.6) {
+        trackRef.current.style.transition = "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)";
+        return;
+      }
+
+      trackRef.current.style.transition = "transform 0.36s cubic-bezier(0.22, 1, 0.36, 1)";
+      return;
+    }
+
+    const progressIntoReveal = (heroProgress - 0.97) / 0.03;
+    const clampedProgress = Math.min(Math.max(progressIntoReveal, 0), 1);
+
+    if (clampedProgress < 0.5) {
+      trackRef.current.style.transition = "transform 0.42s cubic-bezier(0.22, 1, 0.36, 1)";
+      return;
+    }
+
+    const easedProgress = Math.pow(clampedProgress, 1.5);
+    const duration = 0.4 + easedProgress * 0.4;
+
+    trackRef.current.style.transition = `transform ${duration}s cubic-bezier(0.22, 1, 0.36, 1)`;
+  }, []);
+
   const applyTransform = useCallback(() => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
@@ -151,6 +240,19 @@ const HorizontalScroll = () => {
       // Calcul simple du progress
       const heroProgress = Math.min(offsetRef.current / heroExtendedZone, 1);
       setScrollProgress(heroProgress);
+
+      let magnetContext = null;
+
+      if (offsetRef.current > heroExtendedZone) {
+        const slidesAfterHero = Math.max(slides.length - 1, 0);
+        magnetContext = getMagnetizedTransform({
+          offsetValue: offsetRef.current,
+          viewportWidth,
+          slidesCount: slidesAfterHero,
+        });
+      }
+
+      updateTrackTransition(heroProgress, heroExtendedZone, viewportWidth, magnetContext ? magnetContext.localProgress : undefined);
 
       if (heroProgress >= 0.95 && !isHeroAnimationComplete) {
         setIsHeroAnimationComplete(true);
@@ -173,20 +275,24 @@ const HorizontalScroll = () => {
           transformValue = 0;
         }
       } else {
-        // Hors de la zone Hero - défilement normal
+        // Hors de la zone Hero - défilement magnétique
         setIsInHeroZone(false);
-        setTransitionProgress(1);
-        const beyondOffset = offsetRef.current - heroExtendedZone;
-        transformValue = -viewportWidth - beyondOffset;
+
+        const slidesAfterHero = Math.max(slides.length - 1, 0);
+        const magnetDetails = magnetContext ?? getMagnetizedTransform({
+          offsetValue: offsetRef.current,
+          viewportWidth,
+          slidesCount: slidesAfterHero,
+        });
+
+        setTransitionProgress(magnetDetails.localProgress);
+        transformValue = magnetDetails.transformValue;
       }
 
       // Application de la transformation avec transitions fluides
       trackRef.current.style.transform = `translate3d(${transformValue}px, 0, 0)`;
-      trackRef.current.style.transition = scrollProgress >= 0.98 ? 
-        'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 
-        'none';
     });
-  }, [isHeroAnimationComplete]);
+  }, [getMagnetizedTransform, isHeroAnimationComplete, slides.length, updateTrackTransition]);
 
   const measure = useCallback(() => {
     if (typeof window === "undefined") {
