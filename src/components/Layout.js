@@ -35,7 +35,7 @@ export function Layout({ children }) {
               pageType === "contact" ? " h-screen" : ""
             }${
               pageType === "work" || pageType === "contact" ? " pt-[var(--tw-64)]" : ""
-            }`}
+            } pb-[var(--tw-56)] md:pb-[var(--tw-72)]`}
           >
             {children}
           </main>

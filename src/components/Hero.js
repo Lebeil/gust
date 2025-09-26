@@ -7,9 +7,11 @@ const Scene = dynamic(() => import("./R3F/Scene"), {
   ssr: false,
 });
 
-const Hero = ({ content, scrollProgress = 0 }) => {
+const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
   const [isSceneLoaded, setIsSceneLoaded] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const isCompact = variant === "compact";
+  const canvasHeightClass = isCompact ? "lg:h-[calc(100vh-260px)]" : "lg:h-[calc(100vh-180px)]";
 
   useEffect(() => {
     const checkDesktop = () => {
@@ -36,18 +38,22 @@ const Hero = ({ content, scrollProgress = 0 }) => {
       };
     }
   }, [isSceneLoaded, isDesktop]);
+  const desktopContainerClass = isCompact
+    ? "hidden lg:block lg:h-[calc(100vh-200px)] lg:min-h-0"
+    : "hidden lg:block lg:min-h-screen";
 
   return (
-    <section>
+    <section className="h-full w-full">
       <div className="lg:hidden">
         <MainHeroMobile content={content} />
       </div>
 
-      <div className="hidden lg:block lg:min-h-screen">
+      <div className={`${desktopContainerClass} lg:pt-[var(--tw-4)]`}>
         <Scene
           content={content}
           onLoaded={() => setIsSceneLoaded(true)}
           scrollProgress={scrollProgress}
+          canvasClassName={`h-full ${canvasHeightClass}`}
         />
       </div>
     </section>

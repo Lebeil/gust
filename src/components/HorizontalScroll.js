@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import ThreeColumnsAccordion from "@/components/ThreeColumnsAccordion";
 import AutoScrollGallery from "@/components/AutoScrollGallery";
 import ExpertisesGrid from "@/components/ExpertisesGrid";
+import LogoBanner from "@/components/LogoBanner";
 import { homePageContent } from "@/data/content";
 
 const HorizontalScroll = () => {
@@ -81,11 +82,20 @@ const HorizontalScroll = () => {
         id: "hero",
         label: "Section introduction Gust",
         content: (
-          <div className="flex h-full w-full items-start justify-start transition-all duration-700 ease-out">
-            <Hero content={homePageContent.hero} scrollProgress={scrollProgress} />
+          <div className="flex h-full w-full flex-col items-center justify-start gap-[var(--tw-6)] pt-[var(--tw-2)] pb-[var(--tw-32)] transition-all duration-700 ease-out">
+            <div className="flex w-full max-w-[1200px] flex-1 items-start justify-center">
+              <Hero
+                content={homePageContent.hero}
+                scrollProgress={scrollProgress}
+                variant="compact"
+              />
+            </div>
+            <div className="w-full px-[var(--tw-16)]">
+              <LogoBanner />
+            </div>
           </div>
         ),
-        className: "transition-opacity duration-700 ease-out",
+        className: "transition-opacity duration-700 ease-out justify-start pt-[var(--tw-12)] lg:pt-[var(--tw-16)] pb-[var(--tw-48)] lg:pb-[var(--tw-64)] gap-[var(--tw-12)]",
       },
       {
         id: "expertises-accordion",
@@ -471,29 +481,10 @@ const HorizontalScroll = () => {
         </div>
       )}
       
-      {/* Indicateur de transition en cours */}
-      {scrollProgress >= 0.98 && scrollProgress < 1 && isInHeroZone && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2">
-          <div className="text-white font-medium animate-pulse">
-            Transition en cours... ✨
-          </div>
-          <div className="w-40 h-1 bg-white/20 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full transition-all duration-300"
-              style={{ width: `${transitionProgress * 100}%` }}
-            />
-          </div>
-        </div>
-      )}
+      {/* Indicateur de transition en cours retiré */}
       
       {/* Message quand l'animation est terminée mais avant transition */}
-      {isHeroAnimationComplete && isInHeroZone && scrollProgress < 0.98 && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 animate-pulse">
-          <div className="text-white font-medium">
-            Profitez du CTA ! Continuez à défiler pour la suite →
-          </div>
-        </div>
-      )}
+      {/* Overlay retiré : LogoBanner affiché directement sous Hero */}
     </div>
   );
 };

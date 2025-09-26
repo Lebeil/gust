@@ -23,8 +23,11 @@
   --tw-20: 5rem;
   --tw-24: 6rem;
   --tw-36: 9rem;
+  --tw-40: 10rem;
   --tw-48: 12rem;
+  --tw-56: 14rem;
   --tw-64: 16rem;
+  --tw-72: 18rem;
 
   --ls-s: 0.5px;
   --lh-s: 1;
@@ -121,6 +124,19 @@ pre {
 
 body * {
   letter-spacing: 0.05rem;
+}
+
+@keyframes logo-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-logo-marquee {
+  animation: logo-marquee 25s linear infinite;
 }
 
 /* Classes utilitaires pour Avenir Next */
