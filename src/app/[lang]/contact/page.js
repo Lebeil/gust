@@ -1,40 +1,17 @@
 import { Layout } from "@/components/Layout"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
-
-  try {
-    const settings = getSettings({})
-    
-    return {
-      title: "Contact - Gust Agence Créative",
-      description: "Contactez-nous pour discuter de votre projet créatif et digital",
-      keywords: "contact, agence, projet, devis, collaboration",
-    }
-  } catch (error) {
-    return {
-      title: "Contact - Gust",
-      description: "Contactez notre agence créative",
-    }
+  return {
+    title: "Contact - Gust Agence Créative",
+    description: "Contactez-nous pour discuter de votre projet créatif et digital",
+    keywords: "contact, agence, projet, devis, collaboration",
   }
 }
 
 export default async function ContactPage({ params }) {
-
   try {
-    const header = getHeader({})
-    const footer = getFooter({})
-    const settings = getSettings({})
-    const locales = getLocales()
-
     return (
-      <Layout
-        header={header}
-        footer={footer}
-        settings={settings}
-        locales={locales}
-        page_type="contact"
-      >
+      <Layout>
         <div className="min-h-screen text-white flex items-center justify-center">
           <div className="max-w-5xl mx-auto px-6 w-full">
             <form className="grid md:grid-cols-2 gap-10 mt-6 items-start">
@@ -43,7 +20,7 @@ export default async function ContactPage({ params }) {
                 <h2 className="text-xl md:text-2xl font-semibold mb-3">Parlons de votre projet</h2>
                 <p className="text-gray-300 leading-relaxed text-sm md:text-base">
                   Vous avez une idée créative ? Un projet digital ?
-                  Contactez-nous pour en discuter et créer ensemble quelque chose d'exceptionnel.
+                  Contactez-nous pour en discuter et créer ensemble quelque chose d&apos;exceptionnel.
                 </p>
               </div>
 
