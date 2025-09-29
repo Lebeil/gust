@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Layout } from "@/components/Layout"
 import CaseStudyDetail from "@/components/CaseStudyDetail"
 import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
