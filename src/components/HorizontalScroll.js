@@ -7,6 +7,7 @@ import AutoScrollGallery from "@/components/AutoScrollGallery";
 import ExpertisesGrid from "@/components/ExpertisesGrid";
 import LogoBanner from "@/components/LogoBanner";
 import FaqOverlay from "@/components/FaqOverlay";
+import CinematicFooter from "@/components/CinematicFooter";
 import { homePageContent } from "@/data/content";
 
 const HorizontalScroll = () => {
@@ -389,17 +390,25 @@ const HorizontalScroll = () => {
 
     const handleWheel = (event) => {
       const isVertical = Math.abs(event.deltaY) >= Math.abs(event.deltaX);
-      const overlayFullyVisible = overlayProgressRef.current >= 0.999;
+      const overlayVisible = overlayProgressRef.current > 0.001;
       const overlayContainer = overlayContainerRef.current;
+      const pageScrollTop = (typeof window !== 'undefined' ? window.scrollY : 0) || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const isAtTopOfPage = pageScrollTop <= 1;
 
-      if (overlayFullyVisible && isVertical) {
-        if (event.deltaY > 0 && overlayContainer) {
+      if (overlayVisible && isVertical) {
+        // Si on est tout en haut de la FAQ et qu'on remonte, reprendre le scroll horizontal
+        if (event.deltaY < 0 && isAtTopOfPage) {
+          event.preventDefault();
+          if (typeof window !== 'undefined') {
+            window.scrollTo(0, 0);
+          }
+          offsetRef.current = clampOffset(offsetRef.current + event.deltaY);
+          applyTransform();
           return;
         }
 
-        if (event.deltaY < 0 && overlayContainer && overlayContainer.scrollTop > 0) {
-          return;
-        }
+        // Sinon, laisser le scroll vertical natif dans la FAQ
+        return;
       }
 
       event.preventDefault();
@@ -418,17 +427,23 @@ const HorizontalScroll = () => {
         return;
       }
 
-      const overlayFullyVisible = overlayProgressRef.current >= 0.999;
+      const overlayVisible = overlayProgressRef.current > 0.001;
       const overlayContainer = overlayContainerRef.current;
+      const pageScrollTop = (typeof window !== 'undefined' ? window.scrollY : 0) || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const isAtTopOfPage = pageScrollTop <= 1;
 
-      if (overlayFullyVisible) {
-        if (event.key === "ArrowDown") {
-          return;
+      if (overlayVisible) {
+        const viewportWidth = window.innerWidth;
+        if (event.key === "ArrowUp" && isAtTopOfPage) {
+          event.preventDefault();
+          if (typeof window !== 'undefined') {
+            window.scrollTo(0, 0);
+          }
+          offsetRef.current = clampOffset(offsetRef.current - viewportWidth);
+          applyTransform();
         }
-
-        if (event.key === "ArrowUp" && overlayContainer && overlayContainer.scrollTop > 0) {
-          return;
-        }
+        // Laisser la navigation clavier au conteneur vertical dans les autres cas
+        return;
       }
 
       event.preventDefault();
@@ -474,17 +489,26 @@ const HorizontalScroll = () => {
       }
 
       const isVertical = Math.abs(deltaY) >= Math.abs(deltaX);
-      const overlayFullyVisible = overlayProgressRef.current >= 0.999;
+      const overlayVisible = overlayProgressRef.current > 0.001;
       const overlayContainer = overlayContainerRef.current;
+      const pageScrollTop = (typeof window !== 'undefined' ? window.scrollY : 0) || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const isAtTopOfPage = pageScrollTop <= 1;
 
-      if (overlayFullyVisible && isVertical) {
-        if (deltaY > 0 && overlayContainer) {
+      if (overlayVisible && isVertical) {
+        // Si on est en haut et qu'on remonte, reprendre le scroll horizontal
+        if (deltaY < 0 && isAtTopOfPage) {
+          event.preventDefault();
+          if (typeof window !== 'undefined') {
+            window.scrollTo(0, 0);
+          }
+          const dominantDelta = isVertical ? deltaY : -deltaX;
+          offsetRef.current = clampOffset(touchStartRef.current.offset + dominantDelta);
+          applyTransform();
           return;
         }
 
-        if (deltaY < 0 && overlayContainer && overlayContainer.scrollTop > 0) {
-          return;
-        }
+        // Sinon laisser le scroll tactile vertical natif
+        return;
       }
 
       event.preventDefault();
@@ -529,8 +553,12 @@ const HorizontalScroll = () => {
 
     if (isMobile) {
       document.body.style.overflow = "";
+      return;
     }
-  }, [isMobile]);
+
+    // Laisser le scroll vertical du document quand l'overlay est visible
+    document.body.style.overflow = overlayProgress > 0.001 ? "" : "hidden";
+  }, [isMobile, overlayProgress]);
 
   if (isMobile) {
     return (
@@ -564,15 +592,15 @@ const HorizontalScroll = () => {
   }
 
   return (
-    <div className="relative flex h-screen w-screen overflow-hidden ">
-      
-      <div
-        ref={trackRef}
-        className="flex h-full items-stretch"
-        style={{ width: trackWidth ? `${trackWidth}px` : "100vw" }}
-        role="group"
-        aria-label="Défilement horizontal des sections"
-      >
+    <>
+      <div className="relative flex h-screen w-screen overflow-hidden ">
+        <div
+          ref={trackRef}
+          className="flex h-full items-stretch"
+          style={{ width: trackWidth ? `${trackWidth}px` : "100vw" }}
+          role="group"
+          aria-label="Défilement horizontal des sections"
+        >
     {slides.map((slide, index) => {
       // Toutes les sections sont visibles - la transformation du track contrôle l'affichage
       const sectionOpacity = 1;
@@ -598,10 +626,11 @@ const HorizontalScroll = () => {
         </section>
       );
     })}
-  </div>
-  <FaqOverlay progress={overlayProgress} onContainerReady={handleOverlayContainerReady} />
-</div>
-);
+        </div>
+      </div>
+      <FaqOverlay progress={overlayProgress} onContainerReady={handleOverlayContainerReady} />
+    </>
+  );
 };
 
 const ProjectsSection = ({ projectsData }) => {
