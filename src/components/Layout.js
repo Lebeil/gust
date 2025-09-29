@@ -33,8 +33,6 @@ export function Layout({ children }) {
           <main
             className={`${pageType ? `main ${pageType}` : ""}${
               pageType === "contact" ? " h-screen" : ""
-            }${
-              pageType === "work" || pageType === "contact" ? " pt-[var(--tw-64)]" : ""
             }`}
           >
             {children}

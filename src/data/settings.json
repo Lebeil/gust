@@ -1,0 +1,77 @@
+{
+  "fr": {
+    "site_title": "Gust - Agence créative",
+    "favicon": {
+      "url": "/favicon.ico"
+    },
+    "header": {
+      "logo": {
+        "url": "/images/logo.avif",
+        "alt": "Logo Gust"
+      },
+      "navigation": [
+        { "label": "Accueil", "link": "/", "active": true },
+        { "label": "Travaux", "link": "/work" },
+        { "label": "À propos", "link": "/about" },
+        { "label": "Contact", "link": "/contact" }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2024 Gust. Tous droits réservés.",
+      "social_links": [
+        { "platform": "Instagram", "url": "https://instagram.com/gust" },
+        { "platform": "LinkedIn", "url": "https://linkedin.com/company/gust" }
+      ]
+    }
+  },
+  "fr-fr": {
+    "site_title": "Gust - Agence créative",
+    "favicon": {
+      "url": "/favicon.ico"
+    },
+    "header": {
+      "logo": {
+        "url": "/images/logo.avif",
+        "alt": "Logo Gust"
+      },
+      "navigation": [
+        { "label": "Accueil", "link": "/", "active": true },
+        { "label": "Travaux", "link": "/work" },
+        { "label": "À propos", "link": "/about" },
+        { "label": "Contact", "link": "/contact" }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2024 Gust. Tous droits réservés.",
+      "social_links": [
+        { "platform": "Instagram", "url": "https://instagram.com/gust" },
+        { "platform": "LinkedIn", "url": "https://linkedin.com/company/gust" }
+      ]
+    }
+  },
+  "en-us": {
+    "site_title": "Gust - Creative Agency",
+    "favicon": {
+      "url": "/favicon.ico"
+    },
+    "header": {
+      "logo": {
+        "url": "/images/logo.avif",
+        "alt": "Gust Logo"
+      },
+      "navigation": [
+        { "label": "Home", "link": "/", "active": true },
+        { "label": "Work", "link": "/work" },
+        { "label": "About", "link": "/about" },
+        { "label": "Contact", "link": "/contact" }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2024 Gust. All rights reserved.",
+      "social_links": [
+        { "platform": "Instagram", "url": "https://instagram.com/gust" },
+        { "platform": "LinkedIn", "url": "https://linkedin.com/company/gust" }
+      ]
+    }
+  }
+} 

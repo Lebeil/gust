@@ -1,0 +1,212 @@
+{
+  "home": {
+    "fr": {
+      "title": "Accueil - Gust",
+      "meta_title": "Gust - Agence créative",
+      "meta_description": "Agence créative spécialisée dans le digital et l'innovation",
+      "meta_keywords": "agence, créative, digital, innovation",
+      "slices": [
+        {
+          "slice_type": "hero",
+          "variation": "default",
+          "primary": {
+            "title": "Bienvenue chez Gust",
+            "description": "Une agence créative qui transforme vos idées en expériences digitales exceptionnelles",
+            "media": {
+              "url": "/assets/media/video_landing_light.webm"
+            },
+            "text_primary": [
+              {
+                "text": [
+                  {
+                    "text": "Nous créons des"
+                  }
+                ]
+              }
+            ],
+            "text_secondary": [
+              {
+                "text": [
+                  {
+                    "text": "STOP-SCROLLERS"
+                  }
+                ]
+              }
+            ],
+            "text_tertiary": [
+              {
+                "text": [
+                  {
+                    "text": "We create stop-scrollers."
+                  }
+                ]
+              },
+              {
+                "text": [
+                  {
+                    "text": "\nL'attention, l'essentiel pour les marques. Avec la fragmentation des audiences et la saturation publicitaire, capter l’attention est désormais le critère clé de réussite d'une campagne.\n\nNotre mission : vous permettre de capter vos audiences"
+                  }
+                ]
+              },
+              {
+                "text": [
+                  {
+                    "text": "\nNotre travail →"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "fr-fr": {
+      "title": "Accueil - Gust",
+      "meta_title": "Gust - Agence créative",
+      "meta_description": "Agence créative spécialisée dans le digital et l'innovation",
+      "meta_keywords": "agence, créative, digital, innovation",
+      "slices": [
+        {
+          "slice_type": "hero",
+          "variation": "default",
+          "primary": {
+            "title": "Bienvenue chez Gust",
+            "description": "Une agence créative qui transforme vos idées en expériences digitales exceptionnelles",
+            "media": {
+              "url": "/assets/media/video_landing_light.webm"
+            },
+            "text_primary": [
+              {
+                "text": [
+                  {
+                    "text": "Créativité"
+                  }
+                ]
+              }
+            ],
+            "text_secondary": [
+              {
+                "text": [
+                  {
+                    "text": "Innovation"
+                  }
+                ]
+              }
+            ],
+            "text_tertiary": [
+              {
+                "text": [
+                  {
+                    "text": "Nous transformons vos idées"
+                  }
+                ]
+              },
+              {
+                "text": [
+                  {
+                    "text": "en expériences digitales uniques"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "en-us": {
+      "title": "Home - Gust",
+      "meta_title": "Gust - Creative Agency",
+      "meta_description": "Creative agency specialized in digital and innovation",
+      "meta_keywords": "agency, creative, digital, innovation",
+      "slices": [
+        {
+          "slice_type": "hero",
+          "variation": "default",
+          "primary": {
+            "title": "Welcome to Gust",
+            "description": "A creative agency that transforms your ideas into exceptional digital experiences",
+            "media": {
+              "url": "/assets/media/video_landing_light.webm"
+            },
+            "text_primary": [
+              {
+                "text": [
+                  {
+                    "text": "Creativity"
+                  }
+                ]
+              }
+            ],
+            "text_secondary": [
+              {
+                "text": [
+                  {
+                    "text": "Innovation"
+                  }
+                ]
+              }
+            ],
+            "text_tertiary": [
+              {
+                "text": [
+                  {
+                    "text": "We transform your ideas"
+                  }
+                ]
+              },
+              {
+                "text": [
+                  {
+                    "text": "into unique digital experiences"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "slice_type": "large_text",
+          "variation": "default",
+          "primary": {
+            "rich_text": [
+              {
+                "text": "We create digital experiences that leave a lasting impression"
+              }
+            ]
+          }
+        },
+        {
+          "slice_type": "media_text",
+          "variation": "default",
+          "primary": {
+            "inverse": false,
+            "align_y": "center",
+            "width": "full",
+            "spacing_top": "medium",
+            "spacing_bottom": "medium",
+            "media": [
+              {
+                "image": {
+                  "url": "/images/placeholder.svg",
+                  "alt": "Example image",
+                  "dimensions": { "width": 800, "height": 600 }
+                },
+                "with_background": false
+              }
+            ],
+            "rich_text": [
+              {
+                "text": "Our team of experts supports you in creating innovative and high-performing digital solutions."
+              }
+            ],
+            "media_feature": [
+              { "pill": "Design" },
+              { "pill": "Development" },
+              { "pill": "Innovation" }
+            ]
+          }
+        }
+      ]
+    }
+  }
+} 

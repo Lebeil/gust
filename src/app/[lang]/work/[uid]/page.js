@@ -1,113 +1,89 @@
 import { Layout } from "@/components/Layout"
-import { notFound } from "next/navigation"
+import CaseStudyDetail from "@/components/CaseStudyDetail"
+import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import caseStudies from "@/data/caseStudies"
 
-// Projets statiques pour remplacer Prismic
-const projects = {
-  'les-secrets-de-loly': {
-    title: 'Les secrets de Loly',
-    client: 'OPI',
-    description: 'Une campagne créative pour OPI mettant en scène Loly dans un univers coloré.',
-    video: '/assets/media/cases_studies/Les%20secrets%20de%20loly.mp4',
-    tags: ['Production', 'Influence']
-  },
-  'vestiaire-collective': {
-    title: 'Vestiaire Collective',
-    client: 'VESTIAIRE COLLECTIVE',
-    description: 'Campagne d\'influence pour la plateforme de mode de seconde main.',
-    video: '/assets/media/cases_studies/Vestiaire_Collective.mp4',
-    tags: ['Influence']
-  },
-  'showroom-prive': {
-    title: 'Showroom Privé',
-    client: 'SHOWROOM PRIVÉ',
-    description: 'Collaboration avec des célébrités pour une campagne d\'impact.',
-    video: '/assets/media/cases_studies/ShowroomBy-Faustine.mp4',
-    tags: ['Célébrité', 'Production']
-  }
-};
-
-export async function generateMetadata({ params: { uid, lang } }) {
-  const project = projects[uid];
-  
-  if (!project) {
+export async function generateMetadata({ params }) {
+    const { uid, lang } = await params
+    const slugify = (s) => (s || "")
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+    const caseData = caseStudies.find(c => slugify(c.title) === uid || slugify(c.title).includes(uid) || uid.includes(slugify(c.title)))
+    
     return {
-      title: 'Projet non trouvé - Gust',
-      description: 'Ce projet n\'existe pas.'
-    };
-  }
-  
-  return {
-    title: `${project.title} - ${project.client} | Gust`,
-    description: project.description,
-    keywords: `${project.client}, ${project.tags.join(', ')}, gust`,
-    openGraph: {
-      title: `${project.title} - ${project.client}`,
-      description: project.description,
-    },
-  }
+        title: `${caseData?.title || uid} - Gust Case Study`,
+        description: `Découvrez notre collaboration avec ${caseData?.title || uid}`,
+    }
 }
 
-export default async function WorkPage({ params }) {
-  const { lang, uid } = await params;
-  const project = projects[uid];
-  
-  if (!project) {
-    notFound();
-  }
-  
-  return (
-    <Layout>
-      <div className="min-h-screen px-6 py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              {project.title}
-            </h1>
-            <p className="text-2xl text-white/60 mb-8">
-              {project.client}
-            </p>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              {project.description}
-            </p>
-          </div>
-          
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {project.tags.map((tag) => (
-                <span 
-                  key={tag}
-                  className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-white/80 text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
+export default async function CaseStudyPage({ params }) {
+    const { uid, lang } = await params
+    
+    try {
+        const header = getHeader({ lang })
+        const footer = getFooter({ lang })
+        const settings = getSettings({ lang })
+        const locales = getLocales()
+
+        // Trouver le case study correspondant
+        const slugify = (s) => (s || "")
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+        const caseData = caseStudies.find(c => {
+            const slug = slugify(c.title)
+            return slug === uid || slug.includes(uid) || uid.includes(slug)
+        })
+
+        if (!caseData) {
+            return (
+                <Layout header={header} footer={footer} settings={settings} locales={locales}>
+                    <div className="min-h-screen flex items-center justify-center text-white">
+                        <div className="text-center">
+                            <h1 className="text-2xl font-bold mb-4">Case Study non trouvé</h1>
+                            <p>Le projet "{uid}" n'existe pas.</p>
+                        </div>
+                    </div>
+                </Layout>
+            )
+        }
+
+        return (
+            <Layout header={header} footer={footer} settings={settings} locales={locales}>
+                <CaseStudyDetail caseData={caseData} />
+            </Layout>
+        )
+    } catch (error) {
+        console.error("Error loading case study page:", error)
+        return (
+            <div className="min-h-screen flex items-center justify-center text-white">
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold mb-4">Erreur de chargement</h1>
+                    <p>Impossible de charger le case study.</p>
+                </div>
             </div>
-          </div>
-          
-          {project.video && (
-            <div className="aspect-video bg-black rounded-lg overflow-hidden">
-              <video 
-                controls 
-                className="w-full h-full"
-                poster={`/assets/media/cases_studies/cover/${project.title}_cover.png`}
-              >
-                <source src={project.video} type="video/mp4" />
-                Votre navigateur ne supporte pas la vidéo.
-              </video>
-            </div>
-          )}
-        </div>
-      </div>
-    </Layout>
-  )
+        )
+    }
 }
 
 export async function generateStaticParams() {
-  // Générer les paramètres statiques pour les projets existants
-  const projectIds = Object.keys(projects);
-  
-  return projectIds.flatMap(uid => [
-    { uid, lang: 'fr' },
-    { uid, lang: 'en' }
-  ]);
+    // Générer les paramètres statiques pour tous les case studies
+    const params = []
+    
+    caseStudies.forEach(caseStudy => {
+        const uid = caseStudy.title.toLowerCase().replace(/[^a-z0-9]/g, '-')
+        // Générer pour toutes les langues
+        params.push(
+            { lang: 'fr', uid },
+            { lang: 'fr-fr', uid },
+            { lang: 'en-us', uid }
+        )
+    })
+    
+    return params
 }

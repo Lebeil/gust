@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout"
+import CinematicFooter from "@/components/CinematicFooter"
 
 export async function generateMetadata() {
   return {
@@ -127,6 +128,7 @@ export default async function ContactPage({ params }) {
             </form>
           </div>
         </div>
+        <CinematicFooter />
       </Layout>
     )
   } catch (error) {
