@@ -562,32 +562,35 @@ const HorizontalScroll = () => {
 
   if (isMobile) {
     return (
-      <div className="flex min-h-screen w-screen flex-col overflow-x-hidden">
-        {slides.map((slide) => {
-          const baseClasses = "flex min-h-screen w-screen max-w-full flex-col items-stretch justify-center outline-none focus-visible:ring-2 focus-visible:ring-white/50";
-          const heroSpecificClasses = "px-0 py-0";
-          const defaultSectionClasses = "px-6 py-8 gap-6";
-          const sectionClasses = [baseClasses];
+      <>
+        <div className="flex min-h-screen w-screen flex-col overflow-x-hidden">
+          {slides.map((slide) => {
+            const baseClasses = "flex min-h-screen w-screen max-w-full flex-col items-stretch justify-center outline-none focus-visible:ring-2 focus-visible:ring-white/50";
+            const heroSpecificClasses = "px-0 py-0";
+            const defaultSectionClasses = "px-6 py-8 gap-6";
+            const sectionClasses = [baseClasses];
 
-          if (slide.id === "hero") {
-            sectionClasses.push(heroSpecificClasses);
-          } else {
-            sectionClasses.push(defaultSectionClasses);
-          }
+            if (slide.id === "hero") {
+              sectionClasses.push(heroSpecificClasses);
+            } else {
+              sectionClasses.push(defaultSectionClasses);
+            }
 
-          return (
-            <section
-              key={slide.id}
-              id={slide.id}
-              tabIndex={0}
-              aria-label={slide.label}
-              className={`${sectionClasses.join(" ")} ${slide.className || ""}`}
-            >
-              {slide.content}
-            </section>
-          );
-        })}
-      </div>
+            return (
+              <section
+                key={slide.id}
+                id={slide.id}
+                tabIndex={0}
+                aria-label={slide.label}
+                className={`${sectionClasses.join(" ")} ${slide.className || ""}`}
+              >
+                {slide.content}
+              </section>
+            );
+          })}
+        </div>
+        <FaqOverlay progress={overlayProgress} onContainerReady={handleOverlayContainerReady} />
+      </>
     );
   }
 
