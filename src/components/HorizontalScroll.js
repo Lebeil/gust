@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Hero from "@/components/Hero";
 import ThreeColumnsAccordion from "@/components/ThreeColumnsAccordion";
 import AutoScrollGallery from "@/components/AutoScrollGallery";
@@ -639,6 +640,7 @@ const HorizontalScroll = () => {
 const ProjectsSection = ({ projectsData }) => {
   const [galleryApi, setGalleryApi] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
 
   // Détection mobile
   useEffect(() => {
@@ -650,6 +652,24 @@ const ProjectsSection = ({ projectsData }) => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Fonction pour générer le slug à partir du titre (même logique que dans [uid]/page.js)
+  const slugify = useCallback((title) => {
+    return (title || "")
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }, []);
+
+  // Navigation vers la page case study
+  const handleProjectClick = useCallback((project) => {
+    if (!project?.title) return;
+    
+    const slug = slugify(project.title);
+    router.push(`/fr/work/${slug}`);
+  }, [router, slugify]);
 
   const handlePrevious = useCallback(() => {
     galleryApi?.prev();
@@ -713,6 +733,7 @@ const ProjectsSection = ({ projectsData }) => {
           scrollable={isMobile} // Activer le scrollable uniquement sur mobile
           visibleImages={4}
           onApiReady={setGalleryApi}
+          onSelect={handleProjectClick}
           duplicate
           autoScrollSpeed={0.02}
         />
@@ -825,6 +846,11 @@ const ExpertisesSection = () => {
       ref={sectionRef}
       className="relative flex h-full w-full items-center justify-center"
     >
+      <h2
+        className="absolute left-6 top-16 text-2xl font-semibold uppercase tracking-[0.3em] text-white/80 md:left-10 md:top-20 md:text-3xl lg:left-16"
+      >
+        Nos offres
+      </h2>
       {!isMobile && (
         <button
           type="button"

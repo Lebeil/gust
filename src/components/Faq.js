@@ -74,7 +74,7 @@ export const FaqContent = () => {
                       isOpen ? 'max-h-48 opacity-100 md:max-h-56 md:py-1' : 'max-h-0 opacity-70'
                     }`}
                   >
-                    <div className="pl-16 pr-8 md:pl-20 md:pr-16">
+                    <div className="pl-16 pr-8 pb-4 md:pl-20 md:pr-16">
                       <p className="text-sm leading-tight text-white/75 md:text-base">
                         {item.a}
                       </p>
