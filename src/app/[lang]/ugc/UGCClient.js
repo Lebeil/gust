@@ -78,34 +78,11 @@ export default function UGCClient() {
   }));
 
   return (
-    <div className="ugc-wrapper relative min-h-screen">
-      {/* Fond dégradé étendu pour couvrir le footer */}
-      <div 
-        className="footer-background-wrapper"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          backgroundImage: 'url(/images/gradiant_ugc.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-          zIndex: 1
-        }}
-      />
-      <div 
-        className="ugc-content relative"
-        style={{
-          zIndex: 10
-        }}
-      >
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       
       {/* HERO SECTION AVEC VIDEO BACKGROUND */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background avec overlay gradient */}
         <div className="absolute inset-0 z-0">
           <video
@@ -118,6 +95,7 @@ export default function UGCClient() {
           >
             <source src="/assets/media/offres/ugc16_9.mp4" type="video/webm" />
           </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
         </div>
 
 
@@ -177,16 +155,27 @@ export default function UGCClient() {
         </div>
       </section>
 
-      {/* LOGOS BANNER */}
-      <section className="relative py-12 overflow-hidden bg-gradient-to-b from-black/80 to-transparent">
-        <div className="text-center mb-8">
-          <p className="text-white/60 text-sm uppercase tracking-wider">Ils nous font confiance</p>
-        </div>
-        <LogoBanner />
-      </section>
+      {/* FOND DÉGRADÉ POUR LE RESTE DE LA PAGE */}
+      <div 
+        className="relative"
+        style={{
+          backgroundImage: 'url(/images/gradiant_ugc.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* LOGOS BANNER */}
+        <section className="relative py-12 overflow-hidden">
+          <div className="text-center mb-8">
+            <p className="text-white/60 text-sm uppercase tracking-wider">Ils nous font confiance</p>
+          </div>
+          <LogoBanner />
+        </section>
 
-      {/* STATS SECTION AVEC ANIMATION */}
-      <section className="relative py-20 px-6 md:px-12">
+        {/* STATS SECTION AVEC ANIMATION */}
+        <section className="relative py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div 
             id="stats-grid" 
@@ -568,8 +557,8 @@ export default function UGCClient() {
         </a>
       </div>
 
-      <CinematicFooter />
+        <CinematicFooter />
       </div>
-    </div>
+    </>
   );
 }

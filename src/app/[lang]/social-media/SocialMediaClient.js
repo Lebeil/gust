@@ -97,34 +97,11 @@ export default function SocialMediaClient() {
 
 
   return (
-    <div className="social-media-wrapper relative min-h-screen">
-      {/* Fond dégradé étendu pour couvrir le footer */}
-      <div 
-        className="footer-background-wrapper"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          backgroundImage: 'url(/images/gradiant_some.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-          zIndex: 1
-        }}
-      />
-      <div 
-        className="social-media-content relative"
-        style={{
-          zIndex: 10
-        }}
-      >
+    <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       
       {/* HERO SECTION AVEC VIDEO BACKGROUND */}
-      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background avec overlay gradient */}
         <div className="absolute inset-0 z-0">
           <video
@@ -137,8 +114,7 @@ export default function SocialMediaClient() {
           >
             <source src="/assets/media/offres/some16_9.mp4" type="video/webm" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-sky-900/50 to-black/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-sky-500/20 via-transparent to-cyan-500/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
         </div>
 
         {/* Floating elements avec parallaxe */}
@@ -203,13 +179,24 @@ export default function SocialMediaClient() {
         </div>
       </section>
 
-      {/* LOGOS BANNER */}
-      <section className="relative py-12 overflow-hidden bg-gradient-to-b from-black/80 to-transparent">
-        <LogoBanner />
-      </section>
+      {/* FOND DÉGRADÉ POUR LE RESTE DE LA PAGE */}
+      <div 
+        className="relative"
+        style={{
+          backgroundImage: 'url(/images/gradiant_some.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* LOGOS BANNER */}
+        <section className="relative py-12 overflow-hidden">
+          <LogoBanner />
+        </section>
 
-      {/* STATS SECTION AVEC ANIMATION */}
-      <section className="relative py-20 px-6 md:px-12">
+        {/* STATS SECTION AVEC ANIMATION */}
+        <section className="relative py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div 
             id="stats-grid" 
@@ -624,8 +611,9 @@ export default function SocialMediaClient() {
         .trust-check{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:9999px;border:1px solid rgba(255,255,255,0.6);font-size:11px;line-height:1;color:#fff;opacity:.95}
         .trust-label{font-size:12px;line-height:1;color:rgba(255,255,255,0.95);font-family:'Avenir Next', Avenir, system-ui, -apple-system, sans-serif}
       `}</style>
-      <CinematicFooter />
+        
+        <CinematicFooter />
       </div>
-    </div>
+    </>
   );
 }

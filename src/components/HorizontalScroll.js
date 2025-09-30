@@ -145,7 +145,7 @@ const HorizontalScroll = () => {
       },
       {
         id: "projects",
-        label: "Nos projets",
+        label: "Nos meilleurs projets",
         content: <ProjectsSection projectsData={projectsData} />,
         className: " text-white",
       },
@@ -683,7 +683,7 @@ const ProjectsSection = ({ projectsData }) => {
     <div className="flex h-full w-full flex-col justify-center gap-12">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold uppercase tracking-[0.3em] text-white/80 md:text-3xl">
-          Nos projets
+          Nos meilleurs projets
         </h2>
         <div className="flex gap-3">
           <button

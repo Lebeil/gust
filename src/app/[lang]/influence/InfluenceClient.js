@@ -107,8 +107,31 @@ export default function InfluenceClient() {
   const [produceOpen, setProduceOpen] = useState(null);
 
   return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+    <div className="influence-wrapper relative min-h-screen">
+      {/* Fond dégradé étendu pour couvrir le footer */}
+      <div 
+        className="footer-background-wrapper"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundImage: 'url(/images/gradiant_open.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+          zIndex: 1
+        }}
+      />
+      <div 
+        className="influence-content relative"
+        style={{
+          zIndex: 10
+        }}
+      >
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       
       {/* HERO SECTION AVEC VIDEO BACKGROUND */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -119,13 +142,12 @@ export default function InfluenceClient() {
             muted
             loop
             playsInline
-            className="absolute w-full h-full object-cover"
+            className="absolute w-full h-full object-cover opacity-60"
             poster="/assets/media/cases_studies/cover/Quick_cover.png"
           >
             <source src="/assets/media/offres/influence16_9.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-blue-900/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/60" />
         </div>
 
         {/* Floating elements avec parallaxe */}
@@ -759,6 +781,7 @@ export default function InfluenceClient() {
         }
       `}</style>
       <CinematicFooter />
-    </>
+      </div>
+    </div>
   );
 }

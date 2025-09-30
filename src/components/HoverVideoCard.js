@@ -1,10 +1,12 @@
 "use client"
 
 import { useRef, useCallback, useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function HoverVideoCard({ href, title, posterSrc, className = "" }) {
   const videoRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const router = useRouter()
 
   const handleMouseEnter = useCallback(async () => {
     const el = videoRef.current
@@ -56,13 +58,30 @@ export default function HoverVideoCard({ href, title, posterSrc, className = "" 
       .replace(/^-+|-+$/g, '')           // trim leading/trailing '-'
   }
 
+  const handleClick = useCallback((e) => {
+    e.preventDefault()
+    const slug = generateSlug(title)
+    router.push(`/fr/work/${slug}`)
+  }, [title, router])
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick(e)
+    }
+  }, [handleClick])
+
   return (
-    <a
-      href={`/work/${generateSlug(title)}`}
-      className={`${className} relative group`}
+    <div
+      className={`${className} relative group cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black rounded-lg`}
       title={title}
+      role="button"
+      tabIndex={0}
+      aria-label={`Voir le détail du projet ${title}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
       <video
         ref={videoRef}
@@ -83,7 +102,7 @@ export default function HoverVideoCard({ href, title, posterSrc, className = "" 
           loading="lazy"
         />
       )}
-    </a>
+    </div>
   )
 }
 

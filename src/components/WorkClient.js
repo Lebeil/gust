@@ -4,9 +4,12 @@ import { useState, useCallback, useMemo } from "react"
 import WorkFsGrid from "@/components/WorkFsGrid"
 import caseStudies from "@/data/caseStudies"
 import ExpertisesList from "@/components/ExpertisesList"
+import Filters from "@/components/Filters"
 
 export default function WorkClient({ items = [] }) {
   const [activeTag, setActiveTag] = useState(null)
+  const [selectedTags, setSelectedTags] = useState([])
+  const [selectedSectors, setSelectedSectors] = useState([])
 
   const mapToTag = useCallback((label) => {
     const key = (label || "").toLowerCase()
@@ -29,6 +32,25 @@ export default function WorkClient({ items = [] }) {
     return (items && items.length > 0) ? items : caseStudies
   }, [items])
 
+  const tagsArray = useMemo(() => {
+    return Array.from(new Set(itemsToUse.flatMap((i) => i.tags || []))).filter(
+      (t) => (t?.toLowerCase?.() || "") !== 'sport'
+    )
+  }, [itemsToUse])
+
+  const sectorsArray = useMemo(() => {
+    return Array.from(new Set(itemsToUse.flatMap((i) => i.sectors || [])))
+  }, [itemsToUse])
+
+  const handleTagClick = useCallback((tag) => {
+    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]))
+    setActiveTag((prev) => (prev === tag ? null : tag))
+  }, [])
+
+  const handleSectorClick = useCallback((sector) => {
+    setSelectedSectors((prev) => (prev.includes(sector) ? prev.filter((s) => s !== sector) : [...prev, sector]))
+  }, [])
+
   const Word = ({ children }) => (
     <button
       type="button"
@@ -41,13 +63,27 @@ export default function WorkClient({ items = [] }) {
 
   return (
     <div className="text-white">
-      <div className="max-w-7xl mx-auto w-full px-6 md:px-10 pt-16 md:pt-24 pb-6 text-white/90 text-sm">
-        <div className="w-full text-left text-base md:text-lg leading-relaxed whitespace-nowrap">
-          Nous produisons de <Word>l’influence</Word>, <Word>Célébrité</Word>, <Word>Production</Word>, <Word>Social Media</Word>, de <Word>l’UGC</Word>.
+      <div className="max-w-7xl mx-auto w-full">
+        <div className="px-[var(--tw-4)] pt-16 md:pt-24 pb-6 lg:px-[var(--tw-12)] text-white/90 text-sm">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="text-left text-base md:text-lg leading-relaxed whitespace-nowrap">
+              Nous produisons de <Word>l'influence</Word>, <Word>Célébrité</Word>, <Word>Production</Word>, <Word>Social Media</Word>, de <Word>l'UGC</Word>.
+            </div>
+            <div className="lg:block hidden">
+              <Filters
+                tagsArray={tagsArray}
+                sectorsArray={sectorsArray}
+                selectedTags={selectedTags}
+                selectedSectors={selectedSectors}
+                handleTagClick={handleTagClick}
+                handleSectorClick={handleSectorClick}
+              />
+            </div>
+          </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto w-full px-6 md:px-10 pb-0">
-        <WorkFsGrid items={itemsToUse} activeTag={activeTag} />
+      <div className="max-w-7xl mx-auto w-full pb-0">
+        <WorkFsGrid items={itemsToUse} activeTag={activeTag} selectedTags={selectedTags} selectedSectors={selectedSectors} />
       </div>
 
       {/* Section Nos expertises (fidèle à la maquette fournie) */}

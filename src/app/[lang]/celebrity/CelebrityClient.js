@@ -170,34 +170,11 @@ export default function CelebrityClient() {
   const [produceOpen, setProduceOpen] = useState(null);
 
   return (
-    <div className="celebrity-wrapper relative min-h-screen">
-      {/* Fond dégradé étendu pour couvrir le footer */}
-      <div 
-        className="footer-background-wrapper"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          backgroundImage: 'url(/images/gradiant_open.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-          zIndex: 1
-        }}
-      />
-      <div 
-        className="celebrity-content relative"
-        style={{
-          zIndex: 10
-        }}
-      >
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       
       {/* HERO SECTION AVEC VIDEO BACKGROUND */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background avec overlay gradient */}
         <div className="absolute inset-0 z-0">
           <video
@@ -211,7 +188,6 @@ export default function CelebrityClient() {
             <source src="/assets/media/offres/open16_9.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-blue-900/20" />
         </div>
 
         {/* Floating elements avec parallaxe */}
@@ -276,13 +252,24 @@ export default function CelebrityClient() {
         </div>
       </section>
 
-      {/* LOGOS BANNER */}
-      <section className="relative py-12 overflow-hidden">
-        <LogoBanner />
-      </section>
+      {/* FOND DÉGRADÉ POUR LE RESTE DE LA PAGE */}
+      <div 
+        className="relative"
+        style={{
+          backgroundImage: 'url(/images/gradiant_open.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* LOGOS BANNER */}
+        <section className="relative py-12 overflow-hidden">
+          <LogoBanner />
+        </section>
 
-      {/* STATS SECTION AVEC ANIMATION */}
-      <section className="relative py-20 px-6 md:px-12">
+        {/* STATS SECTION AVEC ANIMATION */}
+        <section className="relative py-20 px-6 md:px-12">
         <div className="max-w-5xl mx-auto">
           <div 
             id="stats-grid" 
@@ -866,8 +853,9 @@ export default function CelebrityClient() {
           .kpi-label { font-size: 12px; line-height: 12px; }
         }
         `}</style>
-      <CinematicFooter />
+        
+        <CinematicFooter />
       </div>
-    </div>
+    </>
   );
 }

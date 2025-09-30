@@ -1,43 +1,22 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useMemo } from "react"
 import HoverVideoCard from "@/components/HoverVideoCard"
-import Filters from "@/components/Filters"
 import { MoreIcon } from "@/components/icons/MoreIcon"
 
-export default function WorkFsGrid({ items = [], activeTag = null }) {
-  const [selectedTags, setSelectedTags] = useState([])
-  const [selectedSecteurs, setSelectedSecteurs] = useState([])
-
-  const tagsArray = useMemo(() => {
-    return Array.from(new Set(items.flatMap((i) => i.tags || []))).filter(
-      (t) => (t?.toLowerCase?.() || "") !== 'sport'
-    )
-  }, [items])
-
-  const secteursArray = []
-
-  const handleTagClick = (tag) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]))
-  }
-
-  const handleSecteurClick = () => {}
+export default function WorkFsGrid({ items = [], activeTag = null, selectedTags = [], selectedSectors = [] }) {
 
   const filteredItems = useMemo(() => {
-    const selected = (selectedTags || []).filter((t) => (t?.toLowerCase?.() || "") !== 'sport')
+    const selectedTagsFiltered = (selectedTags || []).filter((t) => (t?.toLowerCase?.() || "") !== 'sport')
+    const selectedSectorsFiltered = (selectedSectors || [])
+    
     return items.filter((item) => {
-      const matchTags = selected.length === 0 || (item.tags || []).some((t) => selected.includes(t))
-      return matchTags
+      const matchTags = selectedTagsFiltered.length === 0 || (item.tags || []).some((t) => selectedTagsFiltered.includes(t))
+      const matchSectors = selectedSectorsFiltered.length === 0 || (item.sectors || []).some((s) => selectedSectorsFiltered.includes(s))
+      return matchTags && matchSectors
     })
-  }, [items, selectedTags])
+  }, [items, selectedTags, selectedSectors])
 
-  useEffect(() => {
-    if (!activeTag) {
-      setSelectedTags([])
-      return
-    }
-    setSelectedTags([activeTag])
-  }, [activeTag])
 
   return (
     <section className="work_overview">
@@ -47,18 +26,6 @@ export default function WorkFsGrid({ items = [], activeTag = null }) {
           lg:px-[var(--tw-12)] lg:pb-[var(--tw-48)]
         `}
       >
-        <div
-          className={`
-            pb-4 hidden
-            lg:pb-12 lg:block
-          `}
-        >
-          <Filters
-            tagsArray={tagsArray}
-            selectedTags={selectedTags}
-            handleTagClick={handleTagClick}
-          />
-        </div>
 
         <div
           className={`
