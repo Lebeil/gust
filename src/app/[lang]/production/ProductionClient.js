@@ -102,7 +102,7 @@ export default function ProductionClient() {
             loop
             playsInline
             className="absolute w-full h-full object-cover"
-            poster="/assets/media/cases_studies/cover/Orange_cover.png"
+            poster="/assets/media/cases_studies/cover/Orange_cover%202.png"
           >
             <source src="/assets/media/offres/production16_9.mp4" type="video/webm" />
           </video>

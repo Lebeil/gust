@@ -67,7 +67,7 @@ export default function WorkClient({ items = [] }) {
         <div className="px-[var(--tw-4)] pt-16 md:pt-24 pb-6 lg:px-[var(--tw-12)] text-white/90 text-sm">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="text-left text-base md:text-lg leading-relaxed whitespace-nowrap">
-              Nous produisons de <Word>l'influence</Word>, <Word>Célébrité</Word>, <Word>Production</Word>, <Word>Social Media</Word>, de <Word>l'UGC</Word>.
+              Nous produisons de <Word>l&apos;influence</Word>, <Word>Célébrité</Word>, <Word>Production</Word>, <Word>Social Media</Word>, de <Word>l&apos;UGC</Word>.
             </div>
             <div className="lg:block hidden">
               <Filters

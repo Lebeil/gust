@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 
 // Détection mobile
 const useIsMobile = () => {
@@ -49,8 +50,8 @@ export default function AutoScrollGallery({
   // Source des items: utilise les images fournies, sinon un set par défaut pour garantir un flux continu
   const defaultItems = [
     { title: "Showroom Privé", client: "SHOWROOM PRIVÉ", video: "/assets/media/cases_studies/ShowroomBy-Faustine.mp4", tags: ["Célébrité", "Production"], textColor: "text-white" },
-    { title: "Service Civique Solidarité Seniors", client: "WĀJ", video: "/assets/media/cases_studies/Service civique solidarité.mp4", tags: ["Influence", "Social média"], textColor: "text-white" },
-    { title: "Parions Sport", client: "PARIONS SPORT", video: "/assets/media/cases_studies/ParionsSport-Avion.mp4", tags: ["Production", "Social média"], textColor: "text-white" },
+    { title: "Service Civique Solidarité Seniors", client: "WĀJ", video: "/assets/media/cases_studies/Service_civique_solidarité.mp4", tags: ["Influence", "Social média"], textColor: "text-white" },
+    { title: "Parions Sport", client: "PARIONS SPORT", video: "/assets/media/cases_studies/Parions_Sport_valise.mp4", tags: ["Production", "Social média"], textColor: "text-white" },
     { title: "Quick", client: "Quick", video: "/assets/media/cases_studies/Quick.mp4", tags: ["Influence", "Social média"], textColor: "text-white" },
     { title: "Vestiaire Collective", client: "Vestiaire Collective", video: "/assets/media/cases_studies/Vestiaire_Collective.mp4", tags: ["Production", "Social média"], textColor: "text-white" },
   ];
@@ -79,7 +80,7 @@ export default function AutoScrollGallery({
     return Math.max(0, (containerWidth - oneSetWidth) / 2);
   };
 
-  const updateTransformAndProgress = () => {
+  const updateTransformAndProgress = useCallback(() => {
     const containerWidth = galleryRef.current?.clientWidth || 0;
     const centerOffset = Math.max(0, (containerWidth - oneSetWidth) / 2);
     if (!shouldDuplicate) {
@@ -97,35 +98,41 @@ export default function AutoScrollGallery({
       lastProgressRef.current = currentProgress;
       setProgressPercent(currentProgress);
     }
-  };
+  }, [baseOffsetPx, oneSetWidth, shouldDuplicate]);
 
   useEffect(() => {
-    if (typeof onApiReady === 'function') {
-      const stepPx = CARD_WIDTH + GAP_PX;
-      const api = {
-        next: () => {
-          if (shouldDuplicate) {
-            scrollPositionRef.current += stepPx;
-          } else {
-            const containerWidth = galleryRef.current?.clientWidth || 0;
-            const maxScroll = Math.max(0, oneSetWidth - containerWidth);
-            scrollPositionRef.current = Math.min(maxScroll, scrollPositionRef.current + stepPx);
-          }
-          updateTransformAndProgress();
-        },
-        prev: () => {
-          if (shouldDuplicate) {
-            scrollPositionRef.current -= stepPx;
-          } else {
-            scrollPositionRef.current = Math.max(0, scrollPositionRef.current - stepPx);
-          }
-          updateTransformAndProgress();
-        },
-      };
-      try { onApiReady(api); } catch (_) {}
+    if (typeof onApiReady !== "function") {
+      return undefined;
     }
-    // noop cleanup
-  }, [onApiReady]);
+
+    const stepPx = CARD_WIDTH + GAP_PX;
+    const api = {
+      next: () => {
+        if (shouldDuplicate) {
+          scrollPositionRef.current += stepPx;
+        } else {
+          const containerWidth = galleryRef.current?.clientWidth || 0;
+          const maxScroll = Math.max(0, oneSetWidth - containerWidth);
+          scrollPositionRef.current = Math.min(maxScroll, scrollPositionRef.current + stepPx);
+        }
+        updateTransformAndProgress();
+      },
+      prev: () => {
+        if (shouldDuplicate) {
+          scrollPositionRef.current -= stepPx;
+        } else {
+          scrollPositionRef.current = Math.max(0, scrollPositionRef.current - stepPx);
+        }
+        updateTransformAndProgress();
+      },
+    };
+
+    try {
+      onApiReady(api);
+    } catch (_) {}
+
+    return undefined;
+  }, [onApiReady, shouldDuplicate, updateTransformAndProgress, oneSetWidth]);
 
   // Animation avec requestAnimationFrame pour défilement ultra-smooth
   useEffect(() => {
@@ -169,12 +176,12 @@ export default function AutoScrollGallery({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isHovered, totalImages, visibleImages, autoScrollSpeed, enableAutoScroll]);
+  }, [enableAutoScroll, totalImages, updateTransformAndProgress, oneSetWidth]);
   
   // Positionner le track au centre dès le premier rendu pour avoir des cards des deux côtés
   useEffect(() => {
     updateTransformAndProgress();
-  }, [baseOffsetPx]);
+  }, [baseOffsetPx, updateTransformAndProgress]);
 
   // Recentrer sur resize du conteneur
   useEffect(() => {
@@ -183,7 +190,7 @@ export default function AutoScrollGallery({
     const ro = new ResizeObserver(() => updateTransformAndProgress());
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [updateTransformAndProgress]);
 
   // Gestion des événements wheel et trackpad (horizontal + vertical)
   useEffect(() => {
@@ -291,7 +298,7 @@ export default function AutoScrollGallery({
       galleryElement.removeEventListener('touchmove', handleTouchMove);
       galleryElement.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isHovered, totalImages, visibleImages, scrollable, isMobile]);
+  }, [enableAutoScroll, isHovered, isMobile, scrollable, shouldDuplicate, totalImages, updateTransformAndProgress]);
 
   return (
     <div className="w-full">
@@ -406,10 +413,12 @@ function ImageCard({ image, index, size, onSelect }) {
 
       {/* Image de couverture au repos */}
       {caseStudy.poster && (
-        <img
+        <Image
           src={caseStudy.poster}
           alt={caseStudy.title || caseStudy.client || 'cover'}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 pointer-events-none"
+          fill
+          className="absolute inset-0 object-cover transition-opacity duration-300 group-hover:opacity-0 pointer-events-none"
+          sizes="(max-width: 768px) 80vw, (max-width: 1280px) 40vw, 25vw"
           loading="lazy"
         />
       )}

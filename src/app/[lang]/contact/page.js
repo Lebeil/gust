@@ -1,5 +1,6 @@
 import { Layout } from "@/components/Layout"
 import CinematicFooter from "@/components/CinematicFooter"
+import dynamic from "next/dynamic"
 
 export async function generateMetadata() {
   return {
@@ -9,13 +10,17 @@ export async function generateMetadata() {
   }
 }
 
+const ProjectSelectMobile = dynamic(() => import("@/components/ProjectSelectMobile"), {
+  ssr: false,
+})
+
 export default async function ContactPage({ params }) {
   try {
     return (
       <Layout>
         <div className="min-h-screen text-white flex items-center justify-center">
           <div className="max-w-5xl mx-auto px-6 w-full">
-            <form className="grid md:grid-cols-2 gap-10 mt-6 items-start">
+            <form className="grid gap-10 mt-6 items-start md:grid-cols-2">
               {/* Ligne 1 gauche: titre + texte */}
               <div className="animate-slide-in-left">
                 <h2 className="text-xl md:text-2xl font-semibold mb-3">Parlons de votre projet</h2>
@@ -26,7 +31,7 @@ export default async function ContactPage({ params }) {
               </div>
 
               {/* Ligne 1 droite: champs Nom / Email / Projet */}
-              <div className="animate-slide-in-right space-y-6">
+              <div className="space-y-6 animate-slide-in-right">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
                     Nom *
@@ -59,24 +64,34 @@ export default async function ContactPage({ params }) {
                   <label htmlFor="project" className="block text-sm font-medium mb-2">
                     Votre projet
                   </label>
-                  <div className="relative">
-                    <select
+                  <div className="hidden md:block">
+                    <div className="relative">
+                      <select
+                        id="project"
+                        name="project"
+                        className="w-full appearance-none px-5 py-3 bg-white/15 border border-white/35 rounded-[12px] focus:border-white/60 focus:outline-none transition-colors pr-10 shadow-inner placeholder-white/60 md:text-base text-sm"
+                      >
+                        <option value="">Selectionnez un type de projet</option>
+                        <option value="stop-scrollers">Stop-Scrollers</option>
+                        <option value="site-web">Site Web</option>
+                        <option value="app-mobile">Application Mobile</option>
+                        <option value="branding">Branding</option>
+                        <option value="autre">Autre</option>
+                      </select>
+                      <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/70">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="md:hidden">
+                    <ProjectSelectMobile
                       id="project"
                       name="project"
-                      className="w-full appearance-none px-5 py-3 bg-white/15 border border-white/35 rounded-[12px] focus:border-white/60 focus:outline-none transition-colors pr-10 shadow-inner placeholder-white/60"
-                    >
-                      <option value="">Selectionnez un type de projet</option>
-                      <option value="stop-scrollers">Stop-Scrollers</option>
-                      <option value="site-web">Site Web</option>
-                      <option value="app-mobile">Application Mobile</option>
-                      <option value="branding">Branding</option>
-                      <option value="autre">Autre</option>
-                    </select>
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/70">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </span>
+                      placeholder="Selectionnez un type de projet"
+                    />
                   </div>
                 </div>
               </div>

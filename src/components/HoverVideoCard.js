@@ -2,6 +2,7 @@
 
 import { useRef, useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export default function HoverVideoCard({ href, title, posterSrc, className = "" }) {
   const videoRef = useRef(null)
@@ -95,11 +96,14 @@ export default function HoverVideoCard({ href, title, posterSrc, className = "" 
         className="w-full h-full object-cover"
       />
       {posterSrc && (
-        <img
+        <Image
           src={posterSrc}
           alt={title}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 pointer-events-none"
+          fill
+          className="absolute inset-0 object-cover transition-opacity duration-300 group-hover:opacity-0 pointer-events-none"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
           loading="lazy"
+          priority={false}
         />
       )}
     </div>

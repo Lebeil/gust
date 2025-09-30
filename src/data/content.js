@@ -73,7 +73,7 @@ export const workData = {
           height: 600
         },
         preview_video: {
-          url: "/assets/media/cases_studies/Les%20secrets%20de%20loly.mp4"
+          url: "/assets/media/cases_studies/Les_secrets_de_loly.mp4"
         }
       }
     },

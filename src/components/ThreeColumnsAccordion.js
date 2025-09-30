@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
+import Image from "next/image";
 
 // Component that displays the 3-columns section with accordion hover effect
 export default function ThreeColumnsAccordion({ progress = 0 }) {
@@ -209,21 +210,15 @@ export default function ThreeColumnsAccordion({ progress = 0 }) {
         }}
       >
         <div className="flex items-center gap-8 md:gap-12">
-          {[
-            "/images/showroom privé.svg",
-            "/images/Nestlé.svg", 
-            "/images/orange logo.svg",
-            "/images/parions sport.svg",
-            "/images/coca cola.svg",
-            "/images/verbaudet.svg",
-            "/images/vestiaire collective.svg",
-            "/images/cyberghost vpn.svg"
-          ].map((logo, i) => (
-            <img
-              key={i}
+          {["/images/showroom privé.svg","/images/Nestlé.svg","/images/orange logo.svg","/images/parions sport.svg","/images/coca cola.svg","/images/verbaudet.svg","/images/vestiaire collective.svg","/images/cyberghost vpn.svg"].map((logo) => (
+            <Image
+              key={logo}
               src={logo}
               alt="Client logo"
-              className="h-10 md:h-12 object-contain filter brightness-0 invert opacity-70 hover:opacity-100 transition-opacity duration-300"
+              width={160}
+              height={48}
+              className="h-10 md:h-12 w-auto object-contain filter brightness-0 invert opacity-70 hover:opacity-100 transition-opacity duration-300"
+              loading="lazy"
             />
           ))}
         </div>

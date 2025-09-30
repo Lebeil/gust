@@ -143,7 +143,7 @@ export default function InfluenceClient() {
             loop
             playsInline
             className="absolute w-full h-full object-cover opacity-60"
-            poster="/assets/media/cases_studies/cover/Quick_cover.png"
+            poster="/assets/media/cases_studies/cover/Quick_cover%202.png"
           >
             <source src="/assets/media/offres/influence16_9.mp4" type="video/mp4" />
           </video>

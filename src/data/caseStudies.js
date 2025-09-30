@@ -11,7 +11,7 @@ const caseStudies = [
   },
   {
     title: "Service Civique Solidarité Seniors",
-    href: "/assets/media/cases_studies/Service civique solidarité.mp4",
+    href: "/assets/media/cases_studies/Service_civique_solidarité.mp4",
     posterSrc: "/assets/media/cases_studies/cover/SC2S_cover%202.png",
     tags: ["Influence", "Ad-fluence"],
     sectors: ["Solidarité"],
@@ -55,7 +55,7 @@ const caseStudies = [
   },
   {
     title: "We Are Etendart",
-    href: "/assets/media/cases_studies/We are Etendart.mp4",
+    href: "/assets/media/cases_studies/We_are_etendart.mp4",
     posterSrc: "/assets/media/cases_studies/cover/WE%20ARTE%20ETENDART_cover%202.png",
     tags: ["Influence", "Brand content", "Événementiel"],
     sectors: ["Sport"],
@@ -105,7 +105,7 @@ const caseStudies = [
   },
   {
     title: "Les Secrets de Loly",
-    href: "/assets/media/cases_studies/Les secrets de loly.mp4",
+    href: "/assets/media/cases_studies/Les_secrets_de_loly.mp4",
     posterSrc: "/assets/media/cases_studies/cover/LSL_cover%202.png",
     tags: ["Production", "Social média", "Illustration", "Motion design"],
     sectors: ["Beauté"],
@@ -189,7 +189,7 @@ const caseStudies = [
   },
   {
     title: "La Biche‑Renard",
-    href: "/assets/media/cases_studies/Les secrets de loly.mp4",
+    href: "/assets/media/cases_studies/Les_secrets_de_loly.mp4",
     posterSrc: "/assets/media/cases_studies/cover/LBR_COVER%20copie%202.png",
     tags: ["Influence", "Production", "Social média"],
     sectors: ["Solidarité"],
@@ -327,8 +327,8 @@ const caseStudies = [
   },
   {
     title: "Emma - Étude d'Impact",
-    href: "/assets/media/cases_studies/Emma - Étude d'impact.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Emma_cover 2.png",
+    href: "/assets/media/cases_studies/Emma_etude_impact.mp4",
+    posterSrc: "/assets/media/cases_studies/cover/Emma_cover%202.png",
     tags: ["Influence", "Production"],
     sectors: ["Habitat"],
     client: "Emma Matelas",
@@ -381,7 +381,7 @@ const caseStudies = [
   },
   {
     title: "Coca-Cola",
-    href: "/assets/media/cases_studies/Coca Cola.mp4",
+    href: "/assets/media/cases_studies/Coca_cola.mp4",
     posterSrc: "/assets/media/cases_studies/cover/Coca_cola.png",
     tags: ["Production", "Social média", "Brand content"],
     sectors: ["Sport", "Food & Beverage"],
@@ -638,7 +638,7 @@ const caseStudies = [
   },
   {
     title: "Spring Court",
-    href: "/assets/media/cases_studies/spring-court.mp4",
+    href: "/assets/media/cases_studies/spring-court.webm",
     posterSrc: "/assets/media/cases_studies/cover/spring-court.png",
     tags: ["UGC", "Social média"],
     sectors: ["Mode"],
@@ -658,7 +658,7 @@ const caseStudies = [
   },
   {
     title: "Chi Fou Quick",
-    href: "/assets/media/cases_studies/chi-fou-quick.mp4",
+    href: "/assets/media/cases_studies/chi_fou_quick.webm",
     posterSrc: "/assets/media/cases_studies/cover/chi-fou-quick.png",
     tags: ["Influence", "UGC", "Ad-fluence", "Social média", "Production"],
     sectors: ["Food & Beverage"],

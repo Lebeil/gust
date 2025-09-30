@@ -8,7 +8,7 @@ const MainHeroMobile = ({ content }) => {
   return (
     <section
       id="main-hero"
-      className="relative flex h-screen w-screen min-h-screen items-center justify-center overflow-hidden"
+      className="relative flex min-h-screen w-full items-center justify-center overflow-hidden"
     >
       <figure className="absolute inset-0 z-0">
         <video
@@ -22,8 +22,8 @@ const MainHeroMobile = ({ content }) => {
         </video>
       </figure>
 
-      <div className="relative z-10 flex h-full w-full items-start justify-center bg-gradient-to-b from-black/45 via-black/25 to-black/40 px-[var(--tw-4)] pb-[var(--tw-32)] pt-[calc(8vh+var(--tw-20))] text-white sm:px-[var(--tw-6)] md:px-[var(--tw-10)]">
-        <div className="flex w-full max-w-[min(540px,100vw)] flex-col gap-[var(--tw-6)]">
+      <div className="relative z-10 flex h-full w-full items-start justify-center px-[var(--tw-4)] pb-[var(--tw-32)] pt-[calc(6vh+var(--tw-12))] text-white sm:px-[var(--tw-6)] md:px-[var(--tw-10)]">
+        <div className="flex w-full max-w-[min(540px,100%)] flex-col gap-[var(--tw-6)] drop-shadow-lg">
           <div className="flex flex-col gap-[var(--tw-6)]">
             <h2 className="flex flex-col gap-[var(--tw-4)] uppercase">
               <span className="text-sm font-semi-bold tracking-[0.35em] text-white/70">{content.primaryText}</span>
@@ -69,7 +69,7 @@ const MainHeroMobile = ({ content }) => {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-20 -mx-[var(--tw-4)] sm:-mx-[var(--tw-6)] pb-[var(--tw-20)]">
+      <div className="absolute bottom-0 left-0 right-0 z-20 pb-[var(--tw-20)]">
         <LogoBanner />
       </div>
     </section>

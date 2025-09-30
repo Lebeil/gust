@@ -46,7 +46,7 @@ const HorizontalScroll = () => {
       {
         title: "Les secrets de Loly",
         client: "OPI",
-        video: "/assets/media/cases_studies/Les%20secrets%20de%20loly.mp4",
+        video: "/assets/media/cases_studies/Les_secrets_de_loly.mp4",
         poster: "/assets/media/cases_studies/cover/LSL_cover%202.png",
         tags: ["Production"],
         textColor: "text-white",
@@ -54,7 +54,7 @@ const HorizontalScroll = () => {
       {
         title: "La Biche-Renard",
         client: "LA BICHE-RENARD",
-        video: "/assets/media/cases_studies/La%20biche%20Renard.mov",
+        video: "/assets/media/cases_studies/La_biche_Renard.webm",
         poster: "/assets/media/cases_studies/cover/LA%20BICHEv.png",
         tags: ["Influence", "Production"],
         textColor: "text-white",
@@ -86,7 +86,7 @@ const HorizontalScroll = () => {
       {
         title: "Service Civique Solidarité Seniors",
         client: "WĀJ",
-        video: "/assets/media/cases_studies/Service%20civique%20solidarit%C3%A9.mp4",
+        video: "/assets/media/cases_studies/Service_civique_solidarité.mp4",
         poster: "/assets/media/cases_studies/cover/SC2S_cover%202.png",
         tags: ["Influence", "Social média"],
         textColor: "text-white",
@@ -108,18 +108,20 @@ const HorizontalScroll = () => {
     overlayContainerRef.current = node;
   }, []);
   
+  const heroContent = homePageContent?.hero;
+
   const slides = useMemo(
     () => [
       {
         id: "hero",
         label: "Section introduction Gust",
         content: isMobile ? (
-          <Hero content={homePageContent.hero} scrollProgress={scrollProgress} />
+          <Hero content={heroContent} scrollProgress={scrollProgress} />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-start gap-[var(--tw-6)] pt-[var(--tw-2)] pb-[var(--tw-32)] transition-all duration-700 ease-out">
             <div className="flex w-full max-w-[1200px] flex-1 items-start justify-center">
               <Hero
-                content={homePageContent.hero}
+                content={heroContent}
                 scrollProgress={scrollProgress}
                 variant="compact"
               />
@@ -156,7 +158,7 @@ const HorizontalScroll = () => {
         className: " text-white",
       },
     ],
-    [homePageContent.hero, isMobile, projectsData, scrollProgress]
+    [heroContent, isMobile, projectsData, scrollProgress]
   );
 
   const clampOffset = useCallback((value) => {

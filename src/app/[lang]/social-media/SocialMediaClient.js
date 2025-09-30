@@ -110,7 +110,7 @@ export default function SocialMediaClient() {
             loop
             playsInline
             className="absolute w-full h-full object-cover"
-            poster="/assets/media/cases_studies/cover/ParionsSport_cover.png"
+            poster="/assets/media/cases_studies/cover/ParionsSport.png"
           >
             <source src="/assets/media/offres/some16_9.mp4" type="video/webm" />
           </video>

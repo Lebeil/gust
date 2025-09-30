@@ -29,7 +29,7 @@ export function Layout({ children }) {
       <Navbar />
       
       <Template>
-        <div className="relative w-full h-full">
+        <div className="relative h-full w-full overflow-x-clip">
           <main
             className={`${pageType ? `main ${pageType}` : ""}${
               pageType === "contact" ? " h-screen" : ""

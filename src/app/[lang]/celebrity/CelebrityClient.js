@@ -115,7 +115,7 @@ export default function CelebrityClient() {
   const additionalCelebrityCases = [
     {
       title: "Showroom By Géraldine",
-      href: "/assets/media/cases_studies/ShowroomBy-Geraldine.mp4",
+      href: "/assets/media/cases_studies/ShowroomBy-Géraldine.mp4",
       posterSrc: "/assets/media/cases_studies/cover/Geraldine_Cover%202.png",
       tags: ["Célébrité", "Production"],
       client: "Showroom Privé"
