@@ -5,14 +5,14 @@ const caseStudies = [
   {
     title: "Showroom Privé",
     href: "/assets/media/cases_studies/ShowroomBy-Faustine.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Faustine_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/Faustine_cover.png",
     tags: ["Production", "Ad-fluence", "Brand content", "Célébrité"],
     sectors: ["Mode"],
   },
   {
     title: "Service Civique Solidarité Seniors",
     href: "/assets/media/cases_studies/Service_civique_solidarité.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/SC2S_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/SC2S_cover.png",
     tags: ["Influence", "Ad-fluence"],
     sectors: ["Solidarité"],
     client: "SC2S",
@@ -32,7 +32,7 @@ const caseStudies = [
   {
     title: "CyberGhost",
     href: "/assets/media/cases_studies/CyberGhost.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/CYBERGHOSt_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/CYBERGHOSt_cover.png",
     tags: ["Influence"],
     sectors: ["Technologie"],
     client: "CyberGhost",
@@ -56,14 +56,14 @@ const caseStudies = [
   {
     title: "We Are Etendart",
     href: "/assets/media/cases_studies/We_are_etendart.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/WE%20ARTE%20ETENDART_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/WE ARTE ETENDART_cover.png",
     tags: ["Influence", "Brand content", "Événementiel"],
     sectors: ["Sport"],
   },
   {
     title: "Quick - Un jeu concours viral avec GMK",
     href: "/assets/media/cases_studies/Quick.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Quick_cover 2.png",
+    posterSrc: "/assets/media/cases_studies/cover/Quick_cover.png",
     tags: ["Influence", "Ad-fluence"],
     sectors: ["Food & Beverage"],
     client: "Quick",
@@ -84,7 +84,7 @@ const caseStudies = [
   {
     title: "Orange",
     href: "/assets/media/cases_studies/Orange.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Orange_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/Orange_cover.png",
     tags: ["Influence", "Brand content", "Événementiel"],
     sectors: ["Sport"],
     client: "Orange",
@@ -106,7 +106,7 @@ const caseStudies = [
   {
     title: "Les Secrets de Loly",
     href: "/assets/media/cases_studies/Les_secrets_de_loly.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/LSL_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/LSL_cover.png",
     tags: ["Production", "Social média", "Illustration", "Motion design"],
     sectors: ["Beauté"],
     client: "Les Secrets de Loly",
@@ -134,7 +134,7 @@ const caseStudies = [
   {
     title: "OPI",
     href: "/assets/media/cases_studies/OPI.webm",
-    posterSrc: "/assets/media/cases_studies/cover/OPI_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/OPI_cover.png",
     tags: ["Influence", "Ad-fluence"],
     sectors: ["Beauté"],
     client: "O.P.I",
@@ -162,7 +162,7 @@ const caseStudies = [
   {
     title: "ShowroomSport",
     href: "/assets/media/cases_studies/ShowroomSport.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Mathis_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/Mathis_cover.png",
     tags: ["Production", "Célébrité"],
     sectors: ["Sport"],
     client: "ShowroomSport",
@@ -189,8 +189,8 @@ const caseStudies = [
   },
   {
     title: "La Biche‑Renard",
-    href: "/assets/media/cases_studies/Les_secrets_de_loly.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/LBR_COVER%20copie%202.png",
+    href: "/assets/media/cases_studies/La_biche_Renard.webm",
+    posterSrc: "/assets/media/cases_studies/cover/LBR_COVER.png",
     tags: ["Influence", "Production", "Social média"],
     sectors: ["Solidarité"],
     client: "La Biche Renard",
@@ -218,7 +218,7 @@ const caseStudies = [
   {
     title: "Verbaudet - Cartable",
     href: "/assets/media/cases_studies/Verbaudet-cartable.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/VERTBAUDET_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/VERTBAUDET_cover.png",
     tags: ["Production", "3D", "Social média"],
     sectors: ["Habitat"],
     client: "Vertbaudet",
@@ -246,7 +246,7 @@ const caseStudies = [
   {
     title: "Vestiaire Collective",
     href: "/assets/media/cases_studies/Vestiaire_Collective.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/VestiaireCo_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/VestiaireCo_cover.png",
     tags: ["Production", "3D", "Social média"],
     sectors: ["Mode"],
     client: "Vestiaire Collective",
@@ -273,7 +273,7 @@ const caseStudies = [
   {
     title: "Showroom Géraldine Nakache",
     href: "/assets/media/cases_studies/ShowroomBy-Géraldine.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Geraldine_Cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/Geraldine_Cover.png",
     tags: ["Production", "Ad-fluence", "Brand content", "Célébrité"],
     sectors: ["Mode"],
     client: "ShowroomPrivé",
@@ -301,7 +301,7 @@ const caseStudies = [
   {
     title: "Nivea",
     href: "/assets/media/cases_studies/Nivea.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/NIVEA_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/NIVEA_cover.png",
     tags: ["Production", "3D", "Social Ads"],
     sectors: ["Beauté"],
     client: "Nivéa",
@@ -328,7 +328,7 @@ const caseStudies = [
   {
     title: "Emma - Étude d'Impact",
     href: "/assets/media/cases_studies/Emma_etude_impact.mp4",
-    posterSrc: "/assets/media/cases_studies/cover/Emma_cover%202.png",
+    posterSrc: "/assets/media/cases_studies/cover/Emma_cover.png",
     tags: ["Influence", "Production"],
     sectors: ["Habitat"],
     client: "Emma Matelas",

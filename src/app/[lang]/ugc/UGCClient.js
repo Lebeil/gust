@@ -91,7 +91,7 @@ export default function UGCClient() {
             loop
             playsInline
             className="absolute w-full h-full object-cover"
-            poster="/assets/media/cases_studies/cover/Emma_cover%202.png"
+            poster="/assets/media/cases_studies/cover/Emma_cover.png"
           >
             <source src="/assets/media/offres/ugc16_9.mp4" type="video/webm" />
           </video>

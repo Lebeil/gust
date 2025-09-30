@@ -8,17 +8,17 @@ export default function LogoBanner() {
   // Liste des logos clients avec leurs images - taille uniformisée
   const logos = [
     { name: "Emma", image: "/images/emma.svg" },
-    { name: "Vestiaire Collective", image: "/images/vestiaire collective.svg" },
+    { name: "Vestiaire Collective", image: "/images/vestiaire_collective.svg" },
     { name: "Vertbaudet", image: "/images/verbaudet.svg" },
-    { name: "Nestlé", image: "/images/Nestlé.svg" },
-    { name: "CyberGhost", image: "/images/cyberghost vpn.svg" },
+    { name: "Nestlé", image: "/images/Nestle.svg" },
+    { name: "CyberGhost", image: "/images/cyberghost_vpn.svg" },
     { name: "Quick", image: "/images/Quick.svg" },
-    { name: "Parions Sport", image: "/images/parions sport.svg" },
-    { name: "Orange", image: "/images/orange logo.svg" },
-    { name: "Coca-Cola", image: "/images/coca cola.svg" },
+    { name: "Parions Sport", image: "/images/parions_sport.svg" },
+    { name: "Orange", image: "/images/orange_logo.svg" },
+    { name: "Coca-Cola", image: "/images/coca_cola.svg" },
     { name: "NIVEA", image: "/images/NIVEA.svg" },
-    { name: "O.P.I", image: "/images/O P I.svg" },
-    { name: "Showroom Privé", image: "/images/showroom privé.svg" }
+    { name: "O.P.I", image: "/images/opi.svg" },
+    { name: "Showroom Privé", image: "/images/showroom_prive.svg" }
   ];
 
   // Dupliquer les logos pour un défilement continu
