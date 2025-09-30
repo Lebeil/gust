@@ -226,11 +226,15 @@
   top: 100%;
   right: 0;
   z-index: 9999;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-top: none;
   border-radius: 12px;
   overflow: hidden;
   min-width: 220px;
+  background: rgba(9, 13, 32, 0.38);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
 }
 
 .mobileLink {

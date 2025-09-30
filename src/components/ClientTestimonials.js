@@ -36,12 +36,24 @@ export default function ClientTestimonials() {
       company: "Reeve",
       rating: 5,
       avatar: "Z",
+      avatarImage: "/assets/media/logos/reeve.svg",
       isGoogle: true,
       verified: true,
       text: "Nous avons sollicité l'agence Gust afin d'améliorer l'image de marque de notre société en définissant une nouvelle stratégie & en créant les contenus associés. Une véritable écoute de nos problématiques pour mieux adapter la stratégie, un relationnel de grande qualité et une véritable créativité dans les contenus proposés."
     },
     {
       id: "t4",
+      name: "Théo DE CELLERY D'ALLENS",
+      date: "7 Décembre 2024",
+      company: "Tcorp",
+      rating: 5,
+      avatar: "D",
+      isGoogle: true,
+      verified: true,
+      text: "Travailler ensemble sur un appel d’offres sur plusieurs aspects : stratégie et création.J’ai beaucoup apprécié le fait d’être dans une équipe jeune et très connecté aux tendances influence et social média. De plus l’expertise de l’agence sur le stop scrolling rend les propositions créatives pertinentes et impactante d’un point de vu marketing"
+    },
+    {
+      id: "t5",
       name: "Stephane Boukris",
       date: "9 Décembre 2024",
       company: "QUATID",
@@ -51,17 +63,6 @@ export default function ClientTestimonials() {
       verified: false,
       text: "Réaliser des posts engageants pour notre audience.La réactivité de l'équipe, et la compréhension du projet."
     },
-    {
-      id: "t5",
-      name: "Théo DE CELLERY D'ALLENS",
-      date: "7 Décembre 2024",
-      company: "Tcorp",
-      rating: 5,
-      avatar: "D",
-      isGoogle: true,
-      verified: true,
-      text: "Travailler ensemble sur un appel d’offres sur plusieurs aspects : stratégie et création.J’ai beaucoup apprécié le fait d’être dans une équipe jeune et très connecté aux tendances influence et social média. De plus l’expertise de l’agence sur le stop scrolling rend les propositions créatives pertinentes et impactante d’un point de vu marketing"
-    }
   ];
 
   // État: liste d'IDs de cartes actuellement déployées
@@ -204,8 +205,8 @@ export default function ClientTestimonials() {
               key={index}
               onClick={() => setCurrentPage(index)}
               className={`transition-all duration-300 ${
-                index === currentPage 
-                  ? 'w-8 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full' 
+                index === currentPage
+                  ? 'w-8 h-2 bg-white rounded-full'
                   : 'w-2 h-2 bg-white/30 hover:bg-white/50 rounded-full'
               }`}
               aria-label={`Page ${index + 1}`}
