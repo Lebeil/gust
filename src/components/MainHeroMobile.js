@@ -22,7 +22,7 @@ const MainHeroMobile = ({ content }) => {
         </video>
       </figure>
 
-      <div className="relative z-10 flex h-full w-full items-start justify-center px-[var(--tw-4)] pb-[var(--tw-32)] pt-[calc(6vh+var(--tw-12))] text-white sm:px-[var(--tw-6)] md:px-[var(--tw-10)]">
+      <div className="relative z-10 flex h-full w-full items-start justify-center px-[var(--tw-4)] pb-[var(--tw-16)] pt-[calc(6vh+var(--tw-14))] text-white sm:px-[var(--tw-6)] sm:pt-[calc(7vh+var(--tw-16))] md:px-[var(--tw-10)] md:pt-[calc(8vh+var(--tw-20))]">
         <div className="flex w-full max-w-[min(540px,100%)] flex-col gap-[var(--tw-6)] drop-shadow-lg">
           <div className="flex flex-col gap-[var(--tw-6)]">
             <h2 className="flex flex-col gap-[var(--tw-4)] uppercase">
@@ -54,7 +54,7 @@ const MainHeroMobile = ({ content }) => {
           </div>
 
 
-          <div className="flex flex-col gap-[var(--tw-4)] pt-[var(--tw-8)]">
+          <div className="flex flex-col gap-[var(--tw-4)] pt-[var(--tw-10)]">
             <span className="h-px w-20 bg-white/70" aria-hidden="true" />
             <a
               href="#projects"
@@ -66,11 +66,11 @@ const MainHeroMobile = ({ content }) => {
               <span aria-hidden="true">→</span>
             </a>
           </div>
-        </div>
-      </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-20 pb-[var(--tw-20)]">
-        <LogoBanner />
+          <div className="pt-[var(--tw-10)]">
+            <LogoBanner />
+          </div>
+        </div>
       </div>
     </section>
   )

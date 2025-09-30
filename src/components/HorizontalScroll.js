@@ -849,7 +849,7 @@ const ExpertisesSection = () => {
       className="relative flex h-full w-full items-center justify-center"
     >
       <h2
-        className="absolute left-6 top-16 text-2xl font-semibold uppercase tracking-[0.3em] text-white/80 md:left-10 md:top-20 md:text-3xl lg:left-16"
+        className="pointer-events-none absolute left-4 top-8 z-20 text-lg font-semibold uppercase tracking-[0.32em] text-white/80 sm:left-6 sm:top-14 sm:text-2xl md:left-10 md:top-20 md:text-3xl lg:left-16"
       >
         Nos offres
       </h2>

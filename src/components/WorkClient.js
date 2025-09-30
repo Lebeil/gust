@@ -66,7 +66,7 @@ export default function WorkClient({ items = [] }) {
       <div className="max-w-7xl mx-auto w-full">
         <div className="px-[var(--tw-4)] pt-16 md:pt-24 pb-6 lg:px-[var(--tw-12)] text-white/90 text-sm">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div className="text-left text-base md:text-lg leading-relaxed whitespace-nowrap">
+            <div className="text-left text-base md:text-lg leading-relaxed text-pretty">
               Nous produisons de <Word>l&apos;influence</Word>, <Word>Célébrité</Word>, <Word>Production</Word>, <Word>Social Media</Word>, de <Word>l&apos;UGC</Word>.
             </div>
             <div className="lg:block hidden">
@@ -79,6 +79,16 @@ export default function WorkClient({ items = [] }) {
                 handleSectorClick={handleSectorClick}
               />
             </div>
+          </div>
+          <div className="mt-4 lg:hidden">
+            <Filters
+              tagsArray={tagsArray}
+              sectorsArray={sectorsArray}
+              selectedTags={selectedTags}
+              selectedSectors={selectedSectors}
+              handleTagClick={handleTagClick}
+              handleSectorClick={handleSectorClick}
+            />
           </div>
         </div>
       </div>

@@ -605,17 +605,6 @@ export default function ProductionClient() {
           </form>
         </div>
       </section>
-
-      {/* FLOATING CTA MOBILE */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-[999]">
-        <a 
-          href="#contact" 
-          className="block text-center px-6 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-full shadow-xl"
-        >
-          Lancer ma production →
-        </a>
-      </div>
-
       <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }

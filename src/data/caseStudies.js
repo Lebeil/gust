@@ -8,6 +8,27 @@ const caseStudies = [
     posterSrc: "/assets/media/cases_studies/cover/Faustine_cover.png",
     tags: ["Production", "Ad-fluence", "Brand content", "Célébrité"],
     sectors: ["Mode"],
+    client: "Showroom Privé",
+    category: "Mode & Lifestyle",
+    contextTitle: "Contexte",
+    context:
+      "Avec ses nouvelles éditions ShowroomBY, Showroom Privé souhaitait mettre en avant ses univers mode, beauté, maison & voyage avec une sélection exclusive par différentes personnalités publiques. Pour cette première édition, c’est Faustine Bollaert qui a plongé les communautés dans son dressing.",
+    contentTitle: "Contenus",
+    content: [
+      "2 IGP (dont 1 jeu concours)",
+      "3 IGS (de 3 écrans chacune)",
+      "12 assets : photos, vidéos, déclinaisons Social Ads",
+      "2 drops de 30 produits chacun"
+    ],
+    impactTitle: "Nos expertises",
+    impact:
+      "Casting, réseaux de célébrités, gestion opérationnelle, projet réalisé en 1 mois.",
+    expertise_details: [
+      "Casting",
+      "Réseaux de célébrités",
+      "Gestion opérationnelle",
+      "Projet réalisé en 1 mois"
+    ]
   },
   {
     title: "Service Civique Solidarité Seniors",
@@ -583,7 +604,7 @@ const caseStudies = [
   {
     title: "Emma Moving Day",
     href: "/assets/media/cases_studies/EMMA_MOVING_DAY.webm",
-    posterSrc: "/assets/media/cases_studies/cover/Emma ugc 2.png",
+    posterSrc: "/assets/media/cases_studies/cover/Emma ugc.png",
     tags: ["Influence", "Production"],
     sectors: ["Habitat"],
     client: "Emma Matelas",
@@ -648,7 +669,7 @@ const caseStudies = [
   },
   {
     title: "Be Real",
-    href: "/assets/media/cases_studies/be-real.mp4",
+    href: "/assets/media/cases_studies/be-real.webm",
     posterSrc: "/assets/media/cases_studies/cover/be-real.png",
     tags: ["UGC", "Production", "Social média"],
     sectors: ["Technologie"],

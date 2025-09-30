@@ -120,7 +120,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
   };
 
   return (
-    <section className="w-full min-h-[92vh] relative flex items-center justify-center select-none">
+    <section className="relative flex w-full min-h-[92vh] select-none items-center justify-center px-4 sm:px-0">
       {/* Arc décoratif */}
       <svg className="absolute bottom-0 left-0 right-0 w-full" height="180" viewBox="0 0 1440 180" aria-hidden>
         <path d="M0 178 C 320 40, 1120 40, 1440 178" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
@@ -129,17 +129,23 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
       <div
         className="relative"
         onMouseLeave={() => setLockedId(null)}
-        style={{ width: 1040, height: 560, pointerEvents: "auto" }}
+        style={{
+          width: typeof window !== "undefined" && window.innerWidth < 768 ? "100%" : 1040,
+          maxWidth: "min(100%, 1040px)",
+          height: typeof window !== "undefined" && window.innerWidth < 768 ? 480 : 560,
+          pointerEvents: "auto",
+        }}
       >
         {cards.map((card, idx) => {
           // Éventail dynamique relatif à la carte active
           const slotIndex = getSlotIndex(idx); // 0..4
           const s = slots[slotIndex];
           const isActive = card.id === activeId; // carte au centre si slotIndex === 2
-          const baseW = 360;
-          const baseH = 520;
-          const w = isActive ? baseW : Math.round(baseW * s.scale);
-          const h = isActive ? baseH : Math.round(baseH * s.scale);
+          const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+          const baseW = isMobile ? 300 : 360;
+          const baseH = isMobile ? 440 : 520;
+          const w = isActive ? baseW : Math.round(baseW * s.scale * (isMobile ? 0.88 : 1));
+          const h = isActive ? baseH : Math.round(baseH * s.scale * (isMobile ? 0.9 : 1));
           const z = isActive ? 30 : 10 + Math.abs(slotIndex - 2);
 
           return (

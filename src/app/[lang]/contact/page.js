@@ -18,7 +18,7 @@ export default async function ContactPage({ params }) {
   try {
     return (
       <Layout>
-        <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="min-h-screen text-white flex items-start justify-center pt-16 pb-12 md:items-center md:pt-0 md:pb-0">
           <div className="max-w-5xl mx-auto px-6 w-full">
             <form className="grid gap-10 mt-6 items-start md:grid-cols-2">
               {/* Ligne 1 gauche: titre + texte */}
@@ -124,7 +124,7 @@ export default async function ContactPage({ params }) {
                     placeholder="Décrivez nous votre projet..."
                   ></textarea>
                 </div>
-                <div className="pt-4 flex justify-center">
+                <div className="flex justify-center pt-4 pb-12 md:pb-0">
                   <button
                     type="submit"
                     className="relative group text-white/95 text-sm md:text-base font-medium tracking-wide"
