@@ -32,12 +32,6 @@ export default function FaqOverlay({ progress = 0, onContainerReady }) {
       ref={containerRef}
       id="faq-scroll-container"
       className="w-full min-h-screen"
-      style={{
-        backgroundImage: "url('/images/GRADIANT.png')",
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center'
-      }}
     >
       <Faq />
       <CinematicFooter />
