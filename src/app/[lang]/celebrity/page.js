@@ -1,11 +1,5 @@
-import { Layout } from "@/components/Layout"
 import CelebrityClient from "./CelebrityClient"
-import {
-    getSettings,
-    getHeader,
-    getFooter,
-    getLocales
-} from "@/lib/dataLoader"
+import { getSettings, getLocales } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
     return {
@@ -14,24 +8,12 @@ export async function generateMetadata() {
     }
 }
 
-export default async function Page({ params }) {
-    const { lang } = await params
+export default async function Page() {
     try {
-        const header = getHeader({ lang })
-        const footer = getFooter({ lang })
-        const settings = getSettings({ lang })
-        const locales = getLocales()
+        getSettings({})
+        getLocales()
 
-        return (
-            <Layout
-                header={header}
-                footer={footer}
-                settings={settings}
-                locales={locales}
-            >
-                <CelebrityClient />
-            </Layout>
-        )
+        return <CelebrityClient />
     } catch (error) {
         console.error("Failed to load Celebrity page data:", error)
         return <div>Error loading page.</div>

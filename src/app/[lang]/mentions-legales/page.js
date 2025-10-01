@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Layout } from "@/components/Layout"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import { getSettings } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
 
@@ -20,22 +19,12 @@ export async function generateMetadata() {
   }
 }
 
-export default async function MentionsLegales({ params }) {
+export default async function MentionsLegales() {
 
   try {
-    const header = getHeader({})
-    const footer = getFooter({})
-    const settings = getSettings({})
-    const locales = getLocales()
+    getSettings({})
 
     return (
-      <Layout
-        header={header}
-        footer={footer}
-        settings={settings}
-        locales={locales}
-        page_type="legal"
-      >
         <div className="min-h-screen bg-white" style={{ color: '#000000' }}>
           <style dangerouslySetInnerHTML={{
             __html: `
@@ -275,7 +264,6 @@ export default async function MentionsLegales({ params }) {
             </div>
           </div>
         </div>
-      </Layout>
     )
   } catch (error) {
     console.error("Error loading mentions-legales page:", error)

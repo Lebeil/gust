@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout"
 import CinematicFooter from "@/components/CinematicFooter"
 import dynamic from "next/dynamic"
 
@@ -14,10 +13,9 @@ const ProjectSelectMobile = dynamic(() => import("@/components/ProjectSelectMobi
   ssr: false,
 })
 
-export default async function ContactPage({ params }) {
+export default async function ContactPage() {
   try {
     return (
-      <Layout>
         <div className="min-h-screen text-white flex items-start justify-center pt-16 pb-12 md:items-center md:pt-0 md:pb-0">
           <div className="max-w-5xl mx-auto px-6 w-full">
             <form className="grid gap-10 mt-6 items-start md:grid-cols-2">
@@ -144,7 +142,6 @@ export default async function ContactPage({ params }) {
           </div>
         </div>
         <CinematicFooter />
-      </Layout>
     )
   } catch (error) {
     console.error("Error loading contact page:", error)

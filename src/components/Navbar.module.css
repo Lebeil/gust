@@ -288,11 +288,76 @@
 
   .mobileMenuButton {
     display: block;
+    position: relative;
+    z-index: 10002; /* au-dessus de l'overlay plein écran */
   }
 
   .logo {
     width: 60px !important;
     height: 18px !important;
+  }
+
+  /* Dropdown mobile en plein écran */
+  .mobileDropdown {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* iOS Safari */
+    z-index: 10001;
+    border: none;
+    border-radius: 0;
+    padding-top: 8vh; /* espace sous la navbar */
+    background: rgba(9, 13, 32, 0.15); /* couche très légère pour lisibilité */
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    overflow-y: auto;
+  }
+
+  /* Logo ancré dans l'overlay en haut gauche */
+  .mobileOverlayLogo {
+    position: absolute;
+    top: 0.9rem;
+    left: 1rem;
+    z-index: 10002;
+  }
+
+  /* Bouton OFFRES ouvrable + chevron */
+  .mobileDropdownToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mobileChevron {
+    transition: transform 0.2s ease;
+  }
+
+  .open {
+    transform: rotate(180deg);
+  }
+
+  /* Texte du menu en gras sur mobile uniquement */
+  .mobileLink {
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    padding: 1.15rem 1.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Titres principaux (OFFRES, CASE STUDIES, CONTACT) */
+  .mobileLinkPrimary {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .mobileActive {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
   }
 }
 
@@ -303,11 +368,7 @@
     /* Maintient 8% sur mobile */
   }
 
-  .mobileDropdown {
-    right: -1rem;
-    left: -1rem;
-    min-width: auto;
-  }
+  /* règles spécifiques mobiles extra-small non nécessaires pour le plein écran */
 }
 
 /* === ACCESSIBILITÉ === */

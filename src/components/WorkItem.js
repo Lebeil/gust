@@ -40,9 +40,10 @@ export default function WorkItem({ data }) {
     <Link
       href={`/work/${data.uid}`}
       className="
-        relative block h-full rounded-3xl overflow-hidden border-2 border-transparent hover:border-white aspect-[9/15]
-        md:aspect-auto
+        relative block rounded-[20px] overflow-hidden border-2 border-transparent hover:border-white mx-auto
+        md:h-full md:w-auto md:rounded-3xl md:aspect-auto md:aspect-[9/15]
       "
+      style={{ width: "min(328px, calc(100vw - 48px))", height: "min(328px, calc(100vw - 48px))" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

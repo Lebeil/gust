@@ -2,7 +2,7 @@ const WorkItemInfo = ({ tags }) => {
     return (
         <div
             className={`
-                w-full p-[var(--tw-4)] absolute bottom-0 left-0
+                hidden md:block w-full p-[var(--tw-4)] absolute bottom-0 left-0
                 md:p-[var(--tw-6)]
             `}
             >

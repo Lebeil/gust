@@ -1,10 +1,4 @@
-import { Layout } from "@/components/Layout"
-import {
-    getSettings,
-    getHeader,
-    getFooter,
-    getLocales,
-} from "@/lib/dataLoader"
+import { getSettings, getLocales } from "@/lib/dataLoader"
 import InfluenceClient from "./InfluenceClient"
 
 export async function generateMetadata() {
@@ -34,17 +28,10 @@ export async function generateMetadata() {
   }
 }
 
-export default async function InfluencePage({ params }) {
-  const header = getHeader({})
-  const footer = getFooter({})
-  const settings = getSettings({})
-  const locales = getLocales()
+export default async function InfluencePage() {
+  getSettings({})
 
-  return (
-    <Layout header={header} footer={footer} settings={settings} locales={locales}>
-      <InfluenceClient />
-    </Layout>
-  )
+  return <InfluenceClient />
 }
 
 export async function generateStaticParams() {

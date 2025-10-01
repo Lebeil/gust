@@ -29,7 +29,7 @@ export default function WorkFsGrid({ items = [], activeTag = null, selectedTags 
 
         <div
           className={`
-            grid gap-[var(--tw-4)]
+            grid grid-cols-1 justify-items-center gap-[24px]
             md:grid-cols-2
             lg:grid-cols-4 lg:gap-8
           `}
@@ -43,13 +43,14 @@ export default function WorkFsGrid({ items = [], activeTag = null, selectedTags 
                 href={item.href}
                 title={item.title}
                 posterSrc={item.posterSrc}
-                className="block rounded-[14px] overflow-hidden aspect-[9/16] bg-white/5 hover:bg-white/10 transition-colors"
+                className="block overflow-hidden bg-white/5 hover:bg-white/10 transition-colors rounded-[20px] md:rounded-[14px] md:w-auto md:h-auto md:aspect-[9/16]"
+                style={{ width: "min(328px, calc(100vw - 48px))", height: "min(328px, calc(100vw - 48px))" }}
               />
 
               {(item.tags?.length || 0) > 0 && (
                 <div
                   className={`
-                    w-full p-[var(--tw-3)] absolute bottom-0 left-0
+                    hidden md:block w-full p-[var(--tw-3)] absolute bottom-0 left-0
                     md:p-[var(--tw-4)]
                   `}
                 >

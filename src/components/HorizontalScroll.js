@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useHeroState } from "@/context/HeroStateContext";
 import { useRouter } from "next/navigation";
 import Hero from "@/components/Hero";
 import ThreeColumnsAccordion from "@/components/ThreeColumnsAccordion";
@@ -96,7 +97,7 @@ const HorizontalScroll = () => {
   );
 
   // Calculer le progress de scroll pour l'animation iPhone
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const { scrollProgress, setScrollProgress } = useHeroState();
   const [isHeroAnimationComplete, setIsHeroAnimationComplete] = useState(false);
   const [overlayProgress, setOverlayProgress] = useState(0);
   const overlayProgressRef = useRef(0);
@@ -147,7 +148,7 @@ const HorizontalScroll = () => {
       },
       {
         id: "projects",
-        label: "Nos meilleurs projets",
+        label: "Nos projets",
         content: <ProjectsSection projectsData={projectsData} />,
         className: " text-white",
       },
@@ -684,8 +685,8 @@ const ProjectsSection = ({ projectsData }) => {
   return (
     <div className="flex h-full w-full flex-col justify-center gap-12">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold uppercase tracking-[0.3em] text-white/80 md:text-3xl">
-          Nos meilleurs projets
+        <h2 className="text-2xl font-semibold tracking-[0.3em] text-white/80 md:text-3xl">
+          Nos projets
         </h2>
         <div className="flex gap-3">
           <button
@@ -849,7 +850,7 @@ const ExpertisesSection = () => {
       className="relative flex h-full w-full items-center justify-center"
     >
       <h2
-        className="pointer-events-none absolute left-4 top-8 z-20 text-lg font-semibold uppercase tracking-[0.32em] text-white/80 sm:left-6 sm:top-14 sm:text-2xl md:left-10 md:top-20 md:text-3xl lg:left-16"
+        className="pointer-events-none absolute left-4 top-8 z-20 text-lg font-semibold tracking-[0.32em] text-white/80 sm:left-6 sm:top-14 sm:text-2xl md:left-10 md:top-20 md:text-3xl lg:left-16"
       >
         Nos offres
       </h2>
@@ -903,7 +904,35 @@ const ExpertisesSection = () => {
 };
 
 const ExpertisesGridWithControl = ({ currentIndex }) => {
-  return <ExpertisesGrid forceActiveIndex={currentIndex} />;
+  const [stableIndex, setStableIndex] = useState(currentIndex);
+  const [isSafari, setIsSafari] = useState(false);
+  
+  // Détection Safari
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userAgent = window.navigator.userAgent;
+      setIsSafari(/Safari/.test(userAgent) && !/Chrome/.test(userAgent));
+    }
+  }, []);
+  
+  // Gestion des changements d'index - approche simplifiée pour Safari
+  useEffect(() => {
+    if (currentIndex === stableIndex) return;
+    
+    if (isSafari) {
+      // Safari : approche ultra-simple avec délai fixe
+      const timer = setTimeout(() => {
+        setStableIndex(currentIndex);
+      }, 200); // Délai suffisant pour éviter les conflits
+      
+      return () => clearTimeout(timer);
+    } else {
+      // Autres navigateurs : immédiat
+      setStableIndex(currentIndex);
+    }
+  }, [currentIndex, stableIndex, isSafari]);
+  
+  return <ExpertisesGrid forceActiveIndex={stableIndex} key={isSafari ? `safari-${stableIndex}` : stableIndex} />;
 };
 
 export default HorizontalScroll;

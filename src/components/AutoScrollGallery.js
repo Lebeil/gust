@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import { detectSafari } from "@/lib/browserUtils";
 
 // Détection mobile
 const useIsMobile = () => {
@@ -40,6 +41,7 @@ export default function AutoScrollGallery({
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
+  const [isSafari, setIsSafari] = useState(false);
   const lastProgressRef = useRef(0);
   const galleryRef = useRef(null);
   const scrollPositionRef = useRef(0);
@@ -66,6 +68,11 @@ export default function AutoScrollGallery({
   const renderItems = shouldDuplicate
     ? Array.from({ length: MULTI_SET_COUNT }).flatMap(() => baseItems)
     : baseItems;
+
+  // Détection Safari au montage
+  useEffect(() => {
+    setIsSafari(detectSafari());
+  }, []);
 
   // Largeur uniforme demandée pour toutes les cards
   const sizePattern = ['uniform'];
@@ -301,7 +308,20 @@ export default function AutoScrollGallery({
   }, [enableAutoScroll, isHovered, isMobile, scrollable, shouldDuplicate, totalImages, updateTransformAndProgress]);
 
   return (
-    <div className="w-full">
+    <div
+      className="w-full"
+      style={
+        isMobile
+          ? {
+              width: "100vw",
+              marginLeft: "calc(50% - 50vw)",
+              marginRight: "calc(50% - 50vw)",
+              paddingLeft: 0,
+              paddingRight: 0,
+            }
+          : undefined
+      }
+    >
       <div 
         ref={galleryRef}
         className="relative overflow-hidden group"
@@ -311,12 +331,13 @@ export default function AutoScrollGallery({
           willChange: 'transform',
           backfaceVisibility: 'hidden',
           perspective: '1000px',
-          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.12) 0px, rgba(0,0,0,1) 48px, rgba(0,0,0,1) calc(100% - 48px), rgba(0,0,0,0.12) 100%)',
-          maskImage: 'linear-gradient(to right, rgba(0,0,0,0.12) 0px, rgba(0,0,0,1) 48px, rgba(0,0,0,1) calc(100% - 48px), rgba(0,0,0,0.12) 100%)',
-          WebkitMaskRepeat: 'no-repeat',
-          maskRepeat: 'no-repeat',
-          WebkitMaskSize: '100% 100%',
-          maskSize: '100% 100%'
+          // Désactivé temporairement pour Safari - utiliser l'overlay à la place
+          // WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.12) 0px, rgba(0,0,0,1) 48px, rgba(0,0,0,1) calc(100% - 48px), rgba(0,0,0,0.12) 100%)',
+          // maskImage: 'linear-gradient(to right, rgba(0,0,0,0.12) 0px, rgba(0,0,0,1) 48px, rgba(0,0,0,1) calc(100% - 48px), rgba(0,0,0,0.12) 100%)',
+          // WebkitMaskRepeat: 'no-repeat',
+          // maskRepeat: 'no-repeat',
+          // WebkitMaskSize: '100% 100%',
+          // maskSize: '100% 100%'
         }}
       >
         {/* Track de la galerie avec images dupliquées pour effet infini */}
@@ -346,6 +367,24 @@ export default function AutoScrollGallery({
         </div>
 
         {/* Indicateur de statut supprimé selon demande */}
+
+        {/* Overlay pour Safari (remplacement du mask-image) */}
+        {isSafari && !isMobile && (
+          <div className="absolute inset-0 pointer-events-none z-10">
+            <div 
+              className="absolute left-0 top-0 bottom-0 w-12"
+              style={{
+                background: 'linear-gradient(to right, rgba(0,0,0,0.88), transparent)'
+              }}
+            />
+            <div 
+              className="absolute right-0 top-0 bottom-0 w-12"
+              style={{
+                background: 'linear-gradient(to left, rgba(0,0,0,0.88), transparent)'
+              }}
+            />
+          </div>
+        )}
 
         {/* Fondu géré par mask-image sur le conteneur (aucun overlay, pas de liseré) */}
       </div>

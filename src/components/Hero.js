@@ -1,16 +1,30 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import dynamic from 'next/dynamic';
 import MainHeroMobile from "@/components/MainHeroMobile";
+import { useHeroState } from "@/context/HeroStateContext";
 
 const Scene = dynamic(() => import("./R3F/Scene"), {
   ssr: false,
 });
 
-const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
-  const [isSceneLoaded, setIsSceneLoaded] = useState(false);
+const Hero = ({ content, scrollProgress, variant = "default" }) => {
   const [isDesktop, setIsDesktop] = useState(false);
-  const [isWebGLSupported, setIsWebGLSupported] = useState(null);
+  const {
+    isSceneLoaded,
+    setIsSceneLoaded,
+    isWebGLSupported,
+    setIsWebGLSupported,
+    scrollProgress: persistedScrollProgress,
+  } = useHeroState();
+
+  const effectiveScrollProgress = useMemo(() => {
+    if (typeof scrollProgress === "number") {
+      return scrollProgress;
+    }
+
+    return persistedScrollProgress;
+  }, [persistedScrollProgress, scrollProgress]);
   const isCompact = variant === "compact";
   const canvasHeightClass = isCompact ? "lg:h-[calc(100vh-260px)]" : "lg:h-[calc(100vh-180px)]";
 
@@ -27,7 +41,7 @@ const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || isWebGLSupported !== null) {
       return;
     }
 
@@ -42,9 +56,9 @@ const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
     };
 
     setIsWebGLSupported(supportsWebGL());
-  }, []);
+  }, [isWebGLSupported, setIsWebGLSupported]);
 
-  const shouldRenderScene = isDesktop && isWebGLSupported;
+  const shouldRenderScene = isDesktop && isWebGLSupported === true;
 
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -78,7 +92,7 @@ const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
           <Scene
             content={content}
             onLoaded={() => setIsSceneLoaded(true)}
-            scrollProgress={scrollProgress}
+            scrollProgress={effectiveScrollProgress}
             canvasClassName={`h-full ${canvasHeightClass}`}
           />
         </div>

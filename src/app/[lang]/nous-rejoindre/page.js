@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Layout } from "@/components/Layout"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import { getSettings } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
 
@@ -20,22 +19,12 @@ export async function generateMetadata() {
   }
 }
 
-export default async function NousRejoindre({ params }) {
+export default async function NousRejoindre() {
 
   try {
-    const header = getHeader({})
-    const footer = getFooter({})
-    const settings = getSettings({})
-    const locales = getLocales()
+    getSettings({})
 
     return (
-      <Layout
-        header={header}
-        footer={footer}
-        settings={settings}
-        locales={locales}
-        page_type="carriere"
-      >
         <div className="h-full text-white overflow-y-auto">
           <div className="max-w-6xl mx-auto px-4 py-8">
             <h1 className="text-6xl font-bold mb-12 text-center animate-fade-in">
@@ -168,7 +157,6 @@ export default async function NousRejoindre({ params }) {
             </div>
           </div>
         </div>
-      </Layout>
     )
   } catch (error) {
     console.error("Error loading nous-rejoindre page:", error)

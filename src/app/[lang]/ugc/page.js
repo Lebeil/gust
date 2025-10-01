@@ -1,6 +1,5 @@
-import { Layout } from "@/components/Layout"
 import UGCClient from "./UGCClient"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import { getSettings, getLocales } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
   try {
@@ -26,17 +25,11 @@ export async function generateMetadata() {
   }
 }
 
-export default async function UGCPage({ params }) {
-  const header = getHeader({})
-  const footer = getFooter({})
-  const settings = getSettings({})
-  const locales = getLocales()
+export default async function UGCPage() {
+  getSettings({})
+  getLocales()
 
-  return (
-    <Layout header={header} footer={footer} settings={settings} locales={locales}>
-      <UGCClient />
-    </Layout>
-  )
+  return <UGCClient />
 }
 
 export async function generateStaticParams() {

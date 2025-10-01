@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export default function ClientTestimonials() {
@@ -71,6 +71,27 @@ export default function ClientTestimonials() {
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 4;
 
+  // Mesure de la hauteur disponible pour une carte mobile afin qu'elle soit totalement visible
+  const mobileListRef = useRef(null);
+  const [mobileCardHeight, setMobileCardHeight] = useState(328);
+
+  useEffect(() => {
+    const recalc = () => {
+      if (!mobileListRef.current) return;
+      const rect = mobileListRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const available = Math.max(260, Math.round(viewportHeight - rect.top - 24)); // 24px marge bas
+      setMobileCardHeight(available);
+    };
+    recalc();
+    window.addEventListener('resize', recalc);
+    window.addEventListener('orientationchange', recalc);
+    return () => {
+      window.removeEventListener('resize', recalc);
+      window.removeEventListener('orientationchange', recalc);
+    };
+  }, []);
+
   const toggleCard = (cardId) => {
     setExpandedIds((prev) => {
       const isOpen = prev.includes(cardId);
@@ -114,8 +135,8 @@ export default function ClientTestimonials() {
             Ce que nos clients pensent de nous
           </h2>
           
-          {/* Navigation Arrows - En haut à droite */}
-          <div className="flex items-center gap-3">
+          {/* Navigation Arrows - Desktop/Tablet uniquement */}
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={goToPrevious}
               className="w-10 h-10 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors group"
@@ -137,8 +158,72 @@ export default function ClientTestimonials() {
           </div>
         </div>
 
-        {/* Rangée sans coupures: grilles responsives, aucune carte coupée */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+        {/* Liste horizontale mobile */}
+        <div
+          ref={mobileListRef}
+          className="md:hidden -mx-6 px-6 overflow-x-auto snap-x snap-mandatory"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
+          <div className="flex gap-4">
+            {testimonials.map((testimonial) => {
+              const isExpanded = expandedIds.includes(testimonial.id);
+              const { truncated, needsExpand } = truncateText(testimonial.text, 180);
+              return (
+                <div key={testimonial.id} className="snap-start shrink-0 z-30">
+                  <div
+                    className={`relative rounded-xl p-5 border border-white bg-white/5 bg-clip-padding backdrop-blur-lg transition-all duration-300 flex flex-col shadow-[0_0_0_1px_rgba(255,255,255,0.08)] z-30`}
+                    style={{ width: 'min(328px, calc(100vw - 48px))', height: isExpanded ? 'auto' : 'min(328px, calc(100vh - 160px))', minHeight: '260px' }}
+                  >
+                    {/* Header avec Avatar et Info */}
+                    <div className="flex items-start gap-3 mb-4">
+                      {/* Avatar */}
+                      <div className="flex-shrink-0">
+                        {testimonial.avatarImage ? (
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white">
+                            <Image src={testimonial.avatarImage} alt={`${testimonial.name} logo`} fill sizes="40px" className="object-contain p-1" />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-lg font-bold">
+                            {testimonial.avatar}
+                          </div>
+                        )}
+                      </div>
+                      {/* Nom et Date */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-white font-semibold text-sm">{testimonial.name}</h3>
+                        </div>
+                        <p className="text-white/50 text-xs mt-0.5">{testimonial.company}</p>
+                      </div>
+                    </div>
+
+                    {/* Texte du témoignage */}
+                    <div className={`relative ${isExpanded ? '' : 'flex-1'} `}>
+                      <p className={`text-white/80 text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
+                        {isExpanded ? testimonial.text : truncated}
+                      </p>
+                      {needsExpand && (
+                        <button
+                          onClick={() => toggleCard(testimonial.id)}
+                          className={`mt-3 text-sm transition-colors ${
+                            isExpanded 
+                              ? 'text-white/50 hover:text-white/70 border border-white/20 px-3 py-1 rounded-lg' 
+                              : 'text-blue-400 hover:text-blue-300'
+                          }`}
+                        >
+                          {isExpanded ? 'Cacher' : 'Lire la suite'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Grille desktop/tablette */}
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
           {currentTestimonials.map((testimonial) => {
             const isExpanded = expandedIds.includes(testimonial.id);
             const { truncated, needsExpand } = truncateText(testimonial.text, 180);
@@ -198,8 +283,8 @@ export default function ClientTestimonials() {
           })}
         </div>
 
-        {/* Dots Indicator */}
-        <div className="flex justify-center gap-2 mt-8">
+        {/* Dots Indicator - Desktop/Tablet uniquement */}
+        <div className="hidden md:flex justify-center gap-2 mt-8">
           {[...Array(totalPages)].map((_, index) => (
             <button
               key={index}

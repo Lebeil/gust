@@ -1,4 +1,3 @@
-import { Layout } from "@/components/Layout"
 import { homePageContent } from "@/data/content"
 import Hero from "@/components/Hero"
 import HorizontalScroll from "@/components/HorizontalScroll"
@@ -17,14 +16,8 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function Page({ params }) {
-  const { lang } = await params
-  
-  return (
-    <Layout>
-      <HorizontalScroll />
-    </Layout>
-  )
+export default async function Page() {
+  return <HorizontalScroll />
 }
 
 export async function generateStaticParams() {

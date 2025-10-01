@@ -41,7 +41,10 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
         <MoreIcon size={12} isOpen={isOpen} />
       </div>
 
-      <div className={`absolute top-full right-0 mt-2 bg-black/20 backdrop-blur-md border border-white/10 rounded-lg p-4 min-w-80 z-50 ${isOpen || visibleSelectedTags.length > 0 || visibleSelectedSectors.length > 0 ? 'block' : 'hidden'}`} style={{
+      <div className={`${isOpen || visibleSelectedTags.length > 0 || visibleSelectedSectors.length > 0 ? 'block' : 'hidden'} 
+        fixed inset-0 w-screen h-[100dvh] z-50 px-4 pt-[8vh] pb-8 rounded-none 
+        md:absolute md:top-full md:right-0 md:mt-2 md:min-w-80 md:w-auto md:h-auto md:rounded-lg md:p-4 md:pt-4 md:pb-4
+        bg-black/20 backdrop-blur-md border border-white/10`} style={{
         background: 'rgba(0, 0, 0, 0.3)',
         backdropFilter: 'blur(20px) saturate(180%)',
         WebkitBackdropFilter: 'blur(20px) saturate(180%)',
@@ -52,6 +55,10 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
         `,
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
       }}>
+
+        {/* Décalage du contenu via padding-top; suppression de l'entête mobile */}
+
+        {/* Bouton fermer est rendu dans la section Secteurs ci-dessous (mobile) */}
 
         <div className={`${visibleSelectedTags.length === 0 && visibleSelectedSectors.length === 0 && !isOpen ? "hidden" : "grid"} gap-4`}>
           {/* Section Expertises */}
@@ -69,7 +76,7 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
                         handleFilterClick(e)
                         handleTagClick(tag)
                       }}
-                      className={`flex items-center gap-2 px-4 py-1 rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedTags.includes(tag)
+                      className={`flex items-center gap-2 px-5 py-2 text-base rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedTags.includes(tag)
                         ? 'border-white'
                         : 'text-white hover:border-white'
                         }`}
@@ -88,7 +95,7 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
                         handleFilterClick(e)
                         handleTagClick(tag)
                       }}
-                      className={`flex items-center gap-2 px-4 py-1 rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedTags.includes(tag)
+                      className={`flex items-center gap-2 px-5 py-2 text-base rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedTags.includes(tag)
                         ? 'border-white'
                         : 'text-white hover:border-white'
                         }`}
@@ -117,7 +124,7 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
                             handleFilterClick(e)
                             handleSectorClick(sector)
                           }}
-                          className={`flex items-center gap-2 px-4 py-1 rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedSectors.includes(sector)
+                          className={`flex items-center gap-2 px-5 py-2 text-base rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedSectors.includes(sector)
                             ? 'border-white'
                             : 'text-white hover:border-white'
                             }`}
@@ -136,7 +143,7 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
                             handleFilterClick(e)
                             handleSectorClick(sector)
                           }}
-                          className={`flex items-center gap-2 px-4 py-1 rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedSectors.includes(sector)
+                          className={`flex items-center gap-2 px-5 py-2 text-base rounded-lg bg-white bg-opacity-20 cursor-pointer transition-all duration-200 ease-in-out border border-transparent ${selectedSectors.includes(sector)
                             ? 'border-white'
                             : 'text-white hover:border-white'
                             }`}
@@ -148,6 +155,18 @@ const Filters = ({ tagsArray, sectorsArray, selectedTags, selectedSectors, handl
                   </ul>
                 )
               }
+
+              {/* Bouton fermer à la toute fin des badges (mobile uniquement) */}
+              <div className="md:hidden flex justify-center mt-6">
+                <button
+                  type="button"
+                  aria-label="Fermer les filtres"
+                  className="p-3 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-xl border border-white/30"
+                  onClick={(e) => { e.stopPropagation(); setIsOpen(false) }}
+                >
+                  <VscClose size={18} />
+                </button>
+              </div>
             </div>
           )}
         </div>

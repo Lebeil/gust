@@ -1,6 +1,5 @@
-import { Layout } from "@/components/Layout"
 import SocialMediaClient from "./SocialMediaClient"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import { getSettings, getLocales } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
   try {
@@ -26,17 +25,11 @@ export async function generateMetadata() {
   }
 }
 
-export default async function SocialMediaPage({ params }) {
-  const header = getHeader({})
-  const footer = getFooter({})
-  const settings = getSettings({})
-  const locales = getLocales()
+export default async function SocialMediaPage() {
+  getSettings({})
+  getLocales()
 
-  return (
-    <Layout header={header} footer={footer} settings={settings} locales={locales}>
-      <SocialMediaClient />
-    </Layout>
-  )
+  return <SocialMediaClient />
 }
 
 export async function generateStaticParams() {

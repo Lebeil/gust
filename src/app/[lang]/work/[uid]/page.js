@@ -1,11 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Layout } from "@/components/Layout"
 import CaseStudyDetail from "@/components/CaseStudyDetail"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import { getSettings } from "@/lib/dataLoader"
 import caseStudies from "@/data/caseStudies"
 
 export async function generateMetadata({ params }) {
-    const { uid, lang } = await params
+    const { uid } = await params
     const slugify = (s) => (s || "")
         .toLowerCase()
         .normalize('NFD')
@@ -24,10 +23,7 @@ export default async function CaseStudyPage({ params }) {
     const { uid, lang } = await params
     
     try {
-        const header = getHeader({ lang })
-        const footer = getFooter({ lang })
-        const settings = getSettings({ lang })
-        const locales = getLocales()
+        getSettings({ lang })
 
         // Trouver le case study correspondant
         const slugify = (s) => (s || "")
@@ -43,22 +39,16 @@ export default async function CaseStudyPage({ params }) {
 
         if (!caseData) {
             return (
-                <Layout header={header} footer={footer} settings={settings} locales={locales}>
-                    <div className="min-h-screen flex items-center justify-center text-white">
-                        <div className="text-center">
-                            <h1 className="text-2xl font-bold mb-4">Case Study non trouvé</h1>
-                            <p>Le projet "{uid}" n'existe pas.</p>
-                        </div>
+                <div className="min-h-screen flex items-center justify-center text-white">
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold mb-4">Case Study non trouvé</h1>
+                        <p>Le projet "{uid}" n'existe pas.</p>
                     </div>
-                </Layout>
+                </div>
             )
         }
 
-        return (
-            <Layout header={header} footer={footer} settings={settings} locales={locales}>
-                <CaseStudyDetail caseData={caseData} />
-            </Layout>
-        )
+        return <CaseStudyDetail caseData={caseData} />
     } catch (error) {
         console.error("Error loading case study page:", error)
         return (

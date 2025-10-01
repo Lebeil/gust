@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { detectSafari } from "@/lib/browserUtils";
+import Image from "next/image";
 
 // Nouvelle maquette interactive "Nos expertises"
 // - 1 carte centrale agrandie
@@ -23,6 +25,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
         description:
           "Des créateurs de contenus avec une communauté engagée, utilisés pour leur créativité, leur image et leur expérience.",
         video: "/assets/media/offres/influence16_9.mp4",
+        poster: "/assets/media/cases_studies/cover/Faustine_cover.png", // Utiliser une image existante comme aperçu
       },
       {
         id: "celebrity",
@@ -30,6 +33,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
         description:
           "Accès aux célébrités pour vos campagnes, RSE, B2C et B2B.",
         video: "/assets/media/offres/open16_9.mp4",
+        poster: "/assets/media/cases_studies/cover/Geraldine_Cover.png",
       },
       {
         id: "ugc",
@@ -37,6 +41,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
         description:
           "Campagnes UGC à grande échelle avec des contenus authentiques.",
         video: "/assets/media/offres/ugc16_9.mp4",
+        poster: "/assets/media/cases_studies/cover/Emma_cover.png",
       },
       {
         id: "social",
@@ -44,6 +49,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
         description:
           "Stratégie éditoriale, création et performance sur les plateformes.",
         video: "/assets/media/offres/some16_9.mp4",
+        poster: "/assets/media/cases_studies/cover/Orange_cover.png",
       },
       {
         id: "production",
@@ -51,6 +57,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
         description:
           "3D, stop‑motion, sound design… des contenus à la frontière du réel.",
         video: "/assets/media/offres/production16_9.mp4",
+        poster: "/assets/media/cases_studies/cover/LSL_cover.png",
       },
     ],
     []
@@ -59,6 +66,7 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
   const [activeId, setActiveId] = useState(cards[0].id);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [lockedId, setLockedId] = useState(null);
+  const [isSafari, setIsSafari] = useState(false);
   const linkById = useMemo(
     () => ({
       production: "/production",
@@ -70,6 +78,11 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
     []
   );
   const videoRef = useRef(null);
+
+  // Détection Safari au montage
+  useEffect(() => {
+    setIsSafari(detectSafari());
+  }, []);
 
   useEffect(() => {
     if (typeof forceActiveIndex !== "number") {
@@ -83,8 +96,13 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
       return;
     }
 
-    setActiveId(targetCard.id);
-  }, [activeId, cards, forceActiveIndex]);
+    // Safari : changement immédiat sans transition complexe
+    if (isSafari) {
+      setActiveId(targetCard.id);
+    } else {
+      setActiveId(targetCard.id);
+    }
+  }, [activeId, cards, forceActiveIndex, isSafari]);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -97,14 +115,28 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
     return () => clearTimeout(t);
   }, [activeId]);
 
-  // Positions fidèles à la maquette (gauche -> droite)
-  const slots = [
-    { x: -480, y: 140, r: -16, scale: 0.72 },
-    { x: -260, y: 80, r: -8, scale: 0.86 },
-    { x: 0, y: 0, r: 0, scale: 1 }, // centre
-    { x: 260, y: 80, r: 8, scale: 0.86 },
-    { x: 480, y: 140, r: 16, scale: 0.72 },
-  ];
+  // Positions fidèles à la maquette (gauche -> droite) - versions Safari et normale
+  const slots = useMemo(() => {
+    if (isSafari) {
+      // Safari : positions Y minimales pour éviter les décalages
+      return [
+        { x: -480, y: 20, r: -8, scale: 0.75 }, // Réduction des rotations et décalages Y
+        { x: -260, y: 10, r: -4, scale: 0.88 },
+        { x: 0, y: 0, r: 0, scale: 1 }, // centre
+        { x: 260, y: 10, r: 4, scale: 0.88 },
+        { x: 480, y: 20, r: 8, scale: 0.75 },
+      ];
+    }
+    
+    // Navigateurs normaux : positions originales
+    return [
+      { x: -480, y: 60, r: -16, scale: 0.72 },
+      { x: -260, y: 30, r: -8, scale: 0.86 },
+      { x: 0, y: 0, r: 0, scale: 1 }, // centre
+      { x: 260, y: 30, r: 8, scale: 0.86 },
+      { x: 480, y: 60, r: 16, scale: 0.72 },
+    ];
+  }, [isSafari]);
 
   // Répartition initiale des cartes (index -> slot), conforme à la maquette
   // 0: centre, 1: droite proche, 2: droite loin, 3: gauche loin, 4: gauche proche
@@ -134,6 +166,13 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
           maxWidth: "min(100%, 1040px)",
           height: typeof window !== "undefined" && window.innerWidth < 768 ? 480 : 560,
           pointerEvents: "auto",
+          // Assurer la stabilité du conteneur pendant les transitions
+          overflow: "visible",
+          // Correctifs Safari pour éviter les décalages - simplifiés
+          ...(isSafari ? {
+            transform: "translateZ(0)", // Force l'accélération matérielle
+            WebkitTransform: "translateZ(0)",
+          } : {}),
         }}
       >
         {cards.map((card, idx) => {
@@ -144,8 +183,10 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
           const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
           const baseW = isMobile ? 300 : 360;
           const baseH = isMobile ? 440 : 520;
-          const w = isActive ? baseW : Math.round(baseW * s.scale * (isMobile ? 0.88 : 1));
-          const h = isActive ? baseH : Math.round(baseH * s.scale * (isMobile ? 0.9 : 1));
+          // Pour Safari, on garde des dimensions fixes et on anime uniquement via transform scale()
+          const visualScale = isActive ? 1 : Math.round((s.scale * (isMobile ? 0.9 : 1)) * 100) / 100;
+          const w = isSafari ? baseW : (isActive ? baseW : Math.round(baseW * s.scale * (isMobile ? 0.88 : 1)));
+          const h = isSafari ? baseH : (isActive ? baseH : Math.round(baseH * s.scale * (isMobile ? 0.9 : 1)));
           const z = isActive ? 30 : 10 + Math.abs(slotIndex - 2);
 
           return (
@@ -160,23 +201,41 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
                 setTimeout(() => {
                   setIsTransitioning(false);
                   setLockedId(null);
-                }, 550);
+                }, isSafari ? 850 : 450); // Timeout beaucoup plus long pour Safari (synchronisé avec la transition 0.8s)
               }}
               onClick={() => {
                 const path = linkById[card.id] || "/work";
                 router.push(path);
               }}
-              className="absolute rounded-2xl border border-white/50 bg-white/5 backdrop-blur-sm overflow-hidden transition-all duration-300 ease-out will-change-transform cursor-pointer"
+              className="absolute rounded-2xl border border-white/50 bg-white/5 overflow-hidden cursor-pointer"
               style={{
                 width: w,
                 height: h,
                 left: "50%",
                 top: "50%",
-                transform: `translate(calc(-50% + ${s.x}px), calc(-50% + ${s.y}px)) rotate(${isActive ? 0 : s.r}deg)`,
+                // Safari: n'animer que le transform avec translate3d + rotate + scale pour éviter tout reflow
+                transform: isSafari
+                  ? `translate3d(calc(-50% + ${s.x}px), calc(-50% + ${s.y}px), 0) rotate(${isActive ? 0 : s.r}deg) scale(${visualScale})`
+                  : `translate(calc(-50% + ${s.x}px), calc(-50% + ${s.y}px)) rotate(${isActive ? 0 : s.r}deg)`,
                 boxShadow: "0 10px 40px rgba(0,0,0,0.25)",
                 zIndex: z,
-                willChange: "transform, width, height",
-                transition: "transform 550ms cubic-bezier(0.25,0.8,0.25,1), width 550ms cubic-bezier(0.25,0.8,0.25,1), height 550ms cubic-bezier(0.25,0.8,0.25,1), box-shadow 550ms ease",
+                transformOrigin: "50% 50%",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                // Styles complètement différents pour Safari vs autres navigateurs
+                ...(isSafari ? {
+                  // Safari : styles ultra-simplifiés et transition uniquement du transform
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transition: "transform 0.6s ease-out, box-shadow 0.6s ease-out",
+                  WebkitTransition: "-webkit-transform 0.6s ease-out, box-shadow 0.6s ease-out",
+                  willChange: "transform",
+                } : {
+                  // Autres navigateurs : styles normaux
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
+                  willChange: "transform, width, height",
+                  transition: "all 400ms cubic-bezier(0.4, 0.0, 0.2, 1)",
+                }),
               }}
             >
               {/* Contenu de la carte */}
@@ -209,15 +268,28 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
                   <p className="text-white/70 text-[11px] leading-snug line-clamp-6">
                     {card.description}
                   </p>
-                  {/* Aperçu vidéo (image du flux) avec espace autour */}
+                  {/* Image d'aperçu avec espace autour */}
                   <div className="mt-auto w-full px-3 pb-3">
-                    <video
-                      className="w-full h-24 object-cover rounded-xl"
-                      src={card.video}
-                      preload="metadata"
-                      muted
-                      playsInline
-                    />
+                    <div className="w-full h-24 rounded-xl overflow-hidden">
+                      {card.poster ? (
+                        <Image
+                          src={card.poster}
+                          alt={`Aperçu ${card.title}`}
+                          width={120}
+                          height={96}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <video
+                          className="w-full h-full object-cover"
+                          src={card.video}
+                          preload="metadata"
+                          muted
+                          playsInline
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

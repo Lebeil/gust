@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react"
 import WorkFsGrid from "@/components/WorkFsGrid"
+import MobileServiceRows from "@/components/MobileServiceRows"
 import caseStudies from "@/data/caseStudies"
 import ExpertisesList from "@/components/ExpertisesList"
 import Filters from "@/components/Filters"
@@ -93,7 +94,10 @@ export default function WorkClient({ items = [] }) {
         </div>
       </div>
       <div className="max-w-7xl mx-auto w-full pb-0">
-        <WorkFsGrid items={itemsToUse} activeTag={activeTag} selectedTags={selectedTags} selectedSectors={selectedSectors} />
+        <div className="hidden md:block">
+          <WorkFsGrid items={itemsToUse} activeTag={activeTag} selectedTags={selectedTags} selectedSectors={selectedSectors} />
+        </div>
+        <MobileServiceRows items={itemsToUse} />
       </div>
 
       {/* Section Nos expertises (fidèle à la maquette fournie) */}

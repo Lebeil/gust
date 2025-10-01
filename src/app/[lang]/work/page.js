@@ -1,7 +1,6 @@
-import { Layout } from "@/components/Layout"
 import WorkClient from "@/components/WorkClient"
 import CinematicFooter from "@/components/CinematicFooter"
-import { getSettings, getHeader, getFooter, getLocales } from "@/lib/dataLoader"
+import { getSettings, getLocales } from "@/lib/dataLoader"
 import caseStudies from "@/data/caseStudies"
 
 export async function generateMetadata() {
@@ -22,27 +21,19 @@ export async function generateMetadata() {
   }
 }
 
-export default async function WorkPage({ params }) {
+export default async function WorkPage() {
 
   try {
-    const header = getHeader({})
-    const footer = getFooter({})
-    const settings = getSettings({})
-    const locales = getLocales()
+    getSettings({})
+    getLocales()
 
     return (
-      <Layout
-        header={header}
-        footer={footer}
-        settings={settings}
-        locales={locales}
-        page_type="work"
-      >
+      <>
         <div className="text-white">
           <WorkClient items={caseStudies} />
         </div>
         <CinematicFooter />
-      </Layout>
+      </>
     )
   } catch (error) {
     console.error("Error loading work page:", error)

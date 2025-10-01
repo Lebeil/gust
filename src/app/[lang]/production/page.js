@@ -1,12 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Layout } from "@/components/Layout"
 import ProductionClient from "./ProductionClient"
-import {
-    getSettings,
-    getHeader,
-    getFooter,
-    getLocales
-} from "@/lib/dataLoader"
+import { getSettings, getLocales } from "@/lib/dataLoader"
 
 export async function generateMetadata() {
   try {
@@ -80,23 +74,12 @@ export async function generateMetadata() {
   }
 }
 
-export default async function ProductionPage({ params }) {
+export default async function ProductionPage() {
   try {
-    const header = getHeader({})
-    const footer = getFooter({})
-    const settings = getSettings({})
-    const locales = getLocales()
+    getSettings({})
+    getLocales()
 
-    return (
-      <Layout
-        header={header}
-        footer={footer}
-        settings={settings}
-        locales={locales}
-      >
-        <ProductionClient />
-      </Layout>
-    )
+    return <ProductionClient />
   } catch (error) {
     console.error("Failed to load Production page data:", error)
     return (

@@ -72,7 +72,7 @@ const WorkGrid = ({ allWork }) => {
 
                     <div
                         className={`
-                            grid gap-[var(--tw-4)]
+                            grid grid-cols-1 justify-items-center gap-[24px]
                             md:grid-cols-2
                             lg:grid-cols-4 lg:gap-8
                         `}

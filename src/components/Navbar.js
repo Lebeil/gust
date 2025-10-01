@@ -26,6 +26,7 @@ const navLinks = [
 export default function Navbar() {
   const [currentTime, setCurrentTime] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOffersOpen, setMobileOffersOpen] = useState(false);
   const [theme, setTheme] = useState('navLight');
   const pathname = usePathname();
 
@@ -150,32 +151,72 @@ export default function Navbar() {
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
       >
-        <span className={mobileMenuOpen ? styles.menuIconOpen : styles.menuIcon}>☰</span>
+        <span className={mobileMenuOpen ? styles.menuIconOpen : styles.menuIcon}>
+          {mobileMenuOpen ? '✕' : '☰'}
+        </span>
       </button>
 
       {/* Mobile Dropdown */}
       {mobileMenuOpen && (
         <div className={styles.mobileDropdown}>
+          {/* Logo en haut à gauche dans l'overlay */}
+          <Link href="/" className={styles.mobileOverlayLogo} onClick={() => setMobileMenuOpen(false)}>
+            <Image
+              src={logoGust}
+              alt="Gust"
+              width={56}
+              height={17}
+              className={styles.logo}
+              priority
+            />
+          </Link>
+
           {navLinks.map((link) => (
             <div key={link.href}>
-              <Link
-                href={link.href}
-                className={styles.mobileLink}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-              {link.isDropdown && link.subItems.map((subItem) => (
-                <Link
-                  key={subItem.href}
-                  href={subItem.href}
-                  className={styles.mobileLink}
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ paddingLeft: '2rem', fontSize: '0.8rem' }}
+              {link.isDropdown ? (
+                <button
+                  type="button"
+                  className={`${styles.mobileLink} ${styles.mobileLinkPrimary} ${styles.mobileDropdownToggle}`}
+                  onClick={() => setMobileOffersOpen((v) => !v)}
+                  aria-expanded={mobileOffersOpen}
+                  aria-controls="mobile-offers"
                 >
-                  {subItem.label}
+                  <span>{link.label}</span>
+                  <svg
+                    className={`${styles.mobileChevron} ${mobileOffersOpen ? styles.open : ''}`}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                  >
+                    <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              ) : (
+                <Link
+                  href={link.href}
+                  className={`${styles.mobileLink} ${styles.mobileLinkPrimary} ${pathname === link.href ? styles.mobileActive : ''}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
                 </Link>
-              ))}
+              )}
+
+              {link.isDropdown && mobileOffersOpen && (
+                <div id="mobile-offers">
+                  {link.subItems.map((subItem) => (
+                    <Link
+                      key={subItem.href}
+                      href={subItem.href}
+                      className={styles.mobileLink}
+                      onClick={() => setMobileMenuOpen(false)}
+                      style={{ paddingLeft: '2rem', fontSize: '0.85rem' }}
+                    >
+                      {subItem.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
