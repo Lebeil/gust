@@ -669,13 +669,14 @@ const caseStudies = [
   },
   {
     title: "Be Real",
-    href: "/assets/media/cases_studies/be-real.webm",
+    href: null,
     posterSrc: "/assets/media/cases_studies/cover/be-real.png",
     tags: ["UGC", "Production", "Social média"],
     sectors: ["Technologie"],
     client: "Be Real",
     category: "Social Media & Technology",
     period: "2024",
+    description: "Activation social media réalisée sans support vidéo public. Asset vidéo en cours de production."
   },
   {
     title: "Chi Fou Quick",

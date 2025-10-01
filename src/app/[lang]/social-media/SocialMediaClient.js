@@ -472,7 +472,7 @@ export default function SocialMediaClient() {
       {/* CASES GALLERY */}
       <section id="cases" className="relative py-20 px-6 md:px-12">
           <div className="flex items-center justify-between mb-6">
-          <h2 className="text-white text-lg font-semibold tracking-wide">Nos derniers succès</h2>
+          <h2 className="text-white text-lg font-semibold tracking-wide">Nos case studies</h2>
             <div className="flex items-center gap-3">
               <button type="button" aria-label="Précédent" className="w-8 h-8 rounded-full border border-white/60 text-white grid place-items-center hover:bg-white/10" onClick={() => galleryApi?.prev?.()}>⟵</button>
               <button type="button" aria-label="Suivant" className="w-8 h-8 rounded-full border border-white/60 text-white grid place-items-center hover:bg-white/10" onClick={() => galleryApi?.next?.()}>⟶</button>

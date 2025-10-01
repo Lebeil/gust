@@ -10,6 +10,7 @@ const Scene = dynamic(() => import("./R3F/Scene"), {
 const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
   const [isSceneLoaded, setIsSceneLoaded] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isWebGLSupported, setIsWebGLSupported] = useState(null);
   const isCompact = variant === "compact";
   const canvasHeightClass = isCompact ? "lg:h-[calc(100vh-260px)]" : "lg:h-[calc(100vh-180px)]";
 
@@ -26,18 +27,42 @@ const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
   }, []);
 
   useEffect(() => {
-    if (isDesktop) {
-      if (isSceneLoaded) {
-        document.body.style.overflow = "auto";
-      } else {
-        document.body.style.overflow = "hidden";
-      }
-
-      return () => {
-        document.body.style.overflow = "auto";
-      };
+    if (typeof window === "undefined") {
+      return;
     }
-  }, [isSceneLoaded, isDesktop]);
+
+    const supportsWebGL = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        return !!gl && typeof gl.getShaderPrecisionFormat === "function";
+      } catch (error) {
+        return false;
+      }
+    };
+
+    setIsWebGLSupported(supportsWebGL());
+  }, []);
+
+  const shouldRenderScene = isDesktop && isWebGLSupported;
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    if (!shouldRenderScene) {
+      document.body.style.overflow = "auto";
+      return;
+    }
+
+    document.body.style.overflow = isSceneLoaded ? "auto" : "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isSceneLoaded, shouldRenderScene]);
+
   const desktopContainerClass = isCompact
     ? "hidden lg:block lg:h-[calc(100vh-200px)] lg:min-h-0"
     : "hidden lg:block lg:min-h-screen";
@@ -48,14 +73,20 @@ const Hero = ({ content, scrollProgress = 0, variant = "default" }) => {
         <MainHeroMobile content={content} />
       </div>
 
-      <div className={`${desktopContainerClass} lg:pt-[var(--tw-4)]`}>
-        <Scene
-          content={content}
-          onLoaded={() => setIsSceneLoaded(true)}
-          scrollProgress={scrollProgress}
-          canvasClassName={`h-full ${canvasHeightClass}`}
-        />
-      </div>
+      {shouldRenderScene ? (
+        <div className={`${desktopContainerClass} lg:pt-[var(--tw-4)]`}>
+          <Scene
+            content={content}
+            onLoaded={() => setIsSceneLoaded(true)}
+            scrollProgress={scrollProgress}
+            canvasClassName={`h-full ${canvasHeightClass}`}
+          />
+        </div>
+      ) : (
+        <div className="hidden lg:block">
+          <MainHeroMobile content={content} />
+        </div>
+      )}
     </section>
   );
 };
