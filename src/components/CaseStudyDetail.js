@@ -1,9 +1,11 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { getLocalizedPath } from "@/lib/localizePath"
+import AutoScrollGallery from "@/components/AutoScrollGallery"
+import caseStudies from "@/data/caseStudies"
 import { IoIosArrowRoundBack } from "react-icons/io"
 
 export default function CaseStudyDetail({ caseData }) {
@@ -12,6 +14,20 @@ export default function CaseStudyDetail({ caseData }) {
   const params = useParams()
   const lang = params?.lang || ""
   const backHref = getLocalizedPath("work", lang)
+
+  const galleryItems = useMemo(() => {
+    return (caseStudies || [])
+      .filter((item) => item?.href && item.title !== (caseData?.title || ""))
+      .slice(0, 5)
+      .map((item) => ({
+        title: item.title,
+        client: item.client || item.title,
+        tags: item.tags || [],
+        video: item.href,
+        poster: item.posterSrc,
+        textColor: "text-white",
+      }))
+  }, [caseData?.title])
 
   const handlePlayPause = () => {
     const video = videoRef.current
@@ -64,13 +80,6 @@ export default function CaseStudyDetail({ caseData }) {
           {/* Groupe gauche: 2 colonnes vidéo | métriques */}
           <div className="flex flex-col gap-6 lg:grid lg:h-[60vh] lg:grid-cols-[340px_260px] lg:items-end lg:gap-16">
             <div className="relative inline-block lg:h-full lg:w-[340px]">
-              <Link
-                href={backHref}
-                aria-label="Retour à la liste des projets"
-                className="absolute left-13 top-3 lg:right-full lg:top-0 lg:mr-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/85 bg-transparent text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-              >
-                <IoIosArrowRoundBack size={26} />
-              </Link>
               <div className="aspect-[3/4] w-full overflow-hidden rounded-[24px] bg-white/10 lg:aspect-auto lg:h-full lg:w-[340px]">
                 <video
                 ref={videoRef}
@@ -184,6 +193,32 @@ export default function CaseStudyDetail({ caseData }) {
 
           </div>
         </div>
+
+        {galleryItems.length > 0 && (
+          <section className="mt-16 border-t border-white/10 pt-12 lg:mt-24 lg:pt-16">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-3 text-white">
+                <h2 className="text-2xl font-semibold sm:text-3xl">Nos meilleurs case studies</h2>
+              </div>
+              <AutoScrollGallery
+                images={galleryItems}
+                duplicate={false}
+                enableAutoScroll={false}
+                scrollable={false}
+                showEdgeFade={false}
+                visibleImages={Math.min(5, galleryItems.length || 1)}
+              />
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href={backHref}
+                  className="rounded-full border border-white/30 px-6 py-3 text-base font-medium text-white transition-colors hover:border-white/70 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                >
+                  Tous nos projets
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   )

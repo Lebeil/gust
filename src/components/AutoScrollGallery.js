@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { detectSafari } from "@/lib/browserUtils";
 
@@ -20,8 +20,9 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-// Dimensions fixes demandées pour chaque card
-const CARD_WIDTH = 280; // px (aligné au design fourni)
+// Dimensions et espacements
+const DEFAULT_CARD_WIDTH = 280; // px (fallback)
+const MIN_CARD_WIDTH = 200;
 const CARD_HEIGHT = 440; // px
 const GAP_PX = 24; // écart horizontal exact entre les cards
 
@@ -36,7 +37,9 @@ export default function AutoScrollGallery({
   enableAutoScroll = false, // désactivé: carrousel non scrollable automatiquement
   scrollable = false, // désactivé: pas de défilement à la molette/trackpad
   onSelect = () => {},
-  onApiReady
+  onApiReady,
+  showEdgeFade = true,
+  maxCardWidth = 320,
 }) {
   const isMobile = useIsMobile();
   const [isHovered, setIsHovered] = useState(false);
@@ -48,6 +51,8 @@ export default function AutoScrollGallery({
   const animationFrameRef = useRef(null);
   const lastTimeRef = useRef(0);
   const touchStartRef = useRef(null);
+  const [cardWidth, setCardWidth] = useState(DEFAULT_CARD_WIDTH);
+  const [effectiveVisible, setEffectiveVisible] = useState(visibleImages);
 
   // Source des items: utilise les images fournies, sinon un set par défaut pour garantir un flux continu
   const defaultItems = [
@@ -60,11 +65,11 @@ export default function AutoScrollGallery({
   const baseItems = (Array.isArray(images) && images.length > 0) ? images : defaultItems;
   const totalImages = baseItems.length;
   const MULTI_SET_COUNT = 3; // centre + avant + après pour couvrir l'écran en continu
-  const duplicate = true; // valeur par défaut si non passée (compat)
+  const duplicate = false; // valeur par défaut si non passée (compat)
   // Si la prop n'est pas fournie, on lit depuis arguments en runtime
   // eslint-disable-next-line prefer-rest-params
   const props = arguments?.[0] || {};
-  const shouldDuplicate = typeof props.duplicate === 'boolean' ? props.duplicate : duplicate;
+  const shouldDuplicate = typeof props.duplicate === "boolean" ? props.duplicate : duplicate;
   const renderItems = shouldDuplicate
     ? Array.from({ length: MULTI_SET_COUNT }).flatMap(() => baseItems)
     : baseItems;
@@ -74,16 +79,54 @@ export default function AutoScrollGallery({
     setIsSafari(detectSafari());
   }, []);
 
+  // Calculer dynamiquement la largeur de carte pour afficher exactement `visibleImages`
+  useEffect(() => {
+    const compute = () => {
+      const containerWidth = galleryRef.current?.clientWidth || 0;
+      if (containerWidth > 0) {
+        let count = Math.max(1, Math.min(visibleImages, baseItems.length || visibleImages));
+        if (containerWidth < 520) {
+          count = Math.min(1, count);
+        } else if (containerWidth < 768) {
+          count = Math.min(2, count);
+        } else if (containerWidth < 1024) {
+          count = Math.min(3, count);
+        } else if (containerWidth < 1280) {
+          count = Math.min(4, count);
+        }
+        setEffectiveVisible(count);
+
+        const availableWidth = containerWidth - Math.max(count - 1, 0) * GAP_PX;
+        const computedWidth = Math.floor(availableWidth / count);
+        const clamped = Math.max(MIN_CARD_WIDTH, Math.min(maxCardWidth, computedWidth));
+        setCardWidth(clamped);
+      } else {
+        setCardWidth(DEFAULT_CARD_WIDTH);
+      }
+    };
+
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, [visibleImages, baseItems.length, maxCardWidth]);
+
   // Largeur uniforme demandée pour toutes les cards
   const sizePattern = ['uniform'];
   const widthPercentBySize = { small: 24, medium: 24, large: 24 }; // conservé pour compatibilité mais non utilisé pour largeur
-  const oneSetWidth = totalImages * CARD_WIDTH + Math.max(totalImages - 1, 0) * GAP_PX; // en px
-  const totalTrackWidthPx = renderItems.length * CARD_WIDTH + Math.max(renderItems.length - 1, 0) * GAP_PX;
+  const oneSetWidth = useMemo(
+    () => totalImages * cardWidth + Math.max(totalImages - 1, 0) * GAP_PX,
+    [totalImages, cardWidth]
+  );
+  const totalTrackWidthPx = useMemo(
+    () => renderItems.length * cardWidth + Math.max(renderItems.length - 1, 0) * GAP_PX,
+    [renderItems.length, cardWidth]
+  );
   const baseOffsetPx = shouldDuplicate ? oneSetWidth * Math.floor(MULTI_SET_COUNT / 2) : 0;
 
   // API externe (prev/next)
   const getCenterOffsetPx = () => {
     const containerWidth = galleryRef.current?.clientWidth || 0;
+    if (renderItems.length <= effectiveVisible) return 0;
     return Math.max(0, (containerWidth - oneSetWidth) / 2);
   };
 
@@ -112,7 +155,7 @@ export default function AutoScrollGallery({
       return undefined;
     }
 
-    const stepPx = CARD_WIDTH + GAP_PX;
+    const stepPx = cardWidth + GAP_PX;
     const api = {
       next: () => {
         if (shouldDuplicate) {
@@ -139,7 +182,7 @@ export default function AutoScrollGallery({
     } catch (_) {}
 
     return undefined;
-  }, [onApiReady, shouldDuplicate, updateTransformAndProgress, oneSetWidth]);
+  }, [onApiReady, shouldDuplicate, updateTransformAndProgress, oneSetWidth, cardWidth]);
 
   // Animation avec requestAnimationFrame pour défilement ultra-smooth
   useEffect(() => {
@@ -201,7 +244,9 @@ export default function AutoScrollGallery({
 
   // Gestion des événements wheel et trackpad (horizontal + vertical)
   useEffect(() => {
-    if (!scrollable && !isMobile) return; // ne capte pas la molette/trackpad si non scrollable et pas mobile
+    if (!scrollable && renderItems.length <= effectiveVisible) return;
+    if (!isHovered && !isMobile) return;
+
     const galleryElement = galleryRef.current;
     if (!galleryElement) return;
 
@@ -232,7 +277,11 @@ export default function AutoScrollGallery({
       // Mise à jour directe de la position pour éviter les saccades
       const movement = delta * intensity;
       scrollPositionRef.current += movement; // en px
-      const oneSetWidth = totalImages * CARD_WIDTH + Math.max(totalImages - 1, 0) * GAP_PX;
+      if (!shouldDuplicate) {
+        const containerWidth = galleryRef.current?.clientWidth || 0;
+        const maxScroll = Math.max(0, totalTrackWidthPx - containerWidth);
+        scrollPositionRef.current = Math.max(0, Math.min(scrollPositionRef.current, maxScroll));
+      }
 
       // Mettre à jour le transform immédiatement
       updateTransformAndProgress();
@@ -283,9 +332,11 @@ export default function AutoScrollGallery({
         // Mettre à jour le transform
         updateTransformAndProgress();
 
-        // Mettre à jour la progression
-        const oneSetWidth = totalImages * CARD_WIDTH + Math.max(totalImages - 1, 0) * GAP_PX;
-        const currentProgress = (scrollPositionRef.current % oneSetWidth) / oneSetWidth * 100;
+      // Mettre à jour la progression
+      const localOneSetWidth = shouldDuplicate
+        ? totalImages * cardWidth + Math.max(totalImages - 1, 0) * GAP_PX
+        : Math.max(1, totalTrackWidthPx);
+        const currentProgress = (scrollPositionRef.current % localOneSetWidth) / localOneSetWidth * 100;
         setProgressPercent(currentProgress);
       }
     };
@@ -305,7 +356,7 @@ export default function AutoScrollGallery({
       galleryElement.removeEventListener('touchmove', handleTouchMove);
       galleryElement.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [enableAutoScroll, isHovered, isMobile, scrollable, shouldDuplicate, totalImages, updateTransformAndProgress]);
+  }, [enableAutoScroll, isHovered, isMobile, scrollable, shouldDuplicate, totalImages, updateTransformAndProgress, oneSetWidth, totalTrackWidthPx, cardWidth]);
 
   return (
     <div
@@ -331,13 +382,7 @@ export default function AutoScrollGallery({
           willChange: 'transform',
           backfaceVisibility: 'hidden',
           perspective: '1000px',
-          // Désactivé temporairement pour Safari - utiliser l'overlay à la place
-          // WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.12) 0px, rgba(0,0,0,1) 48px, rgba(0,0,0,1) calc(100% - 48px), rgba(0,0,0,0.12) 100%)',
-          // maskImage: 'linear-gradient(to right, rgba(0,0,0,0.12) 0px, rgba(0,0,0,1) 48px, rgba(0,0,0,1) calc(100% - 48px), rgba(0,0,0,0.12) 100%)',
-          // WebkitMaskRepeat: 'no-repeat',
-          // maskRepeat: 'no-repeat',
-          // WebkitMaskSize: '100% 100%',
-          // maskSize: '100% 100%'
+          minHeight: `${CARD_HEIGHT}px`
         }}
       >
         {/* Track de la galerie avec images dupliquées pour effet infini */}
@@ -358,7 +403,7 @@ export default function AutoScrollGallery({
               <div
                 key={`${index}-${image.url || index}`}
                 className="flex-shrink-0"
-                style={{ width: `${CARD_WIDTH}px` }}
+                style={{ width: `${cardWidth}px` }}
               >
                 <ImageCard image={image} index={index} size={size} onSelect={onSelect} />
               </div>
@@ -369,7 +414,7 @@ export default function AutoScrollGallery({
         {/* Indicateur de statut supprimé selon demande */}
 
         {/* Overlay pour Safari (remplacement du mask-image) */}
-        {isSafari && !isMobile && (
+        {showEdgeFade && isSafari && !isMobile && (
           <div className="absolute inset-0 pointer-events-none z-10">
             <div 
               className="absolute left-0 top-0 bottom-0 w-12"
@@ -434,7 +479,7 @@ function ImageCard({ image, index, size, onSelect }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onSelect?.(caseStudy, index)}
-      style={{ width: `${CARD_WIDTH}px`, height: `${CARD_HEIGHT}px` }}
+      style={{ height: `${CARD_HEIGHT}px` }}
     >
       {/* Vidéo affichée (lecture au survol) */}
       {caseStudy.video && (
