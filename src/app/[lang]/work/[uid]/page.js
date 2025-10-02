@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import CaseStudyDetail from "@/components/CaseStudyDetail"
+import CinematicFooter from "@/components/CinematicFooter"
 import { getSettings } from "@/lib/dataLoader"
 import caseStudies from "@/data/caseStudies"
 
@@ -48,7 +49,12 @@ export default async function CaseStudyPage({ params }) {
             )
         }
 
-        return <CaseStudyDetail caseData={caseData} />
+        return (
+            <>
+                <CaseStudyDetail caseData={caseData} />
+                <CinematicFooter />
+            </>
+        )
     } catch (error) {
         console.error("Error loading case study page:", error)
         return (

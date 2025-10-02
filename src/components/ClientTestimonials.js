@@ -161,10 +161,10 @@ export default function ClientTestimonials() {
         {/* Liste horizontale mobile */}
         <div
           ref={mobileListRef}
-          className="md:hidden -mx-6 px-6 overflow-x-auto snap-x snap-mandatory"
+          className="md:hidden overflow-x-auto snap-x snap-mandatory px-8"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-          <div className="flex gap-4">
+          <div className="flex gap-4 pl-2">
             {testimonials.map((testimonial) => {
               const isExpanded = expandedIds.includes(testimonial.id);
               const { truncated, needsExpand } = truncateText(testimonial.text, 180);
@@ -172,7 +172,7 @@ export default function ClientTestimonials() {
                 <div key={testimonial.id} className="snap-start shrink-0 z-30">
                   <div
                     className={`relative rounded-xl p-5 border border-white bg-white/5 bg-clip-padding backdrop-blur-lg transition-all duration-300 flex flex-col shadow-[0_0_0_1px_rgba(255,255,255,0.08)] z-30`}
-                    style={{ width: 'min(328px, calc(100vw - 48px))', height: isExpanded ? 'auto' : 'min(328px, calc(100vh - 160px))', minHeight: '260px' }}
+                    style={{ width: 'min(328px, calc(100vw - 56px))', height: isExpanded ? 'auto' : 'min(280px, calc(100vh - 200px))', minHeight: '240px' }}
                   >
                     {/* Header avec Avatar et Info */}
                     <div className="flex items-start gap-3 mb-4">

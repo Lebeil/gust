@@ -2,10 +2,16 @@
 
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
+import { useParams } from "next/navigation"
+import { getLocalizedPath } from "@/lib/localizePath"
+import { IoIosArrowRoundBack } from "react-icons/io"
 
 export default function CaseStudyDetail({ caseData }) {
   const videoRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const params = useParams()
+  const lang = params?.lang || ""
+  const backHref = getLocalizedPath("work", lang)
 
   const handlePlayPause = () => {
     const video = videoRef.current
@@ -57,8 +63,16 @@ export default function CaseStudyDetail({ caseData }) {
         <div className="grid gap-12 lg:flex-1 lg:grid-cols-[minmax(320px,600px)_1fr] lg:items-start lg:gap-16">
           {/* Groupe gauche: 2 colonnes vidéo | métriques */}
           <div className="flex flex-col gap-6 lg:grid lg:h-[60vh] lg:grid-cols-[340px_260px] lg:items-end lg:gap-16">
-            <div className="aspect-[3/4] w-full overflow-hidden rounded-[24px] bg-white/10 lg:aspect-auto lg:h-full lg:w-[340px]">
-              <video
+            <div className="relative inline-block lg:h-full lg:w-[340px]">
+              <Link
+                href={backHref}
+                aria-label="Retour à la liste des projets"
+                className="absolute left-13 top-3 lg:right-full lg:top-0 lg:mr-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/85 bg-transparent text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+              >
+                <IoIosArrowRoundBack size={26} />
+              </Link>
+              <div className="aspect-[3/4] w-full overflow-hidden rounded-[24px] bg-white/10 lg:aspect-auto lg:h-full lg:w-[340px]">
+                <video
                 ref={videoRef}
                 src={caseData.href}
                 poster={caseData.posterSrc}
@@ -77,7 +91,8 @@ export default function CaseStudyDetail({ caseData }) {
                   isPlaying ? "Mettre la vidéo en pause" : "Lire la vidéo du projet"
                 }
                 role="button"
-              />
+                />
+              </div>
             </div>
             <div className="flex flex-col gap-4 rounded-[24px] bg-white/5 p-6 text-white lg:bg-transparent lg:p-0 lg:text-left">
               <div>
@@ -103,18 +118,18 @@ export default function CaseStudyDetail({ caseData }) {
             <div className="grid gap-6 sm:grid-cols-2 lg:gap-x-24 lg:gap-y-10">
               
               {/* Colonne 1 */}
-              <div className="space-y-4">
-                <div>
+              <div className="space-y-4 lg:space-y-0">
+                <div className="lg:hidden">
                   <p className="mb-1 text-xs text-white/60">Entreprise</p>
                   <p className="text-base font-semibold text-white">{caseData.client || "SC2S"}</p>
                 </div>
                 
                 <div>
-                  <p className="mb-1 text-xs text-white/60">Catégorie</p>
+                  <p className="mb-1 text-xs text-white/60">Secteurs</p>
                   <p className="text-base font-semibold text-white">{caseData.category || "Associatif"}</p>
                 </div>
                 
-                <div>
+                <div className="lg:hidden">
                   <p className="mb-1 text-xs text-white/60">Période</p>
                   <p className="text-base font-semibold text-white">{caseData.period || "2023"}</p>
                 </div>
