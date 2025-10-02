@@ -12,7 +12,7 @@ const caseStudies = [
     category: "Mode & Lifestyle",
     contextTitle: "Contexte",
     context:
-      "Avec ses nouvelles éditions ShowroomBY, Showroom Privé souhaitait mettre en avant ses univers mode, beauté, maison & voyage avec une sélection exclusive par différentes personnalités publiques. Pour cette première édition, c’est Faustine Bollaert qui a plongé les communautés dans son dressing.",
+      "Avec ses nouvelles éditions ShowroomBY, Showroom Privé souhaitait mettre en avant ses univers mode, beauté, maison & voyage avec une sélection exclusive par différentes personnalités publiques. Pour cette première édition, c'est Faustine Bollaert qui a plongé les communautés dans son dressing.",
     contentTitle: "Contenus",
     content: [
       "2 IGP (dont 1 jeu concours)",
@@ -28,7 +28,12 @@ const caseStudies = [
       "Réseaux de célébrités",
       "Gestion opérationnelle",
       "Projet réalisé en 1 mois"
-    ]
+    ],
+    metrics: {
+      vues: "1M",
+      interactions: "87K",
+      traffic: "120%"
+    }
   },
   {
     title: "Service Civique Solidarité Seniors",
@@ -59,10 +64,14 @@ const caseStudies = [
     client: "CyberGhost",
     category: "VPN",
     period: "2023",
-    context: "Depuis plus d’un an, nous accompagnons CyberGhost VPN dans sa conquête du marché des VPN, et ce, au travers d’intégrations Youtube de créateurs français et internationaux.",
+    contextTitle: "Contexte",
+    context: "Depuis plus d'un an, nous accompagnons CyberGhost VPN dans sa conquête du marché des VPN, et ce, au travers d'intégrations Youtube de créateurs français et internationaux.",
+    contentTitle: "Contenus",
     content: [
       "Près de 20 intégrations Youtube publiées (et de nombreuses autres en cours de développement)."
     ],
+    impactTitle: "Expertises",
+    impact: "Casting FR et Inter, gestion opérationnelle (brief, négociations, contractualisation, monitoring campagne, reporting)",
     expertise_details: [
       "Casting FR et Inter",
       "Gestion opérationnelle (brief, négociations, contractualisation, monitoring campagne, reporting)"
@@ -111,18 +120,22 @@ const caseStudies = [
     client: "Orange",
     category: "Partenariat JOP Paris 2024",
     period: "2024",
-    intro: "Dans le cadre de son partenariat avec les Jeux Olympiques et Paralympiques de Paris 2024, Orange a organisé un événement itinérant dans 8 régions de France. L’objectif : sensibiliser les jeunes au cyberharcèlement à travers les valeurs du sport, de l’inclusion et de l’olympisme.",
+    intro: "Dans le cadre de son partenariat avec les Jeux Olympiques et Paralympiques de Paris 2024, Orange a organisé un événement itinérant dans 8 régions de France. L'objectif : sensibiliser les jeunes au cyberharcèlement à travers les valeurs du sport, de l'inclusion et de l'olympisme.",
     contextTitle: "Le challenge ?",
-    context: "Créer une expérience terrain à fort impact humain et médiatique, capable de toucher les jeunes générations tout en renforçant l’engagement RSE de la marque.",
+    context: "Créer une expérience terrain à fort impact humain et médiatique, capable de toucher les jeunes générations tout en renforçant l'engagement RSE de la marque.",
     content: [
       "Une tournée événementielle pensée pour les réseaux sociaux.",
       "Nous avons imaginé une série de rencontres sportives réunissant jeunes valides et en situation de handicap, dans un format à la fois pédagogique, interactif et inspirant.",
-      "Notre équipe a géré la stratégie créative, le casting des ambassadeurs, l’organisation sur site, les animations et la création de contenus. Résultat : 76 stories, 8 Reels, 1 TikTok, tous produits et diffusés en temps réel pour amplifier l’événement."
+      "Notre équipe a géré la stratégie créative, le casting des ambassadeurs, l'organisation sur site, les animations et la création de contenus. Résultat : 76 stories, 8 Reels, 1 TikTok, tous produits et diffusés en temps réel pour amplifier l'événement."
     ],
     contentTitle: "Notre solution ?",
     impactTitle: "L'impact ?",
-    impact: "Une opération fédératrice, inclusive et engagée, qui illustre parfaitement le rôle sociétal d’Orange, en lien avec l’esprit des Jeux.",
-    
+    impact: "Une opération fédératrice, inclusive et engagée, qui illustre parfaitement le rôle sociétal d'Orange, en lien avec l'esprit des Jeux.",
+    metrics: {
+      views: "920K",
+      contacts: "1,4M",
+      interactions: "43K"
+    }
   },
   {
     title: "Les Secrets de Loly",
@@ -206,7 +219,11 @@ const caseStudies = [
       "Production photo, vidéo et drone",
       "Storytelling puissant et dynamique",
       "Déclinaison multi-assets pour Social Ads"
-    ]
+    ],
+    metrics: {
+      vues: "200K",
+      interactions: "3,2K"
+    }
   },
   {
     title: "La Biche‑Renard",
@@ -370,7 +387,13 @@ const caseStudies = [
       "Mesure du ROAS par influenceur avec intégration de la rémanence",
       "Suivi des résultats en temps réel",
       "Analyse comparative des performances par segment"
-    ]
+    ],
+    metrics: {
+      audiences: "2M",
+      vues: "480K",
+      emv: "250K€",
+      roas: "3.5"
+    }
   },
   {
     title: "RedBull",
@@ -627,7 +650,12 @@ const caseStudies = [
       "Storytelling authentique et émotionnel",
       "Contenus TikTok, Instagram et Reels",
       "Pilotage dispositif complet de A à Z"
-    ]
+    ],
+    metrics: {
+      livraisons: "10",
+      capsules: "3",
+      profil: "1"
+    }
   },
   {
     title: "Fleury Michon",
@@ -672,10 +700,20 @@ const caseStudies = [
     href: null,
     posterSrc: "/assets/media/cases_studies/cover/be-real.png",
     tags: ["UGC", "Production", "Social média"],
-    sectors: ["Technologie"],
-    client: "Be Real",
-    category: "Social Media & Technology",
+    sectors: ["Food & Beverage"],
+    client: "Kellogg's x BeReal",
+    category: "Food & Beverage",
     period: "2024",
+    intro: "Dans le cadre de sa campagne promotionnelle, Kellogg's a choisi BeReal pour valoriser ses produits de manière originale et authentique.",
+    contextTitle: "L'objectif ?",
+    context: "Faire connaître une opération spéciale permettant de gagner des goodies exclusifs dont un UNO Kellogg's et un gros lot : une entrée pour le parc Mattel aux États-Unis.",
+    contentTitle: "NOTRE SOLUTION ?",
+    content: [
+      "GUST a été sollicité pour concevoir des concepts de BeReal adaptés à différentes gammes de produits Kellogg's, puis les produire en respectant l'esthétique brute et immédiate de la plateforme.",
+      "Nos équipes ont imaginé des scènes du quotidien, shooté une série de photos authentiques et sélectionné les visuels les plus crédibles pour maximiser l'impact natif dans l'univers BeReal."
+    ],
+    impactTitle: "L'IMPACT ?",
+    impact: "Une campagne inédite, incarnée par des visuels naturels, fidèles aux usages de la plateforme, pour capter l'attention des utilisateurs sans jamais trahir leur expérience. Un coup d'essai réussi pour Kellogg's sur BeReal, avec une présence juste, innovante et engageante.",
     description: "Activation social media réalisée sans support vidéo public. Asset vidéo en cours de production."
   },
   {

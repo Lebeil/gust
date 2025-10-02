@@ -104,11 +104,95 @@ export default function CaseStudyDetail({ caseData }) {
               </div>
             </div>
             <div className="flex flex-col gap-4 rounded-[24px] bg-white/5 p-6 text-white lg:bg-transparent lg:p-0 lg:text-left">
-              <div>
-                <div className="text-3xl font-bold sm:text-4xl">+1m</div>
-                <div className="mt-1 text-base sm:text-lg">Impressions</div>
-                <div className="text-sm text-white/70">(organique & paid)</div>
-              </div>
+              {caseData.metrics && (
+                <div className="flex flex-col gap-6 mb-4">
+                  {caseData.metrics.audience && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.audience}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">Audience</div>
+                    </div>
+                  )}
+                  {caseData.metrics.views && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.views}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">Vues</div>
+                    </div>
+                  )}
+                  {caseData.metrics.contacts && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.contacts}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">CONTACTS</div>
+                    </div>
+                  )}
+                  {caseData.metrics.interactions && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.interactions}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">Interactions</div>
+                    </div>
+                  )}
+                  {caseData.metrics.impressions && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.impressions}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">Impressions</div>
+                      <div className="text-sm text-white/70">(organique & paid)</div>
+                    </div>
+                  )}
+                  {caseData.metrics.reach && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.reach}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">Personnes atteintes</div>
+                    </div>
+                  )}
+                  {caseData.metrics.livraisons && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.livraisons}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">LIVRAISONS<br/>SURPRISES</div>
+                    </div>
+                  )}
+                  {caseData.metrics.capsules && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.capsules}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">CAPSULES<br/>VIDÉOS</div>
+                    </div>
+                  )}
+                  {caseData.metrics.profil && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.profil}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">PROFIL MEGA</div>
+                    </div>
+                  )}
+                  {caseData.metrics.audiences && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.audiences}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">AUDIENCES</div>
+                    </div>
+                  )}
+                  {caseData.metrics.vues && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.vues}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">VUES</div>
+                    </div>
+                  )}
+                  {caseData.metrics.emv && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.emv}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">Emv</div>
+                    </div>
+                  )}
+                  {caseData.metrics.roas && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.roas}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">ROAS</div>
+                    </div>
+                  )}
+                  {caseData.metrics.traffic && (
+                    <div>
+                      <div className="text-3xl font-bold text-white sm:text-4xl">{caseData.metrics.traffic}</div>
+                      <div className="mt-1 text-base font-medium text-white sm:text-lg">TRAFFIC<br/>ON SITE</div>
+                    </div>
+                  )}
+                </div>
+              )}
               <Link
                 href="/contact"
                 className="w-fit rounded-full border border-white/30 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-white/70 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
@@ -187,7 +271,17 @@ export default function CaseStudyDetail({ caseData }) {
             {caseData.impact && (
               <div className="space-y-3">
                 <h3 className="text-base font-semibold text-white lg:text-lg">{caseData.impactTitle || "Impact"}</h3>
-                <p className="text-sm leading-relaxed text-white/90 lg:text-base">{caseData.impact}</p>
+                <div className="text-sm leading-relaxed text-white/90 lg:text-base">
+                  {caseData.expertise_details ? (
+                    <ul className="list-disc pl-5 space-y-1">
+                      {caseData.expertise_details.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{caseData.impact}</p>
+                  )}
+                </div>
               </div>
             )}
 
