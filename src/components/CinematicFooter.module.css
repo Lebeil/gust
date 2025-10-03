@@ -2,7 +2,14 @@
 .cinematicFooter {
   position: relative;
   width: 100%;
-  background: transparent;
+  background:
+    radial-gradient(140% 120% at 18% 12%, rgba(61, 121, 255, 0.45) 0%, rgba(22, 45, 132, 0.05) 55%, transparent 70%),
+    linear-gradient(145deg, #06143b 5%, #0e1f5a 35%, #1f3eb9 65%, #0a1847 100%),
+    url('/images/GRADIANT.png');
+  background-size: cover, cover, cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: screen, normal, normal;
   overflow: hidden;
   /* Coins supérieurs arrondis comme la maquette */
   border-top-left-radius: 48px;
@@ -11,6 +18,7 @@
   margin-top: 0;
   z-index: 20;
   /* navbar: 1000, fond production: 1 */
+  box-shadow: 0 -48px 120px rgba(7, 16, 54, 0.45);
 }
 
 .noiseLayer {
@@ -21,7 +29,7 @@
   position: absolute;
   inset: 0;
   /* voile uniforme 10% sans flou en haut */
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.06);
   pointer-events: none;
   z-index: 1;
 }

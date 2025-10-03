@@ -16,7 +16,7 @@ export default function ScrollingBackgroundShaderPage() {
   return (
     <div className="fixed inset-0 -z-10">
       <Image
-        src="/assets/gradients/GRADIANT.png"
+        src="/images/GRADIANT.png"
         alt="Background gradient"
         fill
         priority

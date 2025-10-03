@@ -29,7 +29,6 @@ export default function CinematicFooter() {
             <address className={styles.addr}>
             58 rue de Monceau <br />
               75008 Paris<br />
-              <a href="tel:+33659964366" className={styles.linkMuted}>06 59 96 43 66</a><br />
               <a href="mailto:contact@agencegust.com" className={styles.linkMuted}>contact@agencegust.com</a>
             </address>
           </div>

@@ -5,7 +5,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import AutoScrollGallery from "@/components/AutoScrollGallery";
 import LogoBanner from "@/components/LogoBanner";
 import FaqOffers from "@/components/FaqOffers";
-import { MoreIcon } from "@/components/icons/MoreIcon";
 import caseStudies from "@/data/caseStudies";
 import CinematicFooter from "@/components/CinematicFooter";
 
@@ -99,26 +98,6 @@ export default function InfluenceClient() {
     textColor: 'text-white'
   }));
 
-  // Données et états pour les accordéons "approach"
-  const thinkItems = [
-    { title: 'Overlap.', desc: "Lors d’une campagne, certains créateurs de contenu peuvent avoir une part commune du public ciblé. Déterminez le pourcentage d'audience similaire entre différents profils, c'est-à-dire combien de followers identiques partagent des profils. En calculant l'overlap, vous pouvez faire une analyse complète de votre reach" },
-    { title: "Étude d’impact.", desc: "Ajustez vos stratégies et augmentez l’efficacité de vos formats, audiences et créateurs de contenus dans vos campagnes. Comprenez quel type d’influenceur est le plus ROIste pour votre marque. Identifiez les leviers d’acquisitions/ventes réels pour votre marque. Une analyse approfondie de vos campagnes influence pour des résultats quantifiés & qualifiés reposant sur la data." },
-    { title: 'Xplain.Ai.', desc: "Mesurer et optimiser l’attention portée à une campagne via un panel de consommateurs en pré‑lancement. Multipliez par deux le taux de mémorisation de vos campagnes avec une étude XPLN.AI. Heat map dans le contexte média, % mémorisation (Ad‑recall), vues, durée effective, corrélations ad‑centric x attention, calcul prédictif du taux d’attention." }
-  ];
-  const connectItems = [
-    { title: 'Casting.', desc: "Nous sélectionnons des profils alignés avec vos valeurs et affinités produits, sans transformer les influenceurs en panneaux publicitaires ni saturer les audiences. Talents fiables, vérifiés pour leur image et leurs précédentes collaborations. KPIs au cœur pour garantir un ROI optimal et un engagement minimum. Castings mêlant influenceurs, célébrités, artistes 3D et push UGC pour une campagne unique." },
-    { title: 'UGC.', desc: "Parce que les consommateurs recherchent des avis authentiques et sincères, une campagne UGC est votre allié pour améliorer la notoriété et la visibilité. Obtenez de 100 à 350 assets (IG ou TT) et augmentez la discussion autour de vos produits. Amplifiez vos concepts influence avec des micro‑créateurs pour conquérir votre secteur." },
-    { title: 'Ad‑fluence.', desc: "Les algorithmes rendent l’obtention de vues imprévisible. Nous puisons dans la créativité des créateurs, sans exploiter nécessairement leur audience directe: contenus publiés hors feed organique, focus sur le message et l’exécution pour des performances maîtrisées." },
-    { title: 'Media.', desc: "Les activations Gust sont pensées pour optimiser le social ads et scaler votre contenu sur l’ensemble de la plateforme de marque. AD‑fluence incarnée pour un ciblage précis et des performances décuplées. Notoriété, communauté, leads: nous set‑up et gérons vos campagnes média." }
-  ];
-  const produceItems = [
-    { title: 'Social Media.', desc: "Stop‑Scroll Specialists: nous captons l’attention dans un flux saturé avec des contenus pensés pour performer. Hook stratégique, éditorial pertinent, approche entertainment. Amplifiez votre visibilité avec l’influence pour faire grandir votre communauté et incarner vos messages." },
-    { title: 'UGC.', desc: "Campagnes UGC pour une notoriété authentique. 100 à 350 assets sur la plateforme de votre choix, amplification via micro‑créateurs, et continuité avec vos mécaniques d’influence." }
-  ];
-
-  const [thinkOpen, setThinkOpen] = useState(null);
-  const [connectOpen, setConnectOpen] = useState(null);
-  const [produceOpen, setProduceOpen] = useState(null);
 
   return (
     <div className="influence-wrapper relative min-h-screen">
@@ -458,121 +437,249 @@ export default function InfluenceClient() {
         </div>
       </section>
                 {/* STRATEGY / CONNECTION / PRODUCTION SECTION (après Timeline) */}
-                <section id="approach" className="relative py-20 px-6 md:px-12">
+                <section id="approach" className="relative py-24 px-6 md:px-12">
                   <div className="max-w-7xl mx-auto">
+                    
                     {/* We think */}
-                    <div className="w-full max-w-5xl mx-auto mb-12">
-                      <h2 className="text-white text-xl tracking-wide mb-4 font-bold">We think.</h2>
-                      <div className="divide-y divide-white/15 border-t border-white/15 border-b">
-                        {thinkItems.map((item, idx) => {
-                          const isOpen = thinkOpen === idx;
-                          return (
-                            <div key={`think-${idx}`} className="py-0">
-                              <button
-                                type="button"
-                                className={`w-full text-left flex items-center gap-4 md:gap-6 px-4 -mx-4 pt-3 pb-5 md:pt-3 md:pb-6 rounded-xl focus:outline-none transition-colors ${isOpen ? '' : 'hover:bg-white/5 focus:ring-2 focus:ring-white/20'}`}
-                                aria-expanded={isOpen}
-                                aria-controls={`think-panel-${idx}`}
-                                onClick={() => setThinkOpen(prev => prev === idx ? null : idx)}
-                              >
-                                <span className="text-white font-normal text-sm md:text-base leading-none">
-                                  {item.title}
-                                </span>
-                                <span className="ml-auto">
-                                  <MoreIcon size={18} strokeWidth={2} isOpen={isOpen} />
-                                </span>
-                              </button>
-                              <div
-                                id={`think-panel-${idx}`}
-                                className={`overflow-hidden transition-[max-height,opacity] duration-300 ${isOpen ? 'opacity-100 max-h-48 md:max-h-56 py-0 md:py-1' : 'opacity-70 max-h-0 py-0'}`}
-                              >
-                                <div className="pr-8 md:pr-16">
-                                  <p className="text-white/75 text-sm md:text-base leading-tight">
-                                    {item.desc}
-                                  </p>
-                                </div>
-                              </div>
+                    <div className="mb-24">
+                      <div className="mb-8">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          We think.
+                        </h2>
+                        <h3 className="text-xl md:text-2xl font-medium text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          L'influence pilotée par l'intelligence stratégique & la data
+                        </h3>
+                        <p className="text-white/90 text-base md:text-lg font-light leading-relaxed max-w-4xl" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Votre stratégie mérite mieux que du "feeling" : GUST s'appuie sur des données comportementales, de l'analyse d'attention et du tracking business pour construire vos campagnes.
+                        </p>
+                      </div>
+
+                      <p className="text-white font-medium text-base md:text-lg mb-6" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                        Impact & ROI au cœur de la réflexion :
+                      </p>
+
+                      <div className="space-y-0">
+                        <div className="w-full h-[1px] bg-white/40"></div>
+                        
+                        {/* Point 1 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>01</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Étude d'impact
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Analyse des performances business de vos campagnes (ventes, notoriété, engagement). Identifiez les leviers qui convertissent vraiment.
+                              </p>
                             </div>
-                          )
-                        })}
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+
+                        {/* Point 2 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>02</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Overlap audience
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Optimisez la complémentarité de vos créateurs. Réduisez la redondance, augmentez la portée nette.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+
+                        {/* Point 3 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>03</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                XPLAIN.AI (pré-test)
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Test de mémorisation & attention via panel consommateurs. Anticipez l'efficacité créative avant même la diffusion.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+                      </div>
+
+                      <div className="mt-8">
+                        <p className="text-white text-base md:text-lg font-light leading-relaxed max-w-5xl" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Des insights actionnables, pour mieux scaler vos investissements influence & UGC en toute confiance.
+                        </p>
                       </div>
                     </div>
 
                     {/* We connect */}
-                    <div className="w-full max-w-5xl mx-auto mb-12">
-                      <h2 className="text-white text-xl tracking-wide mb-4 font-bold">We connect.</h2>
-                      <div className="divide-y divide-white/15 border-t border-white/15 border-b">
-                        {connectItems.map((item, idx) => {
-                          const isOpen = connectOpen === idx;
-                          return (
-                            <div key={`connect-${idx}`} className="py-0">
-                              <button
-                                type="button"
-                                className={`w-full text-left flex items-center gap-4 md:gap-6 px-4 -mx-4 pt-3 pb-5 md:pt-3 md:pb-6 rounded-xl focus:outline-none transition-colors ${isOpen ? '' : 'hover:bg-white/5 focus:ring-2 focus:ring-white/20'}`}
-                                aria-expanded={isOpen}
-                                aria-controls={`connect-panel-${idx}`}
-                                onClick={() => setConnectOpen(prev => prev === idx ? null : idx)}
-                              >
-                                <span className="text-white font-normal text-sm md:text-base leading-none">
-                                  {item.title}
-                                </span>
-                                <span className="ml-auto">
-                                  <MoreIcon size={18} strokeWidth={2} isOpen={isOpen} />
-                                </span>
-                              </button>
-                              <div
-                                id={`connect-panel-${idx}`}
-                                className={`overflow-hidden transition-[max-height,opacity] duration-300 ${isOpen ? 'opacity-100 max-h-48 md:max-h-56 py-0 md:py-1' : 'opacity-70 max-h-0 py-0'}`}
-                              >
-                                <div className="pr-8 md:pr-16">
-                                  <p className="text-white/75 text-sm md:text-base leading-tight">
-                                    {item.desc}
-                                  </p>
-                                </div>
-                              </div>
+                    <div className="mb-24">
+                      <div className="mb-8">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          We connect.
+                        </h2>
+                        <h3 className="text-xl md:text-2xl font-medium text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Les bons créateurs. Le bon message. La bonne audience.
+                        </h3>
+                        <p className="text-white/90 text-base md:text-lg font-light leading-relaxed max-w-4xl" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Finie l'influence au hasard. GUST sélectionne, active et amplifie des profils parfaitement alignés à votre marque, pour une vraie valeur ajoutée perçue – et pas juste des vues.
+                        </p>
+                      </div>
+
+                      <p className="text-white font-medium text-base md:text-lg mb-6" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                        Activation sur-mesure :
+                      </p>
+
+                      <div className="space-y-0">
+                        <div className="w-full h-[1px] bg-white/40"></div>
+                        
+                        {/* Point 1 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>01</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Casting expert
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Influenceurs, UGC creators, talents émergents, célébrités ou profils niches – tous testés, vérifiés et contextualisés à vos objectifs.
+                              </p>
                             </div>
-                          )
-                        })}
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+
+                        {/* Point 2 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>02</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Ad-fluence
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                On se sert de la créativité des créateurs, pas forcément de leur reach. Contenus boostés hors de leur feed, en ads ciblées. Plus de contrôle. Plus de performance.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+
+                        {/* Point 3 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>03</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Activation média
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                GUST pilote vos campagnes paid social, du set-up au scaling, pour transformer du contenu en levier de performance.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+                      </div>
+
+                      <div className="mt-8">
+                        <p className="text-white text-base md:text-lg font-light leading-relaxed max-w-5xl" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Vous touchez la bonne cible, au bon moment, avec un contenu qui capte l'attention et génère du résultat.
+                        </p>
                       </div>
                     </div>
 
                     {/* We produce */}
-                    <div className="w-full max-w-5xl mx-auto">
-                      <h2 className="text-white text-xl tracking-wide mb-4 font-bold">We produce.</h2>
-                      <div className="divide-y divide-white/15 border-t border-white/15 border-b">
-                        {produceItems.map((item, idx) => {
-                          const isOpen = produceOpen === idx;
-                          return (
-                            <div key={`produce-${idx}`} className="py-0">
-                              <button
-                                type="button"
-                                className={`w-full text-left flex items-center gap-4 md:gap-6 px-4 -mx-4 pt-3 pb-5 md:pt-3 md:pb-6 rounded-xl focus:outline-none transition-colors ${isOpen ? '' : 'hover:bg-white/5 focus:ring-2 focus:ring-white/20'}`}
-                                aria-expanded={isOpen}
-                                aria-controls={`produce-panel-${idx}`}
-                                onClick={() => setProduceOpen(prev => prev === idx ? null : idx)}
-                              >
-                                <span className="text-white font-normal text-sm md:text-base leading-none">
-                                  {item.title}
-                                </span>
-                                <span className="ml-auto">
-                                  <MoreIcon size={18} strokeWidth={2} isOpen={isOpen} />
-                                </span>
-                              </button>
-                              <div
-                                id={`produce-panel-${idx}`}
-                                className={`overflow-hidden transition-[max-height,opacity] duration-300 ${isOpen ? 'opacity-100 max-h-48 md:max-h-56 py-0 md:py-1' : 'opacity-70 max-h-0 py-0'}`}
-                              >
-                                <div className="pr-8 md:pr-16">
-                                  <p className="text-white/75 text-sm md:text-base leading-tight">
-                                    {item.desc}
-                                  </p>
-                                </div>
-                              </div>
+                    <div className="mb-12">
+                      <div className="mb-8">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          We produce.
+                        </h2>
+                        <h3 className="text-xl md:text-2xl font-medium text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Des contenus qui arrêtent le scroll. Et qui transforment.
+                        </h3>
+                        <p className="text-white/90 text-base md:text-lg font-light leading-relaxed max-w-4xl" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Produire du contenu, c'est facile. Produire du contenu qui fait vendre, c'est notre métier.
+                        </p>
+                      </div>
+
+                      <p className="text-white font-medium text-base md:text-lg mb-6" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                        Production 100% orientée performance et branding :
+                      </p>
+
+                      <div className="space-y-0">
+                        <div className="w-full h-[1px] bg-white/40"></div>
+                        
+                        {/* Point 1 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>01</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Social Content Studio
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Vidéos verticales, reels, shorts, stories, motion, capsules, photos… Créés pour performer sur TikTok, Insta, YT Shorts.
+                              </p>
                             </div>
-                          )
-                        })}
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+
+                        {/* Point 2 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>02</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Stop-Scroll Content
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Des formats conçus pour capturer l'attention dans les 3 premières secondes, avec des hooks puissants, des cuts malins, et un tone-of-voice calibré.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+
+                        {/* Point 3 */}
+                        <div className="py-8 md:py-10">
+                          <div className="flex items-start gap-6 md:gap-12">
+                            <span className="text-4xl md:text-6xl font-light text-white leading-none" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>03</span>
+                            <div className="flex-1 pt-1">
+                              <h4 className="text-lg md:text-xl font-semibold text-white mb-3" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Content for Ads
+                              </h4>
+                              <p className="text-white/85 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                                Adaptation créative pour campagnes paid — A/B testing, variants, boucles courtes, edit optimisé.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[1px] bg-white/40"></div>
+                      </div>
+
+                      <div className="mt-8">
+                        <p className="text-white text-base md:text-lg font-light leading-relaxed max-w-5xl" style={{ fontFamily: 'Avenir Next, system-ui, sans-serif' }}>
+                          Des contenus pensés pour nourrir vos plateformes, votre CRM, vos campagnes ads & vos opérations commerciales — sans saturer vos équipes internes.
+                        </p>
                       </div>
                     </div>
+
                   </div>
                 </section>
 

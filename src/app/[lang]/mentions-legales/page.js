@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { getSettings } from "@/lib/dataLoader"
+import Navbar from "@/components/Navbar"
+import CinematicFooter from "@/components/CinematicFooter"
 
 export async function generateMetadata() {
 
@@ -25,11 +27,12 @@ export default async function MentionsLegales() {
     getSettings({})
 
     return (
-        <div className="min-h-screen bg-white" style={{ color: '#000000' }}>
+        <div className="min-h-screen">
+        
           <style dangerouslySetInnerHTML={{
             __html: `
               .min-h-screen * {
-                color: #000000 !important;
+                color:rgb(250, 250, 250) !important;
               }
               .min-h-screen h1.text-blue-600 {
                 color: #2563eb !important;
@@ -44,7 +47,7 @@ export default async function MentionsLegales() {
             {/* Header avec logo GUST! */}
             <div className="mb-12">
               <div className="text-center mb-8">
-                <h1 className="text-5xl font-black tracking-wider text-blue-600 mb-2">
+                <h1 className="text-5xl font-black tracking-wider my-10">
                   GUST!
                 </h1>
                 <p className="text-base font-medium tracking-wide" style={{ color: '#000000' }}>
@@ -226,7 +229,7 @@ export default async function MentionsLegales() {
                       href="https://www.economie.gouv.fr/files/files/directions_services/dgccrf/consommation/Guide-de-bonne-conduite-des-influenceurs.pdf" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                      className=" hover:text-blue-800 underline break-all"
                     >
                       https://www.economie.gouv.fr/files/files/directions_services/dgccrf/consommation/Guide-de-bonne-conduite-des-influenceurs.pdf
                     </a>
@@ -237,7 +240,7 @@ export default async function MentionsLegales() {
                       href="https://www.economie.gouv.fr/guide-bonne-conduite-influenceurs-createurs-contenu" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                      className=" hover:text-blue-800 underline break-all"
                     >
                       https://www.economie.gouv.fr/guide-bonne-conduite-influenceurs-createurs-contenu
                     </a>
@@ -248,7 +251,7 @@ export default async function MentionsLegales() {
                       href="https://www.arpp.org/wp-content/uploads/2019/09/infographie-Influenceurs.pdf" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                      className=" hover:text-blue-800 underline break-all"
                     >
                       https://www.arpp.org/wp-content/uploads/2019/09/infographie-Influenceurs.pdf
                     </a>
@@ -263,6 +266,7 @@ export default async function MentionsLegales() {
               </div>
             </div>
           </div>
+          <CinematicFooter />
         </div>
     )
   } catch (error) {
@@ -273,6 +277,7 @@ export default async function MentionsLegales() {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Erreur de chargement</h1>
           <p>Impossible de charger la page GUST! Policy.</p>
+          <CinematicFooter />
         </div>
       </div>
     )
