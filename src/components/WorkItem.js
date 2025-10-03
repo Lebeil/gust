@@ -1,8 +1,9 @@
 "use client"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import WorkItemInfo from "./WorkItemInfo"
+import { getOptimizedSources } from "@/utils/mediaSources"
 
 export default function WorkItem({ data }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -10,9 +11,14 @@ export default function WorkItem({ data }) {
   const cover = data?.data?.cover || {}
   const coverSrc = cover.url || ""
   const coverAlt = cover.alt || "Cover image"
-  const coverWidth = Number(cover.width) || 500
-  const coverHeight = Number(cover.height) || 300
   const previewSrc = data?.data?.preview_video?.url || ""
+  const previewSources = useMemo(() => {
+    const computed = getOptimizedSources(previewSrc)
+    if (!computed || computed.length === 0) {
+      return previewSrc ? [{ key: `default-${previewSrc}`, src: previewSrc }] : []
+    }
+    return computed
+  }, [previewSrc])
 
   useEffect(() => {
     let timeoutId
@@ -47,23 +53,29 @@ export default function WorkItem({ data }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Image
-        src={coverSrc}
-        alt={coverAlt}
-        width={coverWidth}
-        height={coverHeight}
-        className="h-full w-full object-cover"
-      />
+      <div className="relative h-full w-full">
+        <Image
+          src={coverSrc}
+          alt={coverAlt}
+          fill
+          sizes="(max-width: 640px) 80vw, (max-width: 1024px) 40vw, 328px"
+          className="h-full w-full object-cover"
+          priority={false}
+        />
+      </div>
 
-      {isHovered && previewSrc && (
+      {isHovered && previewSources.length > 0 && (
         <video
           ref={previewRef}
           loop
           muted
           playsInline
+          preload="none"
           className="absolute inset-0 h-full w-full object-cover"
         >
-          <source src={previewSrc} type="video/mp4" />
+          {previewSources.map((source) => (
+            <source key={source.key} src={source.src} type={source.type} />
+          ))}
         </video>
       )}
 

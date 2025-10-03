@@ -167,7 +167,7 @@ const caseStudies = [
   },
   {
     title: "OPI",
-    href: "/assets/media/cases_studies/OPI.webm",
+    href: "/assets/media/cases_studies/OPI.mp4",
     posterSrc: "/assets/media/cases_studies/cover/OPI_cover.png",
     tags: ["Influence", "Ad-fluence"],
     sectors: ["Beauté"],
@@ -227,7 +227,7 @@ const caseStudies = [
   },
   {
     title: "La Biche‑Renard",
-    href: "/assets/media/cases_studies/La_biche_Renard.webm",
+    href: "/assets/media/cases_studies/La_biche_Renard.mp4",
     posterSrc: "/assets/media/cases_studies/cover/LBR_COVER.png",
     tags: ["Influence", "Production", "Social média"],
     sectors: ["Solidarité"],
@@ -397,7 +397,7 @@ const caseStudies = [
   },
   {
     title: "RedBull",
-    href: "/assets/media/cases_studies/redbull.webm",
+    href: "/assets/media/cases_studies/redbull.mp4",
     posterSrc: "/assets/media/cases_studies/cover/redbull.jpg",
     tags: ["Production", "Brand content", "Social média"],
     sectors: ["Food & Beverage"],
@@ -454,7 +454,7 @@ const caseStudies = [
   },
   {
     title: "Fidme",
-    href: "/assets/media/cases_studies/Fidme_courses.webm",
+    href: "/assets/media/cases_studies/Fidme_courses.mp4",
     posterSrc: "/assets/media/cases_studies/cover/Fidme.png",
     tags: ["Production TV", "Social Ads"],
     sectors: ["Food & Beverage"],
@@ -482,7 +482,7 @@ const caseStudies = [
   },
   {
     title: "Conforama",
-    href: "/assets/media/cases_studies/CONFORAMA-8h.webm",
+    href: "/assets/media/cases_studies/CONFORAMA-8h.mp4",
     posterSrc: "/assets/media/cases_studies/cover/CONFORAMA.png",
     tags: ["Influence", "Ad-fluence", "UGC", "Production"],
     sectors: ["Habitat"],
@@ -515,7 +515,7 @@ const caseStudies = [
   },
   {
     title: "La Chênaie",
-    href: "/assets/media/cases_studies/lachenaie.webm",
+    href: "/assets/media/cases_studies/lachenaie.mp4",
     posterSrc: "/assets/media/cases_studies/cover/lachenaie.png",
     tags: ["Influence", "UGC"],
     sectors: ["Beauté"],
@@ -570,7 +570,7 @@ const caseStudies = [
   },
   {
     title: "Le Monde",
-    href: "/assets/media/cases_studies/Le-monde.webm",
+    href: "/assets/media/cases_studies/Le-monde.mp4",
     posterSrc: "/assets/media/cases_studies/cover/Le_monde.png",
     tags: ["Production", "Brand content", "Social média"],
     sectors: ["Banque"],
@@ -598,7 +598,7 @@ const caseStudies = [
   },
   {
     title: "Saily",
-    href: "/assets/media/cases_studies/saily.webm",
+    href: "/assets/media/cases_studies/saily.mp4",
     posterSrc: "/assets/media/cases_studies/cover/saily.png",
     tags: ["Brand content", "Social Ads", "Ad-fluence", "Influence"],
     sectors: ["Technologie"],
@@ -626,7 +626,7 @@ const caseStudies = [
   },
   {
     title: "Emma Moving Day",
-    href: "/assets/media/cases_studies/EMMA_MOVING_DAY.webm",
+    href: "/assets/media/cases_studies/EMMA_MOVING_DAY.mp4",
     posterSrc: "/assets/media/cases_studies/cover/Emma ugc.png",
     tags: ["Influence", "Production"],
     sectors: ["Habitat"],
@@ -687,7 +687,7 @@ const caseStudies = [
   },
   {
     title: "Spring Court",
-    href: "/assets/media/cases_studies/spring-court.webm",
+    href: "/assets/media/cases_studies/spring-court.mp4",
     posterSrc: "/assets/media/cases_studies/cover/spring-court.png",
     tags: ["UGC", "Social média"],
     sectors: ["Mode"],
@@ -718,7 +718,7 @@ const caseStudies = [
   },
   {
     title: "Chi Fou Quick",
-    href: "/assets/media/cases_studies/chi_fou_quick.webm",
+    href: "/assets/media/cases_studies/chi_fou_quick.mp4",
     posterSrc: "/assets/media/cases_studies/cover/chi-fou-quick.png",
     tags: ["Influence", "UGC", "Ad-fluence", "Social média", "Production"],
     sectors: ["Food & Beverage"],

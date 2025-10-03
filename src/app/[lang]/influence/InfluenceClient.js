@@ -12,12 +12,24 @@ import CinematicFooter from "@/components/CinematicFooter";
 export default function InfluenceClient() {
   const [isVisible, setIsVisible] = useState({});
   const [galleryApi, setGalleryApi] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   // Stabilise la callback passée à AutoScrollGallery pour éviter une boucle de rendus
   const handleGalleryApi = useCallback((api) => {
     setGalleryApi(api);
   }, []);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
+
+  // Détection mobile pour optimiser les performances
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Animation d'apparition au scroll
   useEffect(() => {
@@ -38,8 +50,10 @@ export default function InfluenceClient() {
     return () => observer.disconnect();
   }, []);
 
-  // Effet parallaxe souris
+  // Effet parallaxe souris (désactivé sur mobile pour les performances)
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (e) => {
       if (heroRef.current) {
         const rect = heroRef.current.getBoundingClientRect();
@@ -51,7 +65,7 @@ export default function InfluenceClient() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -138,7 +152,7 @@ export default function InfluenceClient() {
         {/* Video Background avec overlay gradient */}
         <div className="absolute inset-0 z-0">
           <video
-            autoPlay
+            autoPlay={!isMobile}
             muted
             loop
             playsInline
@@ -198,7 +212,7 @@ export default function InfluenceClient() {
           </div>
 
           {/* CTA principal (espaces renforcés comme maquette) */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-64 md:mt-80 lg:mt-[22vh] mb-20 md:mb-28 lg:mb-32">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 md:mt-64 lg:mt-[22vh] mb-12 md:mb-28 lg:mb-32">
             <a
               href="#contact"
               className="inline-flex items-center gap-4 text-white text-lg md:text-xl font-medium tracking-normal hover:opacity-95 focus:outline-none"
@@ -352,10 +366,10 @@ export default function InfluenceClient() {
           <div 
             id="packs-grid" 
             data-animate
-            className={`grid grid-cols-1 md:grid-cols-[repeat(3,max-content)] gap-8 md:gap-16 items-start justify-center transition-all duration-1000 delay-300 ${isVisible['packs-grid'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 items-start justify-center transition-all duration-1000 delay-300 ${isVisible['packs-grid'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             {/* Pack Start */}
-            <div className="relative rounded-lg border border-white/60 bg-white/10 p-8 w-[280px] md:w-[320px] min-h-[280px] md:min-h-[320px]">
+            <div className="relative w-full max-w-[360px] md:max-w-[320px] mx-auto rounded-lg border border-white/60 bg-white/10 p-6 sm:p-8 min-h-[260px] md:min-h-[320px]">
               <div className="text-center mb-4">
                 <h3 className="text-2xl font-semibold text-white">Pack Start</h3>
               </div>
@@ -368,7 +382,7 @@ export default function InfluenceClient() {
             </div>
 
             {/* Pack Scale */}
-            <div className="relative rounded-lg border border-white/60 bg-white/10 p-8 w-[280px] md:w-[320px] min-h-[280px] md:min-h-[340px]">
+            <div className="relative w-full max-w-[360px] md:max-w-[320px] mx-auto rounded-lg border border-white/60 bg-white/10 p-6 sm:p-8 min-h-[300px] md:min-h-[340px]">
               <div className="text-center mb-4">
                 <h3 className="text-2xl font-semibold text-white">Pack Scale</h3>
               </div>
@@ -382,7 +396,7 @@ export default function InfluenceClient() {
             </div>
 
             {/* Pack MMR */}
-            <div className="relative rounded-lg border border-white/60 bg-white/10 p-8 w-[280px] md:w-[320px] min-h-[280px] md:min-h-[320px]">
+            <div className="relative w-full max-w-[360px] md:max-w-[320px] mx-auto rounded-lg border border-white/60 bg-white/10 p-6 sm:p-8 min-h-[260px] md:min-h-[320px]">
               <div className="text-center mb-4">
                 <h3 className="text-2xl font-semibold text-white">Pack MMR</h3>
               </div>
@@ -396,7 +410,7 @@ export default function InfluenceClient() {
           </div>
 
           {/* CTA sous la grille */}
-          <div className="mt-10 flex justify-center">
+          <div className="mt-8 md:mt-10 flex justify-center">
             <a href="#contact" className="text-white/90 hover:text-white transition-colors text-base">
               Obtenir ma recommandation 
               <span className="inline-block align-middle ml-2">→</span>
@@ -436,7 +450,7 @@ export default function InfluenceClient() {
                       <p className="text-white/75 text-sm md:text-base leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rounded-full ring-4 ring-white/20" />
+                  <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rounded-full ring-4 ring-white/20" />
                 </div>
               ))}
             </div>
@@ -636,7 +650,48 @@ export default function InfluenceClient() {
             <button type="button" aria-label="Suivant" className="w-8 h-8 rounded-full border border-white/60 text-white grid place-items-center hover:bg-white/10" onClick={() => galleryApi?.next?.()}>⟶</button>
           </div>
         </div>
-        <AutoScrollGallery images={caseItems.filter(ci => (ci.tags||[]).includes('Influence'))} visibleImages={4} enableAutoScroll={false} scrollable={false} duplicate={false} onApiReady={handleGalleryApi} />
+
+        {/* Version mobile avec covers simplifiées */}
+        {isMobile ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+            {caseItems.filter(ci => (ci.tags||[]).includes('Influence')).slice(0, 4).map((item, index) => (
+              <div key={index} className="relative group cursor-pointer overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300">
+                {/* Image de couverture */}
+                {item.poster && (
+                  <div className="relative aspect-video overflow-hidden">
+                    <img
+                      src={item.poster}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  </div>
+                )}
+
+                {/* Contenu */}
+                <div className="p-4">
+                  <h3 className="text-white font-semibold text-sm mb-1">{item.title}</h3>
+                  <p className="text-white/70 text-xs mb-2">{item.client}</p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1">
+                    {item.tags?.slice(0, 2).map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="text-[0.6rem] px-2 py-0.5 rounded-md bg-white/20 text-white backdrop-blur-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Version desktop avec AutoScrollGallery */
+          <AutoScrollGallery images={caseItems.filter(ci => (ci.tags||[]).includes('Influence'))} visibleImages={4} enableAutoScroll={false} scrollable={false} duplicate={false} onApiReady={handleGalleryApi} />
+        )}
       </section>
 
       {/* FAQ SECTION (spécifique page Influence) */}

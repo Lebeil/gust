@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { detectSafari } from "@/lib/browserUtils";
+import { getOptimizedSources } from "@/utils/mediaSources";
 
 // Détection mobile
 const useIsMobile = () => {
@@ -356,7 +357,7 @@ export default function AutoScrollGallery({
       galleryElement.removeEventListener('touchmove', handleTouchMove);
       galleryElement.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [enableAutoScroll, isHovered, isMobile, scrollable, shouldDuplicate, totalImages, updateTransformAndProgress, oneSetWidth, totalTrackWidthPx, cardWidth]);
+  }, [enableAutoScroll, effectiveVisible, isHovered, isMobile, renderItems.length, scrollable, shouldDuplicate, totalImages, updateTransformAndProgress, oneSetWidth, totalTrackWidthPx, cardWidth]);
 
   return (
     <div
@@ -459,6 +460,13 @@ function ImageCard({ image, index, size, onSelect }) {
     : { title: '', client: '', textColor: 'text-white', tags: [], video: undefined };
 
   const videoRef = useRef(null);
+  const videoSources = useMemo(() => {
+    const computed = getOptimizedSources(caseStudy.video)
+    if (!computed || computed.length === 0) {
+      return caseStudy.video ? [{ key: `default-${caseStudy.video}`, src: caseStudy.video }] : []
+    }
+    return computed
+  }, [caseStudy.video]);
 
   useEffect(() => {
     const vid = videoRef.current;
@@ -473,6 +481,21 @@ function ImageCard({ image, index, size, onSelect }) {
     } catch (_) {}
   }, [isHovered]);
 
+  useEffect(() => {
+    const vid = videoRef.current
+    return () => {
+      if (!vid) return
+      try {
+        vid.pause()
+        vid.removeAttribute("src")
+        while (vid.firstChild) {
+          vid.removeChild(vid.firstChild)
+        }
+        vid.load()
+      } catch (_) {}
+    }
+  }, []);
+
   return (
     <div 
       className={`relative group cursor-pointer overflow-hidden rounded-3xl transform transition-all duration-300 hover:scale-[1.01]`}
@@ -485,14 +508,17 @@ function ImageCard({ image, index, size, onSelect }) {
       {caseStudy.video && (
         <video
           ref={videoRef}
-          src={caseStudy.video}
           poster={caseStudy.poster}
           className="absolute inset-0 w-full h-full object-cover"
           muted
           loop
           playsInline
           preload="metadata"
-        />
+        >
+          {videoSources.map((source) => (
+            <source key={source.key} src={source.src} type={source.type} />
+          ))}
+        </video>
       )}
 
       {/* Image de couverture au repos */}

@@ -1,9 +1,32 @@
 "use client"
+import { useState, useEffect, useRef } from "react"
 import RichText from "@/components/RichText"
 import LogoBanner from "@/components/LogoBanner"
 
 const MainHeroMobile = ({ content }) => {
   const landingVideo = content.media
+  const [isSafariMobile, setIsSafariMobile] = useState(false)
+  const [videoStarted, setVideoStarted] = useState(false)
+  const videoRef = useRef(null)
+
+  // Détection Safari mobile
+  useEffect(() => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    setIsSafariMobile(isIOS && isSafari && window.innerWidth <= 768)
+  }, [])
+
+  // Fonction pour démarrer la vidéo sur Safari mobile
+  const startVideo = async () => {
+    if (videoRef.current && isSafariMobile && !videoStarted) {
+      try {
+        await videoRef.current.play()
+        setVideoStarted(true)
+      } catch (error) {
+        console.log('Video autoplay blocked on Safari mobile:', error)
+      }
+    }
+  }
 
   return (
     <section
@@ -12,14 +35,31 @@ const MainHeroMobile = ({ content }) => {
     >
       <figure className="absolute inset-0 z-0">
         <video
+          ref={videoRef}
           loop
           muted
-          autoPlay
+          autoPlay={!isSafariMobile}
           playsInline
           className="h-full w-full object-cover"
+          poster="/assets/media/cases_studies/cover/Quick_cover.png"
+          onClick={isSafariMobile ? startVideo : undefined}
+          style={isSafariMobile ? { cursor: 'pointer' } : {}}
         >
           <source src={landingVideo?.url} type="video/mp4" />
         </video>
+
+        {/* Overlay pour Safari mobile avec instruction */}
+        {isSafariMobile && !videoStarted && (
+          <div
+            className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 cursor-pointer"
+            onClick={startVideo}
+          >
+            <div className="text-center text-white">
+              <div className="text-2xl mb-2">▶</div>
+              <div className="text-sm">Appuyez pour lancer la vidéo</div>
+            </div>
+          </div>
+        )}
       </figure>
 
       <div className="relative z-10 flex h-full w-full items-start justify-center px-[var(--tw-4)] pb-[var(--tw-16)] pt-[calc(6vh+var(--tw-14))] text-white sm:px-[var(--tw-6)] sm:pt-[calc(7vh+var(--tw-16))] md:px-[var(--tw-10)] md:pt-[calc(8vh+var(--tw-20))]">

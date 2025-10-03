@@ -7,17 +7,30 @@ import LogoBanner from "@/components/LogoBanner";
 import { MoreIcon } from "@/components/icons/MoreIcon";
 import caseStudies from "@/data/caseStudies";
 import CinematicFooter from "@/components/CinematicFooter";
+import { getOptimizedSources } from "@/utils/mediaSources";
 
 export default function UGCClient() {
   const [isVisible, setIsVisible] = useState({});
   const heroRef = useRef(null);
   const [galleryApi, setGalleryApi] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const handleGalleryApi = useCallback((api) => {
     setGalleryApi(api);
   }, []);
   
   // État pour la FAQ UGC
   const [faqOpen, setFaqOpen] = useState(null);
+
+  // Détection mobile pour optimiser les performances
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Animation d'apparition au scroll
   useEffect(() => {
@@ -86,14 +99,17 @@ export default function UGCClient() {
         {/* Video Background avec overlay gradient */}
         <div className="absolute inset-0 z-0">
           <video
-            autoPlay
+            autoPlay={!isMobile}
             muted
             loop
             playsInline
+            preload="none"
             className="absolute w-full h-full object-cover"
             poster="/assets/media/cases_studies/cover/Emma_cover.png"
           >
-            <source src="/assets/media/offres/ugc16_9.mp4" type="video/webm" />
+            {getOptimizedSources("/assets/media/offres/ugc16_9.mp4").map((source) => (
+              <source key={source.key} src={source.src} type={source.type} />
+            ))}
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
         </div>
@@ -136,7 +152,7 @@ export default function UGCClient() {
           </div>
 
           {/* CTA principal (espaces réduits pour meilleure proportion) */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 md:mt-16 lg:mt-20 mb-20 md:mb-28 lg:mb-32">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10 md:mt-16 lg:mt-20 mb-12 md:mb-24 lg:mb-32">
             <a
               href="#contact"
               className="inline-flex items-center gap-3 text-white text-base md:text-lg font-medium tracking-normal hover:opacity-95 focus:outline-none transition-opacity duration-200"
@@ -189,7 +205,7 @@ export default function UGCClient() {
             ].map((stat, idx) => (
               <div 
                 key={idx} 
-                className="group relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 hover:scale-105 transition-all duration-300 overflow-hidden"
+                className="group relative w-full max-w-[340px] md:max-w-none mx-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 sm:p-8 hover:scale-105 transition-all duration-300 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
                 <div className="relative z-10">
@@ -217,10 +233,10 @@ export default function UGCClient() {
           <div 
             id="packs-grid" 
             data-animate
-            className={`grid md:grid-cols-2 gap-8 max-w-4xl mx-auto transition-all duration-1000 delay-300 ${isVisible['packs-grid'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto transition-all duration-1000 delay-300 ${isVisible['packs-grid'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             {/* Pack Standard */}
-            <div className="relative rounded-2xl border border-white/30 bg-white/10 backdrop-blur-sm p-8 text-left">
+            <div className="relative w-full max-w-[360px] md:max-w-none mx-auto rounded-2xl border border-white/30 bg-white/10 backdrop-blur-sm p-6 md:p-8 text-left">
               <div className="mb-6">
                 <h3 className="text-2xl font-semibold text-white mb-3" style={{fontFamily:'Avenir Next, Avenir, sans-serif'}}>Pack Standard</h3>
                 <div className="mb-4">
@@ -246,7 +262,7 @@ export default function UGCClient() {
             </div>
 
             {/* Pack Premium */}
-            <div className="relative rounded-2xl border border-white/30 bg-white/10 backdrop-blur-sm p-8 text-left">
+            <div className="relative w-full max-w-[360px] md:max-w-none mx-auto rounded-2xl border border-white/30 bg-white/10 backdrop-blur-sm p-6 md:p-8 text-left">
               <div className="mb-6">
                 <h3 className="text-2xl font-semibold text-white mb-3" style={{fontFamily:'Avenir Next, Avenir, sans-serif'}}>Pack Premium</h3>
                 <div className="mb-4">
@@ -280,7 +296,7 @@ export default function UGCClient() {
           </div>
 
           {/* CTA en bas */}
-          <div className="text-center mt-12">
+          <div className="text-center mt-10 md:mt-12">
             <a 
               href="#contact" 
               className="inline-flex items-center gap-3 text-white text-lg font-medium hover:opacity-90 transition-opacity duration-200"
@@ -305,8 +321,9 @@ export default function UGCClient() {
             data-animate
             className={`relative transition-all duration-1000 delay-400 ${isVisible['timeline'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
-            {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-white/40 hidden md:block" />
+           
+            {/* Ligne verticale */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-white/60" />
 
             <div className="space-y-8 md:space-y-16">
               {[
@@ -439,7 +456,48 @@ export default function UGCClient() {
             <button type="button" aria-label="Suivant" className="w-8 h-8 rounded-full border border-white/60 text-white grid place-items-center hover:bg-white/10" onClick={() => galleryApi?.next?.()}>⟶</button>
           </div>
         </div>
-        <AutoScrollGallery images={caseItems.filter(ci => (ci.tags||[]).includes('Ugc'))} visibleImages={4} enableAutoScroll={false} scrollable={false} duplicate={false} onApiReady={handleGalleryApi} />
+
+        {/* Version mobile avec covers simplifiées */}
+        {isMobile ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+            {caseItems.filter(ci => (ci.tags||[]).includes('Ugc')).slice(0, 4).map((item, index) => (
+              <div key={index} className="relative group cursor-pointer overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300">
+                {/* Image de couverture */}
+                {item.poster && (
+                  <div className="relative aspect-video overflow-hidden">
+                    <img
+                      src={item.poster}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  </div>
+                )}
+
+                {/* Contenu */}
+                <div className="p-4">
+                  <h3 className="text-white font-semibold text-sm mb-1">{item.title}</h3>
+                  <p className="text-white/70 text-xs mb-2">{item.client}</p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1">
+                    {item.tags?.slice(0, 2).map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="text-[0.6rem] px-2 py-0.5 rounded-md bg-white/20 text-white backdrop-blur-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Version desktop avec AutoScrollGallery */
+          <AutoScrollGallery images={caseItems.filter(ci => (ci.tags||[]).includes('Ugc'))} visibleImages={4} enableAutoScroll={false} scrollable={false} duplicate={false} onApiReady={handleGalleryApi} />
+        )}
       </section>
 
       {/* FAQ SECTION UGC */}

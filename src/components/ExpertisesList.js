@@ -8,35 +8,30 @@ export default function ExpertisesList() {
       desc:
         "Des créateurs de contenus avec une communauté engagée, qui sont utilisés pour leur créativité, leur image et leur expérience sur les réseaux sociaux. Des égéries des temps modernes.",
       badge: "Make.it",
-      badgeImg: "/images/services/MAKE IT.PNG.png",
     },
     {
       title: "Célébrité",
       desc:
         "Open, notre entité celebrity marketing en association avec Isabelle Brulier, donne accès aux célébrités françaises et internationales pour vos campagnes, RSE, B2C et même B2B.",
       badge: "OPEN",
-      badgeImg: "/images/services/OPEN.png",
     },
     {
       title: "Social Media",
       desc:
         "Des experts du social media qui orchestrent votre présence sur les plateformes. De la stratégie éditoriale à la création de contenus, ils transforment votre marque en média vivant, pensé pour engager et performer.",
       badge: "SOME",
-      badgeStyle: "some",
     },
     {
       title: "Production",
       desc:
         "Des artistes du digital, aux spécialités diversifiées. De la 3D au stop‑motion au sound design, ils créent des contenus à la frontière entre le réel et l'imaginaire.",
       badge: "",
-      badgeImg: "/images/SVG/Fichier 2.svg",
     },
     {
       title: "User Generated Content",
       desc:
         "Lancez des campagnes UGC à grande échelle, rapidement et à moindre coût. Diffusez votre image grâce à des contenus authentiques et développez votre communauté d'ambassadeurs fidèles.",
       badge: "UGC",
-      badgeStyle: "ugc",
     },
   ]
 

@@ -42,6 +42,8 @@ export default function LogoBanner() {
                 sizes="192px"
                 style={{ objectFit: "contain" }}
                 className="filter brightness-0 invert opacity-80 transition-opacity duration-300 hover:opacity-100"
+                priority={index === 0}
+                fetchPriority={index === 0 ? "high" : undefined}
               />
             </div>
           </div>

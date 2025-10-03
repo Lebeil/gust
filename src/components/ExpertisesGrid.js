@@ -270,14 +270,14 @@ export default function ExpertisesGrid({ forceActiveIndex }) {
                   </p>
                   {/* Image d'aperçu avec espace autour */}
                   <div className="mt-auto w-full px-3 pb-3">
-                    <div className="w-full h-24 rounded-xl overflow-hidden">
+                    <div className="relative w-full h-24 rounded-xl overflow-hidden">
                       {card.poster ? (
                         <Image
                           src={card.poster}
                           alt={`Aperçu ${card.title}`}
-                          width={120}
-                          height={96}
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="(max-width: 768px) 50vw, 240px"
+                          className="object-cover"
                           loading="lazy"
                         />
                       ) : (

@@ -55,7 +55,7 @@ const HorizontalScroll = () => {
       {
         title: "La Biche-Renard",
         client: "LA BICHE-RENARD",
-        video: "/assets/media/cases_studies/La_biche_Renard.webm",
+        video: "/assets/media/cases_studies/La_biche_Renard.mp4",
         poster: "/assets/media/cases_studies/cover/LA BICHEv.png",
         tags: ["Influence", "Production"],
         textColor: "text-white",
@@ -350,7 +350,7 @@ const HorizontalScroll = () => {
         setOverlayProgress(rawOverlayProgress);
       }
     });
-  }, [getMagnetizedTransform, isHeroAnimationComplete, isMobile, slides.length, updateTrackTransition]);
+  }, [getMagnetizedTransform, isHeroAnimationComplete, isMobile, setOverlayProgress, setScrollProgress, slides.length, updateTrackTransition]);
 
   const measure = useCallback(() => {
     if (typeof window === "undefined") {

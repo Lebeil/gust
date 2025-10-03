@@ -12,11 +12,23 @@ import CinematicFooter from "@/components/CinematicFooter";
 export default function ProductionClient() {
   const [isVisible, setIsVisible] = useState({});
   const [galleryApi, setGalleryApi] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const handleGalleryApi = useCallback((api) => {
     setGalleryApi(api);
   }, []);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
+
+  // Détection mobile pour optimiser les performances
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Animation d'apparition au scroll
   useEffect(() => {
@@ -37,8 +49,10 @@ export default function ProductionClient() {
     return () => observer.disconnect();
   }, []);
 
-  // Effet parallaxe souris
+  // Effet parallaxe souris (désactivé sur mobile pour les performances)
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (e) => {
       if (heroRef.current) {
         const rect = heroRef.current.getBoundingClientRect();
@@ -50,7 +64,7 @@ export default function ProductionClient() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -97,7 +111,7 @@ export default function ProductionClient() {
         {/* Video Background avec overlay gradient */}
         <div className="absolute inset-0 z-0">
           <video
-            autoPlay
+            autoPlay={!isMobile}
             muted
             loop
             playsInline
@@ -152,7 +166,7 @@ export default function ProductionClient() {
           </div>
 
           {/* CTA principal (espaces renforcés comme maquette) */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-64 md:mt-80 lg:mt-[22vh] mb-20 md:mb-28 lg:mb-32">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 md:mt-64 lg:mt-[22vh] mb-12 md:mb-28 lg:mb-32">
             <a
               href="#contact"
               className="inline-flex items-center gap-4 text-white text-lg md:text-xl font-medium tracking-normal hover:opacity-95 focus:outline-none"
@@ -202,7 +216,7 @@ export default function ProductionClient() {
             ].map((stat, idx) => (
               <div 
                 key={idx} 
-                className="group relative rounded-2xl border border-white/40 bg-white/20 p-8 hover:scale-105 transition-all duration-300 overflow-hidden"
+                className="group relative w-full max-w-[360px] md:max-w-none mx-auto rounded-2xl border border-white/40 bg-white/20 p-6 sm:p-8 hover:scale-105 transition-all duration-300 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
                 <div className="relative z-10 text-center">
@@ -230,10 +244,10 @@ export default function ProductionClient() {
           <div 
             id="packs-grid" 
             data-animate
-            className={`grid grid-cols-1 lg:grid-cols-3 gap-8 items-start justify-center transition-all duration-1000 delay-300 ${isVisible['packs-grid'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 items-start justify-center transition-all duration-1000 delay-300 ${isVisible['packs-grid'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             {/* Pack Reboot */}
-            <div className="relative rounded-lg border border-white/60 bg-white/10 p-8 w-full max-w-[380px] mx-auto min-h-[380px] md:min-h-[420px]">
+            <div className="relative w-full max-w-[360px] md:max-w-[380px] mx-auto rounded-lg border border-white/60 bg-white/10 p-6 sm:p-8 min-h-[320px] md:min-h-[420px]">
               <div className="text-center mb-4">
                 <h3 className="text-2xl font-semibold text-white">Pack Reboot</h3>
               </div>
@@ -259,7 +273,7 @@ export default function ProductionClient() {
             </div>
 
             {/* Pack Reboot */}
-            <div className="relative rounded-lg border border-white/60 bg-white/10 p-8 w-full max-w-[380px] mx-auto min-h-[480px] md:min-h-[520px]">
+            <div className="relative w-full max-w-[360px] md:max-w-[380px] mx-auto rounded-lg border border-white/60 bg-white/10 p-6 sm:p-8 min-h-[380px] md:min-h-[520px]">
               <div className="text-center mb-4">
                 <h3 className="text-2xl font-semibold text-white">Pack Reboot</h3>
               </div>
@@ -285,7 +299,7 @@ export default function ProductionClient() {
             </div>
 
             {/* Pack Reboot */}
-            <div className="relative rounded-lg border border-white/60 bg-white/10 p-8 w-full max-w-[380px] mx-auto min-h-[380px] md:min-h-[420px]">
+            <div className="relative w-full max-w-[360px] md:max-w-[380px] mx-auto rounded-lg border border-white/60 bg-white/10 p-6 sm:p-8 min-h-[320px] md:min-h-[420px]">
               <div className="text-center mb-4">
                 <h3 className="text-2xl font-semibold text-white">Pack Reboot</h3>
               </div>
@@ -350,7 +364,7 @@ export default function ProductionClient() {
                       <p className="text-white/75 text-sm md:text-base leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rounded-full ring-4 ring-white/20" />
+                  <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rounded-full ring-4 ring-white/20" />
                 </div>
               ))}
             </div>
@@ -497,8 +511,8 @@ export default function ProductionClient() {
         </div>
       </section>
 
-      {/* CASES GALLERY */}
-      <section id="cases" className="relative py-20 px-6 md:px-12">
+        {/* CASES GALLERY */}
+        <section id="cases" className="relative py-20 px-6 md:px-12">
           <div className="flex items-center justify-between mb-6">
           <h2 className="text-white text-lg font-semibold tracking-wide">Nos case studies</h2>
             <div className="flex items-center gap-3">
@@ -506,7 +520,48 @@ export default function ProductionClient() {
               <button type="button" aria-label="Suivant" className="w-8 h-8 rounded-full border border-white/60 text-white grid place-items-center hover:bg-white/10" onClick={() => galleryApi?.next?.()}>⟶</button>
             </div>
           </div>
-        <AutoScrollGallery images={caseItems} visibleImages={4} enableAutoScroll={false} scrollable={false} duplicate={false} onApiReady={handleGalleryApi} />
+
+          {/* Version mobile avec covers simplifiées */}
+          {isMobile ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+              {caseItems.filter(ci => (ci.tags||[]).includes('Production')).slice(0, 4).map((item, index) => (
+                <div key={index} className="relative group cursor-pointer overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  {/* Image de couverture */}
+                  {item.poster && (
+                    <div className="relative aspect-video overflow-hidden">
+                      <img
+                        src={item.poster}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    </div>
+                  )}
+
+                  {/* Contenu */}
+                  <div className="p-4">
+                    <h3 className="text-white font-semibold text-sm mb-1">{item.title}</h3>
+                    <p className="text-white/70 text-xs mb-2">{item.client}</p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1">
+                      {item.tags?.slice(0, 2).map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="text-[0.6rem] px-2 py-0.5 rounded-md bg-white/20 text-white backdrop-blur-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* Version desktop avec AutoScrollGallery */
+            <AutoScrollGallery images={caseItems} visibleImages={4} enableAutoScroll={false} scrollable={false} duplicate={false} onApiReady={handleGalleryApi} />
+          )}
         </section>
 
       {/* FAQ SECTION PRODUCTION */}

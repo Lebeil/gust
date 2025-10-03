@@ -1,18 +1,21 @@
 "use client"
 
-import { useState, useRef, useEffect, useMemo } from "react"
+import { useState, useRef, useEffect, useMemo, useCallback } from "react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { getLocalizedPath } from "@/lib/localizePath"
 import AutoScrollGallery from "@/components/AutoScrollGallery"
 import caseStudies from "@/data/caseStudies"
 import { IoIosArrowRoundBack } from "react-icons/io"
+import { getOptimizedSources } from "@/utils/mediaSources"
 
 export default function CaseStudyDetail({ caseData }) {
   const videoRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isVideoReady, setIsVideoReady] = useState(false)
   const params = useParams()
   const lang = params?.lang || ""
+  const router = useRouter()
   const backHref = getLocalizedPath("work", lang)
 
   const galleryItems = useMemo(() => {
@@ -28,6 +31,88 @@ export default function CaseStudyDetail({ caseData }) {
         textColor: "text-white",
       }))
   }, [caseData?.title])
+
+  const videoSources = useMemo(() => {
+    const computed = getOptimizedSources(caseData?.href)
+    if (!computed || computed.length === 0) {
+      return caseData?.href ? [{ key: `default-${caseData.href}`, src: caseData.href, type: "video/mp4" }] : []
+    }
+    return computed
+  }, [caseData?.href])
+
+  const primaryVideoSrc = videoSources?.[0]?.src || caseData?.href || ""
+  const primaryVideoType = videoSources?.[0]?.type || "video/mp4"
+  const [resolvedVideoSrc, setResolvedVideoSrc] = useState(primaryVideoSrc)
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined
+    }
+
+    const head = document.head
+    const createdLinks = []
+    if (primaryVideoSrc) {
+      const link = document.createElement("link")
+      link.rel = "preload"
+      link.as = "video"
+      link.href = primaryVideoSrc
+      if (primaryVideoType) {
+        link.type = primaryVideoType
+      }
+      head.appendChild(link)
+      createdLinks.push(link)
+    }
+
+    return () => {
+      createdLinks.forEach((link) => {
+        try {
+          head.removeChild(link)
+        } catch (_) {}
+      })
+    }
+  }, [primaryVideoSrc, primaryVideoType])
+
+  useEffect(() => {
+    if (!primaryVideoSrc || typeof window === "undefined") {
+      setResolvedVideoSrc(primaryVideoSrc)
+      return
+    }
+
+    let isCancelled = false
+    let objectUrl = null
+    const controller = new AbortController()
+
+    const warmup = async () => {
+      try {
+        const response = await fetch(primaryVideoSrc, {
+          signal: controller.signal,
+          cache: "force-cache",
+        })
+        if (!response.ok) {
+          setResolvedVideoSrc(primaryVideoSrc)
+          return
+        }
+        const blob = await response.blob()
+        if (isCancelled) return
+        objectUrl = URL.createObjectURL(blob)
+        setResolvedVideoSrc(objectUrl)
+      } catch (error) {
+        if (!isCancelled) {
+          setResolvedVideoSrc(primaryVideoSrc)
+        }
+      }
+    }
+
+    warmup()
+
+    return () => {
+      isCancelled = true
+      controller.abort()
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl)
+      }
+    }
+  }, [primaryVideoSrc])
 
   const handlePlayPause = () => {
     const video = videoRef.current
@@ -57,14 +142,45 @@ export default function CaseStudyDetail({ caseData }) {
     event.currentTarget.click()
   }
 
+  const generateSlug = useCallback((rawTitle) => {
+    return (rawTitle || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  }, [])
+
+  const handleGallerySelect = useCallback((item) => {
+    if (!item?.title) return
+    const slug = generateSlug(item.title)
+    const localizedPath = lang === "fr" || !lang ? `/fr/work/${slug}` : `/${lang}/work/${slug}`
+    router.push(localizedPath)
+  }, [generateSlug, lang, router])
+
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
     try {
       video.muted = true
+      if (primaryVideoSrc) {
+        video.src = resolvedVideoSrc
+      }
+      video.preload = "auto"
+      video.load()
       video.play().catch(() => {})
     } catch {}
-  }, [])
+
+    const handleCanPlayThrough = () => {
+      setIsVideoReady(true)
+    }
+
+    video.addEventListener("canplaythrough", handleCanPlayThrough)
+
+    return () => {
+      video.removeEventListener("canplaythrough", handleCanPlayThrough)
+    }
+  }, [primaryVideoSrc, resolvedVideoSrc])
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
@@ -78,29 +194,43 @@ export default function CaseStudyDetail({ caseData }) {
         {/* Grille principale: groupe gauche (vidéo + métriques) | texte */}
         <div className="grid gap-12 lg:flex-1 lg:grid-cols-[minmax(320px,600px)_1fr] lg:items-start lg:gap-16">
           {/* Groupe gauche: 2 colonnes vidéo | métriques */}
-          <div className="flex flex-col gap-6 lg:grid lg:h-[60vh] lg:grid-cols-[340px_260px] lg:items-end lg:gap-16">
+            <div className="flex flex-col gap-6 lg:grid lg:h-[60vh] lg:grid-cols-[340px_260px] lg:items-end lg:gap-16">
             <div className="relative inline-block lg:h-full lg:w-[340px]">
               <div className="aspect-[3/4] w-full overflow-hidden rounded-[24px] bg-white/10 lg:aspect-auto lg:h-full lg:w-[340px]">
-                <video
-                ref={videoRef}
-                src={caseData.href}
-                poster={caseData.posterSrc}
-                className="h-full w-full object-cover"
-                autoPlay
-                playsInline
-                preload="auto"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onClick={handlePlayPause}
-                onKeyDown={handleVideoKeyDown}
-                muted
-                loop
-                tabIndex={0}
-                aria-label={
-                  isPlaying ? "Mettre la vidéo en pause" : "Lire la vidéo du projet"
-                }
-                role="button"
-                />
+                <div className="relative h-full w-full">
+                  <video
+                    ref={videoRef}
+                    key={resolvedVideoSrc || primaryVideoSrc}
+                    poster={caseData.posterSrc}
+                    className="h-full w-full object-cover"
+                    autoPlay
+                    playsInline
+                    preload="auto"
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                    onLoadedData={() => setIsVideoReady(true)}
+                    onClick={handlePlayPause}
+                    onKeyDown={handleVideoKeyDown}
+                    muted
+                    loop
+                    tabIndex={0}
+                    aria-label={
+                      isPlaying ? "Mettre la vidéo en pause" : "Lire la vidéo du projet"
+                    }
+                    role="button"
+                    src={resolvedVideoSrc || primaryVideoSrc}
+                  />
+                  {caseData.posterSrc && (
+                    <div
+                      className={`pointer-events-none absolute inset-0 overflow-hidden rounded-[24px] transition-opacity duration-300 ${isVideoReady ? "opacity-0" : "opacity-100"}`}
+                    >
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${caseData.posterSrc})` }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-4 rounded-[24px] bg-white/5 p-6 text-white lg:bg-transparent lg:p-0 lg:text-left">
@@ -251,13 +381,7 @@ export default function CaseStudyDetail({ caseData }) {
               </div>
             )}
             
-            {/* Contexte / Challenge */}
-            <div className="space-y-3">
-              <h3 className="text-base font-semibold text-white lg:text-lg">{caseData.contextTitle || "Contexte"}</h3>
-              <p className="text-sm leading-relaxed text-white/90 lg:text-base">
-                {caseData.context || "À l'occasion de la Journée Européenne de la Solidarité Intergénérationnelle, le SC2S s'est associée à Elise Heb pour produire un contenu en marque blanche, mettant en avant les missions de l'association à travers le prisme de la relation qu'elle entretient avec Annick, son amie senior."}
-              </p>
-            </div>
+            {/* Contexte / Challenge - Supprimé */}
 
             {/* Contenu / Solution */}
             <div className="space-y-3">
@@ -284,6 +408,14 @@ export default function CaseStudyDetail({ caseData }) {
                 </div>
               </div>
             )}
+            
+            {/* Result */}
+            {caseData.result && (
+              <div className="space-y-3">
+                <h3 className="text-base font-semibold text-white lg:text-lg">{caseData.resultTitle || "Résultat"}</h3>
+                <p className="text-sm leading-relaxed text-white/90 lg:text-base">{caseData.result}</p>
+              </div>
+            )}
 
           </div>
         </div>
@@ -301,6 +433,7 @@ export default function CaseStudyDetail({ caseData }) {
                 scrollable={false}
                 showEdgeFade={false}
                 visibleImages={Math.min(5, galleryItems.length || 1)}
+                onSelect={handleGallerySelect}
               />
               <div className="mt-8 flex justify-center">
                 <Link

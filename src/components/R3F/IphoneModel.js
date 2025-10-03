@@ -51,7 +51,7 @@ extend({ RoundedScreenMaterial })
 
 export default function Model({ content, onLoaded, externalScrollProgress }) {
     const landingVideo = content.media
-    const videoTexture = useVideoTexture(landingVideo.url)
+    const videoTexture = useVideoTexture(landingVideo.url, { crossOrigin: "anonymous" })
     const { nodes } = useGLTF("/assets/glb/iphone-final.glb")
 
     useEffect(() => {
@@ -61,12 +61,17 @@ export default function Model({ content, onLoaded, externalScrollProgress }) {
     }, [videoTexture, nodes, onLoaded])
 
     useEffect(() => {
-        if (videoTexture) {
-            // Ajuster la vidéo pour combler tous les espaces
-            videoTexture.repeat.set(1.08, 1.18) // Légèrement plus grand pour combler
-            videoTexture.offset.set(-0.10, -0.09) // Recentrage pour couvrir les bords
-            videoTexture.wrapS = THREE.ClampToEdgeWrapping
-            videoTexture.wrapT = THREE.ClampToEdgeWrapping
+        if (!videoTexture) return
+
+        videoTexture.repeat.set(1.08, 1.18)
+        videoTexture.offset.set(-0.10, -0.09)
+        videoTexture.wrapS = THREE.ClampToEdgeWrapping
+        videoTexture.wrapT = THREE.ClampToEdgeWrapping
+
+        return () => {
+            try {
+                videoTexture.dispose?.()
+            } catch (_) {}
         }
     }, [videoTexture])
 
